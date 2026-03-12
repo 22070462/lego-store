@@ -220,3 +220,10 @@ border-radius:6px;
 color:white;
 cursor:pointer;
 }
+
+.logo{
+text-decoration: none;
+color: inherit;
+font-weight: bold;
+font-size: 24px;
+}
