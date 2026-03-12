@@ -92,12 +92,12 @@ width:350px;
 
 /* PRODUCTS */
 
-.products{
+.indxproducts{
 padding:60px;
 text-align:center;
 }
 
-.product-grid{
+.indxproduct-grid{
 display:flex;
 gap:30px;
 justify-content:center;
@@ -186,7 +186,7 @@ color:white;
 }
 
 
-/* products */
+/* PRODUCTS PAGE */
 
 .products-container{
 flex:1;
