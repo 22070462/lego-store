@@ -38,22 +38,22 @@
 
 <h3>PRODUCT TYPE</h3>
 
-<label><input type="checkbox"> Standard Bricks</label>
-<label><input type="checkbox"> Technic</label>
-<label><input type="checkbox"> Duplo</label>
+<label><input type="checkbox" value="standard" class="type-filter"> Standard Bricks</label>
+<label><input type="checkbox" value="technic" class="type-filter"> Technic</label>
+<label><input type="checkbox" value="duplo" class="type-filter"> Duplo</label>
 
 <h3>AGE RANGE</h3>
 
-<button>1.5+</button>
-<button>4+</button>
-<button class="active">9+</button>
-<button>13+</button>
+<button class="age-btn" data-age="1.5">1.5+</button>
+<button class="age-btn" data-age="4">4+</button>
+<button class="age-btn" data-age="9">9+</button>
+<button class="age-btn" data-age="13">13+</button>
 
 <h3>PRICE</h3>
 
-<label><input type="checkbox"> $0 - $25</label>
-<label><input type="checkbox"> $25 - $50</label>
-<label><input type="checkbox"> $50 - $100</label>
+<label><input type="checkbox" value="0-25" class="price-filter"> $0 - $25</label>
+<label><input type="checkbox" value="25-50" class="price-filter"> $25 - $50</label>
+<label><input type="checkbox" value="50-100" class="price-filter"> $50 - $100</label>
 
 </aside>
 
@@ -66,29 +66,49 @@
 
 <div class="product-grid">
 
-<div class="product-card">
-<img src="images/starship.jpg" alt="Galactic Starship">
+<div class="product-card"
+data-type="standard"
+data-age="9"
+data-price="50-100">
+
+<img src="images/starship.jpg">
 <h4>Galactic Starship</h4>
 <p>$89.99</p>
 <button>Add</button>
 </div>
 
-<div class="product-card">
-<img src="images/cranetruck.jpg" alt="Industrial Crane">
+<div class="product-card"
+data-type="technic"
+data-age="9"
+data-price="100+">
+
+<img src="images/cranetruck.jpg">
 <h4>Industrial Crane</h4>
 <p>$149.99</p>
 <button>Add</button>
+
 </div>
 
-<div class="product-card">
-<img src="images/racer.jpg" alt="Racer Z-100">
+
+<div class="product-card"
+data-type="standard"
+data-age="4"
+data-price="0-25">
+
+<img src="images/racer.jpg">
 <h4><a href="product-detail.html">Racer Z-100</a></h4>
 <p>$34.99</p>
 <button>Add</button>
+
 </div>
 
-<div class="product-card">
-<img src="images/botaflower.jpg" alt="Botanical Wildflower">
+
+<div class="product-card"
+data-type="duplo"
+data-age="1.5"
+data-price="25-50">
+
+<img src="images/botaflower.jpg">
 <h4>Botanical Wildflower</h4>
 <p>$59.99</p>
 <button>Add</button>
@@ -106,6 +126,77 @@
 <footer class="footer">
 <p>© PLAYARENA</p>
 </footer>
+
+<script>
+
+const typeFilters = document.querySelectorAll(".type-filter");
+const priceFilters = document.querySelectorAll(".price-filter");
+const ageButtons = document.querySelectorAll(".age-btn");
+
+const products = document.querySelectorAll(".product-card");
+
+let selectedAge = null;
+
+ageButtons.forEach(btn => {
+btn.addEventListener("click", () => {
+
+ageButtons.forEach(b => b.classList.remove("active"));
+btn.classList.add("active");
+
+selectedAge = btn.dataset.age;
+
+filterProducts();
+
+});
+});
+
+[typeFilters, priceFilters].forEach(group => {
+
+group.forEach(filter => {
+
+filter.addEventListener("change", filterProducts);
+
+});
+
+});
+
+
+function filterProducts(){
+
+const activeTypes =
+[...typeFilters]
+.filter(c => c.checked)
+.map(c => c.value);
+
+const activePrices =
+[...priceFilters]
+.filter(c => c.checked)
+.map(c => c.value);
+
+products.forEach(product => {
+
+const type = product.dataset.type;
+const age = product.dataset.age;
+const price = product.dataset.price;
+
+let show = true;
+
+if(activeTypes.length && !activeTypes.includes(type))
+show = false;
+
+if(activePrices.length && !activePrices.includes(price))
+show = false;
+
+if(selectedAge && age < selectedAge)
+show = false;
+
+product.style.display = show ? "block" : "none";
+
+});
+
+}
+
+</script>
 
 </body>
 </html>
