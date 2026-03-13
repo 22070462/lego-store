@@ -64,6 +64,19 @@
 
 <h1>PRODUCTS</h1>
 
+<div class="product-tools">
+
+<input type="text" id="searchInput" placeholder="Search products...">
+
+<select id="sortSelect">
+<option value="">Sort</option>
+<option value="low">Price Low → High</option>
+<option value="high">Price High → Low</option>
+<option value="new">Newest</option>
+</select>
+
+</div>
+
 <div class="product-grid">
 
 <div class="product-card"
@@ -129,18 +142,26 @@ data-price="25-50">
 
 <script>
 
+const products = document.querySelectorAll(".product-card");
+
+const searchInput = document.getElementById("searchInput");
+const sortSelect = document.getElementById("sortSelect");
+
 const typeFilters = document.querySelectorAll(".type-filter");
 const priceFilters = document.querySelectorAll(".price-filter");
 const ageButtons = document.querySelectorAll(".age-btn");
 
-const products = document.querySelectorAll(".product-card");
-
 let selectedAge = null;
 
+
+/* AGE FILTER */
+
 ageButtons.forEach(btn => {
+
 btn.addEventListener("click", () => {
 
 ageButtons.forEach(b => b.classList.remove("active"));
+
 btn.classList.add("active");
 
 selectedAge = btn.dataset.age;
@@ -148,7 +169,16 @@ selectedAge = btn.dataset.age;
 filterProducts();
 
 });
+
 });
+
+
+/* SEARCH */
+
+searchInput.addEventListener("input", filterProducts);
+
+
+/* CHECKBOX FILTER */
 
 [typeFilters, priceFilters].forEach(group => {
 
@@ -161,38 +191,121 @@ filter.addEventListener("change", filterProducts);
 });
 
 
+/* SORT */
+
+sortSelect.addEventListener("change", () => {
+
+const grid = document.querySelector(".product-grid");
+
+const productArray = [...products];
+
+if(sortSelect.value === "low"){
+
+productArray.sort((a,b)=> getPrice(a)-getPrice(b));
+
+}
+
+if(sortSelect.value === "high"){
+
+productArray.sort((a,b)=> getPrice(b)-getPrice(a));
+
+}
+
+if(sortSelect.value === "new"){
+
+productArray.reverse();
+
+}
+
+productArray.forEach(p => grid.appendChild(p));
+
+});
+
+
+function getPrice(product){
+
+return parseFloat(
+product.querySelector("p").innerText.replace("$","")
+);
+
+}
+
+
+/* MAIN FILTER */
+
 function filterProducts(){
 
+const search = searchInput.value.toLowerCase();
+
 const activeTypes =
-[...typeFilters]
-.filter(c => c.checked)
-.map(c => c.value);
+[...typeFilters].filter(c=>c.checked).map(c=>c.value);
 
 const activePrices =
-[...priceFilters]
-.filter(c => c.checked)
-.map(c => c.value);
+[...priceFilters].filter(c=>c.checked).map(c=>c.value);
 
-products.forEach(product => {
+products.forEach(product=>{
+
+const name =
+product.querySelector("h4").innerText.toLowerCase();
 
 const type = product.dataset.type;
-const age = product.dataset.age;
 const price = product.dataset.price;
+const age = product.dataset.age;
 
 let show = true;
+
+
+/* SEARCH */
+
+if(search && !name.includes(search))
+show = false;
+
+
+/* TYPE */
 
 if(activeTypes.length && !activeTypes.includes(type))
 show = false;
 
+
+/* PRICE */
+
 if(activePrices.length && !activePrices.includes(price))
 show = false;
+
+
+/* AGE */
 
 if(selectedAge && age < selectedAge)
 show = false;
 
-product.style.display = show ? "block" : "none";
+
+/* SHOW / HIDE */
+
+product.classList.toggle("hide", !show);
 
 });
+
+}
+
+
+/* URL FILTER */
+
+const params = new URLSearchParams(window.location.search);
+const typeParam = params.get("type");
+
+if(typeParam){
+
+typeFilters.forEach(c=>{
+
+if(c.value === typeParam){
+
+c.checked = true;
+
+}
+
+});
+
+filterProducts();
 
 }
 

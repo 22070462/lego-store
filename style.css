@@ -653,3 +653,35 @@ font-size:12px;
 margin-top:20px;
 color:gray;
 }
+
+/* PRODUCT TOOLS */
+
+.product-tools{
+display:flex;
+justify-content:space-between;
+margin-bottom:20px;
+}
+
+.product-tools input{
+padding:8px 12px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+.product-tools select{
+padding:8px;
+border-radius:6px;
+}
+
+
+/* PRODUCT ANIMATION */
+
+.product-card{
+transition:0.3s;
+}
+
+.product-card.hide{
+opacity:0;
+transform:scale(0.9);
+pointer-events:none;
+}
