@@ -22,7 +22,10 @@
 <div class="icons">
 <a href="login.html">👤</a>
 <span>♡</span>
-<a href="cart.html">🛒</a>
+<a href="cart.html" class="cart-icon">
+🛒
+<span class="cart-count">0</span>
+</a>
 </div>
 
 </header>
@@ -80,51 +83,67 @@
 <div class="product-grid">
 
 <div class="product-card"
+data-id="1"
+data-name="Galactic Starship"
+data-price="89.99"
+data-img="images/starship.jpg"
 data-type="standard"
 data-age="9"
-data-price="50-100">
+data-price-range="50-100">
 
 <img src="images/starship.jpg">
 <h4>Galactic Starship</h4>
 <p>$89.99</p>
-<button>Add</button>
+<button class="add-cart">Add</button>
 </div>
 
 <div class="product-card"
+data-id="2"
+data-name="Industrial Crane"
+data-price="149.99"
+data-img="images/cranetruck.jpg"
 data-type="technic"
 data-age="9"
-data-price="100+">
+data-price-range="100+">
 
 <img src="images/cranetruck.jpg">
 <h4>Industrial Crane</h4>
 <p>$149.99</p>
-<button>Add</button>
+<button class="add-cart">Add</button>
 
 </div>
 
 
 <div class="product-card"
+data-id="3"
+data-name="Racer Z-100"
+data-price="34.99"
+data-img="images/racer.jpg"
 data-type="standard"
 data-age="4"
-data-price="0-25">
+data-price-range="0-25">
 
 <img src="images/racer.jpg">
 <h4><a href="product-detail.html">Racer Z-100</a></h4>
 <p>$34.99</p>
-<button>Add</button>
+<button class="add-cart">Add</button>
 
 </div>
 
 
 <div class="product-card"
+data-id="4"
+data-name="Botanical Wildflower"
+data-price="59.99"
+data-img="images/botaflower.jpg"
 data-type="duplo"
 data-age="1.5"
-data-price="25-50">
+data-price-range="25-50">
 
 <img src="images/botaflower.jpg">
 <h4>Botanical Wildflower</h4>
 <p>$59.99</p>
-<button>Add</button>
+<button class="add-cart">Add</button>
 </div>
 
 </div>
@@ -249,7 +268,7 @@ const name =
 product.querySelector("h4").innerText.toLowerCase();
 
 const type = product.dataset.type;
-const price = product.dataset.price;
+const price = product.dataset.priceRange;
 const age = product.dataset.age;
 
 let show = true;
@@ -310,6 +329,91 @@ filterProducts();
 }
 
 </script>
+
+<script>
+
+/* LOAD CART */
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+const cartBadge = document.querySelector(".cart-count");
+
+
+/* ADD BUTTON */
+
+document.querySelectorAll(".add-cart").forEach(btn => {
+
+btn.addEventListener("click", () => {
+
+const card = btn.closest(".product-card");
+
+const product = {
+
+id: card.dataset.id,
+name: card.dataset.name,
+price: parseFloat(card.dataset.price),
+img: card.dataset.img,
+qty: 1
+
+};
+
+addToCart(product);
+
+});
+
+});
+
+
+/* ADD TO CART */
+
+function addToCart(product){
+
+const exist = cart.find(p => p.id === product.id);
+
+if(exist){
+
+exist.qty++;
+
+}else{
+
+cart.push(product);
+
+}
+
+saveCart();
+updateCartBadge();
+
+}
+
+
+/* SAVE */
+
+function saveCart(){
+
+localStorage.setItem("cart", JSON.stringify(cart));
+
+}
+
+
+/* BADGE */
+
+function updateCartBadge(){
+
+if(!cartBadge) return;
+
+const total = cart.reduce((sum,item)=>sum + item.qty,0);
+
+cartBadge.innerText = total;
+
+}
+
+
+/* LOAD BADGE */
+
+updateCartBadge();
+
+</script>
+
 
 </body>
 </html>

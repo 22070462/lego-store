@@ -292,8 +292,8 @@ position:relative;
 
 .cart-count{
 position:absolute;
-top:-5px;
-right:-8px;
+top:-8px;
+right:-10px;
 background:red;
 color:white;
 font-size:12px;
@@ -685,3 +685,4 @@ opacity:0;
 transform:scale(0.9);
 pointer-events:none;
 }
+

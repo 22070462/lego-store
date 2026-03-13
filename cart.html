@@ -21,7 +21,10 @@
 <div class="icons">
 <a href="login.html">👤</a>
 <span>♡</span>
-<span>🛒</span>
+<a href="cart.html" class="cart-icon">
+🛒
+<span class="cart-count">0</span>
+</a>
 </div>
 </header>
 
@@ -30,43 +33,16 @@
 
 <section class="cart-page">
 
-<h1>My Bag (3)</h1>
+<h1>My Bag (0)</h1>
 
 <div class="cart-layout">
 
 <!-- LEFT SIDE -->
 
-<div class="cart-items">
-
-<div class="cart-item">
-
-<img src="images/cyber.jpg">
-
-<div class="item-info">
-<h3>Cyber-Knight Collector’s Edition</h3>
-<p class="stock">In Stock</p>
-<p class="item-id">Item #75341</p>
-
-<div class="qty">
-<button>-</button>
-<span>1</span>
-<button>+</button>
-</div>
-
-</div>
-
-<div class="item-price">
-$249.99
-<p class="remove">Remove</p>
-</div>
-
-</div>
-
+<div class="cart-items"></div>
 
 <div class="promo">
 Add a Promo Code
-</div>
-
 </div>
 
 
@@ -77,8 +53,8 @@ Add a Promo Code
 <h3>Order Summary</h3>
 
 <div class="summary-row">
-<span>Subtotal (3 items)</span>
-<span>$249.99</span>
+<span class="subtotal-items">Subtotal (0 items)</span>
+<span class="subtotal-price">$0</span>
 </div>
 
 <div class="summary-row">
@@ -95,7 +71,7 @@ Add a Promo Code
 
 <div class="summary-row total">
 <span>Total</span>
-<span>$285.19</span>
+<span class="total-price">$0</span>
 </div>
 
 <button class="checkout">Checkout Securely</button>
@@ -146,6 +122,163 @@ Add a Promo Code
 <footer class="footer">
 <p>© PLAYARENA</p>
 </footer>
+
+<script>
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+const container = document.querySelector(".cart-items");
+const totalPrice = document.querySelector(".total-price");
+const subtotalPrice = document.querySelector(".subtotal-price");
+const subtotalItems = document.querySelector(".subtotal-items");
+const cartTitle = document.querySelector(".cart-page h1");
+const cartBadge = document.querySelector(".cart-count");
+
+
+/* RENDER CART */
+
+function renderCart(){
+
+container.innerHTML="";
+
+if(cart.length === 0){
+
+container.innerHTML = `
+<div class="empty-cart">
+<h2>Your bag is empty</h2>
+<a href="products.html" class="continue-shopping">
+Continue Shopping
+</a>
+</div>
+`;
+
+updateTotal();
+updateCartCount();
+return;
+
+}
+
+cart.forEach(item=>{
+
+const div = document.createElement("div");
+
+div.className="cart-item";
+
+div.innerHTML = `
+
+<img src="${item.img}" width="120">
+
+<div class="item-info">
+<h3>${item.name}</h3>
+<p>$${item.price}</p>
+
+<div class="qty">
+<button onclick="changeQty('${item.id}',-1)">-</button>
+<span>${item.qty}</span>
+<button onclick="changeQty('${item.id}',1)">+</button>
+</div>
+
+<p class="remove" onclick="removeItem('${item.id}')">Remove</p>
+</div>
+
+<div class="item-price">
+$${(item.price * item.qty).toFixed(2)}
+</div>
+
+`;
+
+container.appendChild(div);
+
+});
+
+updateTotal();
+updateCartCount();
+
+}
+
+
+/* CHANGE QTY */
+
+function changeQty(id,delta){
+
+const item = cart.find(p=>p.id===id);
+
+if(!item) return;
+
+item.qty += delta;
+
+if(item.qty <=0){
+
+cart = cart.filter(p=>p.id!==id);
+
+}
+
+saveCart();
+renderCart();
+
+}
+
+
+/* REMOVE ITEM */
+
+function removeItem(id){
+
+cart = cart.filter(p=>p.id!==id);
+
+saveCart();
+renderCart();
+
+}
+
+
+/* SAVE */
+
+function saveCart(){
+
+localStorage.setItem("cart",JSON.stringify(cart));
+
+}
+
+
+/* TOTAL */
+
+function updateTotal(){
+
+let total = 0;
+let count = 0;
+
+cart.forEach(p=>{
+
+total += p.price * p.qty;
+count += p.qty;
+
+});
+
+totalPrice.innerText = "$"+total.toFixed(2);
+subtotalPrice.innerText = "$"+total.toFixed(2);
+subtotalItems.innerText = "Subtotal ("+count+" items)";
+cartTitle.innerText = "My Bag ("+count+")";
+
+}
+
+
+/* CART BADGE */
+
+function updateCartCount(){
+
+const total = cart.reduce((sum,item)=>sum+item.qty,0);
+
+if(cartBadge) cartBadge.innerText = total;
+
+}
+
+
+/* LOAD */
+
+renderCart();
+updateCartCount();
+
+</script>
 
 </body>
 </html>
