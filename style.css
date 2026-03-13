@@ -553,3 +553,103 @@ padding:60px;
 margin-bottom:30px;
 }
 
+/* LOGIN PAGE */
+
+.login-body{
+margin:0;
+font-family:Arial, sans-serif;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:
+linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+url("images/login-bg.jpg") center/cover no-repeat;
+}
+
+/* CONTAINER */
+
+.login-container{
+text-align:center;
+}
+
+/* LOGO */
+
+.logo-box h1{
+margin-top:10px;
+font-size:28px;
+letter-spacing:2px;
+}
+
+.logo-icon{
+width:70px;
+height:70px;
+background:#e21c23;
+border-radius:10px;
+margin:auto;
+}
+
+/* CARD */
+
+.login-card{
+width:350px;
+background:white;
+padding:40px;
+border-radius:15px;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+margin-top:20px;
+text-align:left;
+}
+
+.subtitle{
+color:gray;
+margin-bottom:20px;
+}
+
+.login-card label{
+font-size:12px;
+font-weight:bold;
+display:block;
+margin-top:15px;
+}
+
+.login-card input{
+width:100%;
+padding:12px;
+margin-top:6px;
+border-radius:8px;
+border:1px solid #ddd;
+}
+
+/* BUTTONS */
+
+.assemble-btn{
+width:100%;
+margin-top:20px;
+padding:14px;
+background:#ff6600;
+border:none;
+border-radius:10px;
+color:white;
+font-weight:bold;
+font-size:16px;
+cursor:pointer;
+}
+
+.create-btn{
+width:100%;
+margin-top:10px;
+padding:12px;
+background:#2f7a44;
+border:none;
+border-radius:10px;
+color:white;
+font-weight:bold;
+}
+
+.new-builder{
+text-align:center;
+font-size:12px;
+margin-top:20px;
+color:gray;
+}
