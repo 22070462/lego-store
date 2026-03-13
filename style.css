@@ -204,6 +204,12 @@ background:white;
 padding:15px;
 border-radius:10px;
 text-align:center;
+transition:0.2s;
+}
+
+.product-card:hover{
+transform:translateY(-5px);
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
 .product-card img{
@@ -226,4 +232,182 @@ text-decoration: none;
 color: inherit;
 font-weight: bold;
 font-size: 24px;
+}
+
+/* PRODUCT DETAIL */
+
+.product-detail{
+display:flex;
+gap:60px;
+padding:60px;
+}
+
+.product-images{
+flex:1;
+}
+
+.main-image{
+width:100%;
+border-radius:10px;
+}
+
+.thumbs{
+display:flex;
+gap:10px;
+margin-top:10px;
+}
+
+.thumbs img{
+width:80px;
+border-radius:6px;
+cursor:pointer;
+}
+
+.product-info{
+flex:1;
+}
+
+.product-meta{
+display:flex;
+gap:40px;
+margin:20px 0;
+}
+
+.product-meta span{
+font-size:12px;
+color:gray;
+}
+
+.price{
+margin:20px 0;
+}
+
+.cart-row{
+display:flex;
+gap:20px;
+align-items:center;
+}
+
+.qty{
+display:flex;
+border:1px solid #ccc;
+}
+
+.qty button{
+background:none;
+border:none;
+padding:8px 12px;
+cursor:pointer;
+}
+
+.qty span{
+padding:8px 12px;
+}
+
+.wishlist{
+margin-top:15px;
+background:none;
+border:1px solid #ccc;
+padding:10px;
+}
+
+
+/* RELATED */
+
+.related{
+padding:60px;
+}
+
+.related-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:25px;
+margin-top:20px;
+}
+
+/* FEATURES */
+
+.features{
+margin-top:60px;
+}
+
+.feature{
+width:100%;
+}
+
+/* HERO FEATURE */
+
+.hero-feature{
+height:600px;
+background:url("images/f1-hero.jpg") center/cover no-repeat;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+text-align:center;
+}
+
+.hero-feature .feature-text{
+background:none;
+padding:0;
+}
+
+.hero-feature h2{
+font-size:32px;
+width:600px;
+}
+
+
+/* ROW FEATURES */
+
+.feature-row{
+display:flex;
+min-height:400px;
+}
+
+.feature-row.reverse{
+flex-direction:row-reverse;
+}
+
+.feature-img{
+flex:1;
+min-height:400px;
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+transition:transform 0.4s;
+}
+
+.feature-img:hover{
+transform:scale(1.03);
+}
+
+.feature-text{
+flex:1;
+display:flex;
+flex-direction:column;
+justify-content:center;
+padding:80px;
+background:#111;
+color:white;
+}
+
+.feature-text h2{
+font-size:28px;
+margin-bottom:10px;
+}
+
+
+/* BACKGROUND IMAGES */
+
+.f1-img1{
+background-image:url("images/f1-feature1.jpg");
+}
+
+.f1-img2{
+background-image:url("images/f1-feature2.jpg");
+}
+
+.f1-img3{
+background-image:url("images/f1-feature3.jpg");
 }
