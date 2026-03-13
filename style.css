@@ -686,3 +686,12 @@ transform:scale(0.9);
 pointer-events:none;
 }
 
+.fly-img{
+position:fixed;
+width:80px;
+height:80px;
+object-fit:cover;
+z-index:9999;
+transition:all 0.8s cubic-bezier(.2,.8,.2,1);
+pointer-events:none;
+}

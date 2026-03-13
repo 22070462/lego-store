@@ -19,7 +19,7 @@
 </div>
 
 <div class="icons">
-<a href="login.html">👤</a>
+<a id="accountIcon" href="login.html">👤</a>
 <span>♡</span>
 <a href="cart.html" class="cart-icon">
 🛒
@@ -41,9 +41,7 @@
 
 <div class="cart-items"></div>
 
-<div class="promo">
-Add a Promo Code
-</div>
+
 
 
 <!-- RIGHT SIDE -->
@@ -59,12 +57,12 @@ Add a Promo Code
 
 <div class="summary-row">
 <span>Estimated Shipping</span>
-<span class="free">FREE</span>
+<span class="shipping">FREE</span>
 </div>
 
 <div class="summary-row">
 <span>Estimated Tax</span>
-<span>$35.20</span>
+<span class="tax">$0</span>
 </div>
 
 <hr>
@@ -240,24 +238,40 @@ localStorage.setItem("cart",JSON.stringify(cart));
 }
 
 
-/* TOTAL */
+const TAX_RATE = 0.08;
+const SHIPPING_THRESHOLD = 100;
+const SHIPPING_COST = 10;
 
 function updateTotal(){
 
-let total = 0;
+let subtotal = 0;
 let count = 0;
 
 cart.forEach(p=>{
-
-total += p.price * p.qty;
+subtotal += p.price * p.qty;
 count += p.qty;
-
 });
 
-totalPrice.innerText = "$"+total.toFixed(2);
-subtotalPrice.innerText = "$"+total.toFixed(2);
-subtotalItems.innerText = "Subtotal ("+count+" items)";
-cartTitle.innerText = "My Bag ("+count+")";
+let tax = subtotal * TAX_RATE;
+
+let shipping = subtotal > SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+
+let total = subtotal + tax + shipping;
+
+/* UPDATE UI */
+
+subtotalPrice.innerText = "$" + subtotal.toFixed(2);
+subtotalItems.innerText = "Subtotal (" + count + " items)";
+
+document.querySelector(".tax").innerText =
+"$" + tax.toFixed(2);
+
+document.querySelector(".shipping").innerText =
+shipping === 0 ? "FREE" : "$" + shipping;
+
+totalPrice.innerText = "$" + total.toFixed(2);
+
+cartTitle.innerText = "My Bag (" + count + ")";
 
 }
 
@@ -277,6 +291,24 @@ if(cartBadge) cartBadge.innerText = total;
 
 renderCart();
 updateCartCount();
+
+</script>
+
+<script>
+
+const token = localStorage.getItem("token")
+
+if(token){
+
+const icon=document.getElementById("accountIcon")
+
+if(icon){
+
+icon.href="profile.html"
+
+}
+
+}
 
 </script>
 

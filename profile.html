@@ -1,0 +1,15 @@
+<h1>My Profile</h1>
+
+<button onclick="logout()">Logout</button>
+
+<script>
+
+function logout(){
+
+localStorage.removeItem("token")
+
+window.location.href="login.html"
+
+}
+
+</script>

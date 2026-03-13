@@ -25,7 +25,7 @@
 </div>
 
 <div class="icons">
-<a href="login.html">👤</a>
+<a id="accountIcon" href="login.html">👤</a>
 <span>♡</span>
 <a href="cart.html" class="cart-icon">
 🛒
@@ -139,6 +139,24 @@
 </footer>
 
 <script src="cart-system.js"></script>
+
+<script>
+
+const token = localStorage.getItem("token")
+
+if(token){
+
+const icon=document.getElementById("accountIcon")
+
+if(icon){
+
+icon.href="profile.html"
+
+}
+
+}
+
+</script>
 
 </body>
 </html>

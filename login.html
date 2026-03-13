@@ -22,20 +22,124 @@
 <p class="subtitle">Connect your bricks and start creating.</p>
 
 <label>BUILDER ID</label>
-<input type="text" placeholder="Email or Username">
+<input id="email" type="text" placeholder="Email or Username">
 
 <label>SECRET KEY</label>
-<input type="password" placeholder="••••••">
+<input id="password" type="password" placeholder="••••••">
 
-<button class="assemble-btn">ASSEMBLE ✨</button>
+<button class="assemble-btn" id="loginBtn">ASSEMBLE ✨</button>
 
 <p class="new-builder">NEW BUILDER?</p>
 
-<button class="create-btn">CREATE NEW ACCOUNT</button>
+<button class="create-btn" onclick="showRegister()">CREATE NEW ACCOUNT</button>
+
+</div>
+
+<div class="register-card" style="display:none">
+
+<h2>Create Builder Account</h2>
+
+<label>Email</label>
+<input id="regEmail" type="text">
+
+<label>Password</label>
+<input id="regPassword" type="password">
+
+<button onclick="register()">CREATE ACCOUNT</button>
+
+<button onclick="showLogin()">BACK TO LOGIN</button>
 
 </div>
 
 </div>
+
+<script>
+
+
+document.getElementById("loginBtn").addEventListener("click",login)
+
+async function login(){
+
+const email = document.getElementById("email").value
+const password = document.getElementById("password").value
+
+const res = await fetch("http://localhost:3000/login",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+email:email,
+password:password
+})
+})
+
+const data = await res.json()
+
+if(data.token){
+
+// lưu login
+localStorage.setItem("token",data.token)
+localStorage.setItem("role",data.role)
+
+// redirect theo role
+if(data.role === "admin"){
+window.location.href="admin.html"
+}else{
+window.location.href="profile.html"
+}
+
+}else{
+
+alert(data.message)
+
+}
+
+}
+
+</script>
+
+<script>
+
+function showRegister(){
+document.querySelector(".login-card").style.display="none"
+document.querySelector(".register-card").style.display="block"
+}
+
+function showLogin(){
+document.querySelector(".login-card").style.display="block"
+document.querySelector(".register-card").style.display="none"
+}
+
+async function register(){
+
+const email=document.getElementById("regEmail").value
+const password=document.getElementById("regPassword").value
+
+const res=await fetch("http://localhost:3000/register",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({email,password})
+
+})
+
+const data=await res.json()
+
+alert(data.message)
+
+}
+
+</script>
+
+<script>
+
+
+</script>
 
 </body>
 </html>
