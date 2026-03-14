@@ -1,15 +1,106 @@
-<h1>My Profile</h1>
+<!DOCTYPE html>
+<html>
 
-<button onclick="logout()">Logout</button>
+<head>
+<meta charset="UTF-8">
+<title>My Profile</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+<a href="index.html" class="logo">PLAYARENA</a>
+
+<nav>
+<a href="products.html">SHOP</a>
+<a href="#">DISCOVER</a>
+<a href="#">HELP</a>
+</nav>
+
+<div class="search">
+<input type="text" placeholder="Search">
+</div>
+
+<div class="icons">
+<a id="accountIcon" href="profile.html">👤</a>
+<span>♡</span>
+<a href="cart.html" class="cart-icon">
+🛒
+<span class="cart-count">0</span>
+</a>
+</div>
+
+</header>
+
+
+<!-- PROFILE -->
+
+<section class="profile-page">
+
+<div class="profile-card">
+
+<h1>Builder Profile</h1>
+
+<p class="profile-email" id="userEmail"></p>
+
+<div class="profile-actions">
+
+<a href="cart.html" class="profile-btn">My Orders</a>
+
+<button class="profile-btn">Saved Sets</button>
+
+<button class="logout-btn" onclick="logout()">Logout</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<footer class="footer">
+<p>© PLAYARENA</p>
+</footer>
+
+
+<script src="cart-system.js"></script>
 
 <script>
+
+/* CHECK LOGIN */
+
+const token = localStorage.getItem("token")
+
+if(!token){
+window.location.href="login.html"
+}
+
+
+/* LOGOUT */
 
 function logout(){
 
 localStorage.removeItem("token")
+localStorage.removeItem("role")
 
-window.location.href="login.html"
+window.location.href="index.html"
 
 }
 
+
+/* NAVBAR ACCOUNT ICON */
+
+const icon=document.getElementById("accountIcon")
+
+if(icon){
+icon.href="profile.html"
+}
+
 </script>
+
+</body>
+</html>
