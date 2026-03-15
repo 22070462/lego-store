@@ -97,7 +97,7 @@
         </a>
         <nav class="flex gap-7">
           <a href="products.html" class="nav-link">Shop</a>
-          <a href="products.html" class="nav-link">Discover</a>
+          <a href="about.html" class="nav-link">Discover</a>
           <a href="#" class="nav-link">Help</a>
         </nav>
       </div>
@@ -171,7 +171,41 @@
 
   <script src="cart-system.js"></script>
   <script>
-  const API_BASE = "http://localhost:3000";
+  // Static product data for the shop
+  const productsData = [
+    {
+      id: "eevee",
+      name: "Eevee Buildable Figure",
+      price: 39.99,
+      image_url: "https://i.pinimg.com/1200x/cf/23/b2/cf23b223fc26efc843bf007eef33145c.jpg",
+      age_min: 18,
+      pieces: 387
+    },
+    {
+      id: "pika-speed-racer",
+      name: "Pikachu Speed Racer",
+      price: 49.99,
+      image_url: "https://i.pinimg.com/736x/fb/a1/b2/fba1b2971a231f6a510f3e64ace2d741.jpg",
+      age_min: 10,
+      pieces: 450
+    },
+    {
+      id: "city-starter-pack",
+      name: "Brick City Starter Pack",
+      price: 29.99,
+      image_url: "https://i.pinimg.com/736x/7b/fd/82/7bfd82fea485732ded12d4d2c4352857.jpg",
+      age_min: 7,
+      pieces: 300
+    },
+    {
+      id: "space-explorer",
+      name: "Space Explorer Shuttle",
+      price: 59.99,
+      image_url: "https://i.pinimg.com/1200x/56/be/35/56be35008a1653665c697c693dd3c075.jpg",
+      age_min: 12,
+      pieces: 650
+    }
+  ];
 
   document.addEventListener("DOMContentLoaded", function () {
     const token = localStorage.getItem("token");
@@ -186,7 +220,12 @@
       }
     }
 
-    loadProducts();
+    renderProducts(productsData);
+    const empty = document.getElementById("productsEmpty");
+    if (empty) {
+      empty.classList.toggle("hidden", productsData.length > 0);
+    }
+
     if (typeof updateCartBadge === "function") {
       updateCartBadge();
     }
@@ -197,30 +236,6 @@
     const searchInput = document.getElementById("searchInput");
     searchInput.addEventListener("input", applySearch);
   });
-
-  let productsData = [];
-
-  async function loadProducts() {
-    const grid = document.getElementById("productsGrid");
-    const empty = document.getElementById("productsEmpty");
-    grid.innerHTML = "<p class='col-span-full text-center text-sm text-slate-500'>Loading products...</p>";
-
-    try {
-      const res = await fetch(API_BASE + "/products");
-      const data = await res.json();
-
-      if (!res.ok) {
-        grid.innerHTML = "<p class='col-span-full text-center text-sm text-red-500'>Failed to load products.</p>";
-        return;
-      }
-
-      productsData = data;
-      renderProducts(productsData);
-      empty.classList.toggle("hidden", data.length > 0);
-    } catch (e) {
-      grid.innerHTML = "<p class='col-span-full text-center text-sm text-red-500'>Unable to connect to server.</p>";
-    }
-  }
 
   function renderProducts(list) {
     const grid = document.getElementById("productsGrid");
