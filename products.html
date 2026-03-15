@@ -1,436 +1,319 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Products</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>PLAYARENA | Shop</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&display=swap" rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#f49d25",
+            "background-light": "#f8f7f5",
+            "background-dark": "#221a10",
+          },
+          fontFamily: {
+            display: ["Spline Sans"],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    body { font-family: 'Spline Sans', sans-serif; }
+    .product-card:hover .product-image { transform: scale(1.05); }
+    .header {
+      background-color: #ffffff;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .nav-link {
+      text-decoration: none;
+      color: #4b5563;
+      font-weight: 600;
+      font-size: 15px;
+      position: relative;
+      padding: 8px 0;
+      transition: color 0.3s;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: #1a1a1a;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #4b5563;
+      transition: all 0.2s;
+    }
+    .btn-icon:hover { background-color: #f3f4f6; color: #1a1a1a; }
+    .badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background-color: #f39c12;
+      color: white;
+      font-size: 10px;
+      font-weight: bold;
+      padding: 2px 5px;
+      border-radius: 10px;
+      border: 2px solid white;
+    }
+  </style>
 </head>
-
-<body>
-
-<!-- NAVBAR -->
-
-<header class="navbar">
-
-<a href="index.html" class="logo">PLAYARENA</a>
-
-<div class="search">
-<input type="text" placeholder="Search sets, themes, and more">
-</div>
-
-<div class="icons">
-<a id="accountIcon" href="login.html">👤</a>
-<span>♡</span>
-<a href="cart.html" class="cart-icon">
-🛒
-<span class="cart-count">0</span>
-</a>
-</div>
-
-</header>
-
-
-<!-- PRODUCTS PAGE -->
-
-<section class="products-page">
-
-<!-- SIDEBAR -->
-
-<aside class="sidebar">
-
-<h3>PRODUCT TYPE</h3>
-
-<label><input type="checkbox" value="standard" class="type-filter"> Standard Bricks</label>
-<label><input type="checkbox" value="technic" class="type-filter"> Technic</label>
-<label><input type="checkbox" value="duplo" class="type-filter"> Duplo</label>
-
-<h3>AGE RANGE</h3>
-
-<button class="age-btn" data-age="1.5">1.5+</button>
-<button class="age-btn" data-age="4">4+</button>
-<button class="age-btn" data-age="9">9+</button>
-<button class="age-btn" data-age="13">13+</button>
-
-<h3>PRICE</h3>
-
-<label><input type="checkbox" value="0-25" class="price-filter"> $0 - $25</label>
-<label><input type="checkbox" value="25-50" class="price-filter"> $25 - $50</label>
-<label><input type="checkbox" value="50-100" class="price-filter"> $50 - $100</label>
-
-</aside>
-
-
-<!-- PRODUCTS -->
-
-<div class="products-container">
-
-<h1>PRODUCTS</h1>
-
-<div class="product-tools">
-
-<input type="text" id="searchInput" placeholder="Search products...">
-
-<select id="sortSelect">
-<option value="">Sort</option>
-<option value="low">Price Low → High</option>
-<option value="high">Price High → Low</option>
-<option value="new">Newest</option>
-</select>
-
-</div>
-
-<div class="product-grid">
-
-<div class="product-card"
-data-id="1"
-data-name="Galactic Starship"
-data-price="89.99"
-data-img="images/starship.jpg"
-data-type="standard"
-data-age="9"
-data-price-range="50-100">
-
-<img src="images/starship.jpg">
-<h4>Galactic Starship</h4>
-<p>$89.99</p>
-<button class="add-cart">Add</button>
-</div>
-
-<div class="product-card"
-data-id="2"
-data-name="Industrial Crane"
-data-price="149.99"
-data-img="images/cranetruck.jpg"
-data-type="technic"
-data-age="9"
-data-price-range="100+">
-
-<img src="images/cranetruck.jpg">
-<h4>Industrial Crane</h4>
-<p>$149.99</p>
-<button class="add-cart">Add</button>
-
-</div>
-
-
-<div class="product-card"
-data-id="3"
-data-name="Racer Z-100"
-data-price="34.99"
-data-img="images/racer.jpg"
-data-type="standard"
-data-age="4"
-data-price-range="0-25">
-
-<img src="images/racer.jpg">
-<h4><a href="product-detail.html">Racer Z-100</a></h4>
-<p>$34.99</p>
-<button class="add-cart">Add</button>
-
-</div>
-
-
-<div class="product-card"
-data-id="4"
-data-name="Botanical Wildflower"
-data-price="59.99"
-data-img="images/botaflower.jpg"
-data-type="duplo"
-data-age="1.5"
-data-price-range="25-50">
-
-<img src="images/botaflower.jpg">
-<h4>Botanical Wildflower</h4>
-<p>$59.99</p>
-<button class="add-cart">Add</button>
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- FOOTER -->
-
-<footer class="footer">
-<p>© PLAYARENA</p>
-</footer>
-
-<script>
-
-const products = document.querySelectorAll(".product-card");
-
-const searchInput = document.getElementById("searchInput");
-const sortSelect = document.getElementById("sortSelect");
-
-const typeFilters = document.querySelectorAll(".type-filter");
-const priceFilters = document.querySelectorAll(".price-filter");
-const ageButtons = document.querySelectorAll(".age-btn");
-
-let selectedAge = null;
-
-
-/* AGE FILTER */
-
-ageButtons.forEach(btn => {
-
-btn.addEventListener("click", () => {
-
-ageButtons.forEach(b => b.classList.remove("active"));
-
-btn.classList.add("active");
-
-selectedAge = btn.dataset.age;
-
-filterProducts();
-
-});
-
-});
-
-
-/* SEARCH */
-
-searchInput.addEventListener("input", filterProducts);
-
-
-/* CHECKBOX FILTER */
-
-[typeFilters, priceFilters].forEach(group => {
-
-group.forEach(filter => {
-
-filter.addEventListener("change", filterProducts);
-
-});
-
-});
-
-
-/* SORT */
-
-sortSelect.addEventListener("change", () => {
-
-const grid = document.querySelector(".product-grid");
-
-const productArray = [...products];
-
-if(sortSelect.value === "low"){
-
-productArray.sort((a,b)=> getPrice(a)-getPrice(b));
-
-}
-
-if(sortSelect.value === "high"){
-
-productArray.sort((a,b)=> getPrice(b)-getPrice(a));
-
-}
-
-if(sortSelect.value === "new"){
-
-productArray.reverse();
-
-}
-
-productArray.forEach(p => grid.appendChild(p));
-
-});
-
-
-function getPrice(product){
-
-return parseFloat(
-product.querySelector("p").innerText.replace("$","")
-);
-
-}
-
-
-/* MAIN FILTER */
-
-function filterProducts(){
-
-const search = searchInput.value.toLowerCase();
-
-const activeTypes =
-[...typeFilters].filter(c=>c.checked).map(c=>c.value);
-
-const activePrices =
-[...priceFilters].filter(c=>c.checked).map(c=>c.value);
-
-products.forEach(product=>{
-
-const name =
-product.querySelector("h4").innerText.toLowerCase();
-
-const type = product.dataset.type;
-const price = product.dataset.priceRange;
-const age = product.dataset.age;
-
-let show = true;
-
-
-/* SEARCH */
-
-if(search && !name.includes(search))
-show = false;
-
-
-/* TYPE */
-
-if(activeTypes.length && !activeTypes.includes(type))
-show = false;
-
-
-/* PRICE */
-
-if(activePrices.length && !activePrices.includes(price))
-show = false;
-
-
-/* AGE */
-
-if(selectedAge && age < selectedAge)
-show = false;
-
-
-/* SHOW / HIDE */
-
-product.classList.toggle("hide", !show);
-
-});
-
-}
-
-
-/* URL FILTER */
-
-const params = new URLSearchParams(window.location.search);
-const typeParam = params.get("type");
-
-if(typeParam){
-
-typeFilters.forEach(c=>{
-
-if(c.value === typeParam){
-
-c.checked = true;
-
-}
-
-});
-
-filterProducts();
-
-}
-
-</script>
-
-<script>
-
-/* LOAD CART */
-
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-const cartBadge = document.querySelector(".cart-count");
-
-
-/* ADD BUTTON */
-
-document.querySelectorAll(".add-cart").forEach(btn => {
-
-btn.addEventListener("click", () => {
-
-const card = btn.closest(".product-card");
-
-const product = {
-
-id: card.dataset.id,
-name: card.dataset.name,
-price: parseFloat(card.dataset.price),
-img: card.dataset.img,
-qty: 1
-
-};
-
-addToCart(product);
-
-});
-
-});
-
-
-/* ADD TO CART */
-
-function addToCart(product){
-
-const exist = cart.find(p => p.id === product.id);
-
-if(exist){
-
-exist.qty++;
-
-}else{
-
-cart.push(product);
-
-}
-
-saveCart();
-updateCartBadge();
-
-}
-
-
-/* SAVE */
-
-function saveCart(){
-
-localStorage.setItem("cart", JSON.stringify(cart));
-
-}
-
-
-/* BADGE */
-
-function updateCartBadge(){
-
-if(!cartBadge) return;
-
-const total = cart.reduce((sum,item)=>sum + item.qty,0);
-
-cartBadge.innerText = total;
-
-}
-
-
-/* LOAD BADGE */
-
-updateCartBadge();
-
-</script>
-
-<script>
-
-const token = localStorage.getItem("token")
-
-if(token){
-
-const icon=document.getElementById("accountIcon")
-
-if(icon){
-
-icon.href="profile.html"
-
-}
-
-}
-
-</script>
-
+<body class="bg-background-light text-slate-900">
+  <header class="header">
+    <div class="max-w-[1440px] w-full mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-12">
+        <a href="index.html" class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-[#f39c12] rounded-md flex items-center justify-center text-white font-bold text-lg">B</div>
+          <span class="text-xl font-extrabold tracking-tight">PLAYARENA</span>
+        </a>
+        <nav class="flex gap-7">
+          <a href="products.html" class="nav-link">Shop</a>
+          <a href="products.html" class="nav-link">Discover</a>
+          <a href="#" class="nav-link">Help</a>
+        </nav>
+      </div>
+      <div class="flex items-center gap-5">
+        <div class="relative search-bar">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
+          <input id="searchInput" type="text" class="bg-transparent border-none outline-none text-sm w-full focus:ring-0 pl-5" placeholder="Search for sets, themes..." />
+        </div>
+        <div class="flex gap-2">
+          <button class="btn-icon">♡</button>
+          <a href="cart.html" class="relative">
+            <button class="btn-icon">🛒</button>
+            <span class="badge cart-count">0</span>
+          </a>
+          <a href="login.html" id="accountLink">
+            <button id="accountIcon" class="btn-icon bg-gray-600 !text-white">👤</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-[1440px] mx-auto px-4 md:px-10 py-8">
+    <div class="mb-8">
+      <nav class="flex items-center gap-2 text-xs font-medium text-slate-400 mb-2 tracking-widest">
+        <a class="hover:text-primary transition-colors" href="index.html">Home</a>
+        <span class="text-slate-300">›</span>
+        <span class="text-slate-600 font-semibold">Shop</span>
+      </nav>
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h2 class="text-4xl font-black text-slate-900 mb-2">SHOP</h2>
+          <p class="text-slate-500">Browse all building sets available in our store.</p>
+        </div>
+        <div class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg px-4 py-2 self-start md:self-auto">
+          <span class="text-sm font-semibold text-slate-500">Sort by:</span>
+          <select id="sortSelect" class="bg-transparent border-none focus:ring-0 text-sm font-bold p-0 pr-8 cursor-pointer">
+            <option value="">Most Popular</option>
+            <option value="low">Price: Low to High</option>
+            <option value="high">Price: High to Low</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Simple sidebar (static for now) -->
+      <aside class="w-full lg:w-64 flex-shrink-0 space-y-6">
+        <div class="bg-primary/5 p-4 rounded-xl border border-primary/20 flex items-center justify-between">
+          <span class="text-sm font-bold text-slate-700">Show In Stock Only</span>
+          <button class="w-10 h-5 bg-primary rounded-full relative opacity-50 cursor-not-allowed">
+            <span class="absolute right-1 top-1 w-3 h-3 bg-white rounded-full"></span>
+          </button>
+        </div>
+        <p class="text-xs text-slate-500">
+          Filters are for UI only at the moment; all products are loaded from the backend.
+        </p>
+      </aside>
+
+      <div class="flex-1">
+        <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+          <!-- cards sẽ được render bằng JS -->
+        </div>
+
+        <p id="productsEmpty" class="text-center text-sm text-slate-500 mt-8 hidden">
+          No products available.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <script src="cart-system.js"></script>
+  <script>
+  const API_BASE = "http://localhost:3000";
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const token = localStorage.getItem("token");
+    const accountLink = document.getElementById("accountLink");
+    const accountIcon = document.getElementById("accountIcon");
+
+    if (token) {
+      accountLink.href = "profile.html";
+      if (accountIcon) {
+        accountIcon.classList.remove("bg-gray-600");
+        accountIcon.classList.add("bg-primary");
+      }
+    }
+
+    loadProducts();
+    if (typeof updateCartBadge === "function") {
+      updateCartBadge();
+    }
+
+    const sortSelect = document.getElementById("sortSelect");
+    sortSelect.addEventListener("change", applySort);
+
+    const searchInput = document.getElementById("searchInput");
+    searchInput.addEventListener("input", applySearch);
+  });
+
+  let productsData = [];
+
+  async function loadProducts() {
+    const grid = document.getElementById("productsGrid");
+    const empty = document.getElementById("productsEmpty");
+    grid.innerHTML = "<p class='col-span-full text-center text-sm text-slate-500'>Loading products...</p>";
+
+    try {
+      const res = await fetch(API_BASE + "/products");
+      const data = await res.json();
+
+      if (!res.ok) {
+        grid.innerHTML = "<p class='col-span-full text-center text-sm text-red-500'>Failed to load products.</p>";
+        return;
+      }
+
+      productsData = data;
+      renderProducts(productsData);
+      empty.classList.toggle("hidden", data.length > 0);
+    } catch (e) {
+      grid.innerHTML = "<p class='col-span-full text-center text-sm text-red-500'>Unable to connect to server.</p>";
+    }
+  }
+
+  function renderProducts(list) {
+    const grid = document.getElementById("productsGrid");
+    grid.innerHTML = "";
+
+    list.forEach(function (p) {
+      const card = document.createElement("div");
+      card.className =
+        "group product-card bg-white rounded-xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col";
+
+      const imgUrl =
+        p.image_url ||
+        "https://images.lego.com/is/image/LEGO/ldd_product?$main$&layers=0&fmt=png-alpha";
+
+      const age = p.age_min || "";
+      const pieces = p.pieces || "";
+
+      card.innerHTML =
+        '<div class="relative overflow-hidden aspect-square bg-slate-50">' +
+        '  <img class="product-image w-full h-full object-cover transition-transform duration-500" src="' +
+        imgUrl +
+        '" alt="' +
+        (p.name || "Product") +
+        '">' +
+        "</div>" +
+        '<div class="p-5 flex flex-col flex-1">' +
+        '  <div class="flex items-center gap-2 mb-2">' +
+        (age
+          ? '<span class="text-[10px] font-bold bg-slate-100 px-2 py-0.5 rounded text-slate-600">AGE ' +
+            age +
+            "+</span>"
+          : "") +
+        (pieces
+          ? '<span class="text-[10px] font-bold bg-slate-100 px-2 py-0.5 rounded text-slate-600">' +
+            pieces +
+            " PCS</span>"
+          : "") +
+        "  </div>" +
+        '  <h3 class="font-bold text-slate-900 line-clamp-2 mb-2 group-hover:text-primary transition-colors">' +
+        p.name +
+        "</h3>" +
+        '  <div class="mt-auto flex items-center justify-between gap-4">' +
+        '    <span class="text-xl font-black text-slate-900">$' +
+        Number(p.price).toFixed(2) +
+        "</span>" +
+        '    <button class="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2 text-sm transition-colors whitespace-nowrap">' +
+        '      <span class="material-symbols-outlined text-lg">add_shopping_cart</span>' +
+        "      Add" +
+        "    </button>" +
+        "  </div>" +
+        "</div>";
+
+      const addBtn = card.querySelector("button");
+      addBtn.addEventListener("click", function () {
+        const productForCart = {
+          id: String(p.id),
+          name: p.name,
+          price: Number(p.price),
+          img: imgUrl,
+          qty: 1,
+        };
+        if (typeof addToCart === "function") {
+          addToCart(productForCart);
+        }
+      });
+
+      grid.appendChild(card);
+    });
+  }
+
+  function applySort() {
+    const sortSelect = document.getElementById("sortSelect");
+    let sorted = [...productsData];
+
+    if (sortSelect.value === "low") {
+      sorted.sort((a, b) => a.price - b.price);
+    } else if (sortSelect.value === "high") {
+      sorted.sort((a, b) => b.price - a.price);
+    }
+
+    const search = document.getElementById("searchInput").value.toLowerCase();
+    if (search) {
+      sorted = sorted.filter((p) =>
+        String(p.name || "").toLowerCase().includes(search)
+      );
+    }
+
+    renderProducts(sorted);
+  }
+
+  function applySearch() {
+    applySort();
+  }
+  </script>
 </body>
 </html>

@@ -1,106 +1,279 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="vi">
 <head>
-<meta charset="UTF-8">
-<title>My Profile</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Account - ĐKL</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    body { background-color: #f4f4f4; font-family: sans-serif; }
+    .lego-yellow { background-color: #ffd500; }
+    .lego-blue { background-color: #006db7; }
+    .sidebar-item:hover { background-color: #e5e7eb; }
+    .active-sidebar { background-color: #006db7; color: white !important; }
+  </style>
 </head>
+<body class="bg-white text-gray-900 font-sans">
+  <!-- Header -->
+  <header class="header bg-white border-b border-gray-200">
+    <div class="max-w-[1440px] mx-auto flex items-center justify-between px-10 h-16">
+      <div class="flex items-center gap-12">
+        <a href="index.html" class="logo-link">
+          <div class="flex items-center gap-2 cursor-pointer">
+            <div class="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center text-white font-bold">B</div>
+            <span class="text-xl font-extrabold tracking-tight text-gray-900">ĐKL</span>
+          </div>
+        </a>
+        <nav class="hidden md:flex gap-7">
+          <a href="products.html" class="text-gray-600 font-semibold text-sm hover:text-gray-900">Shop</a>
+          <a href="productdkl.html" class="text-gray-600 font-semibold text-sm hover:text-gray-900">Discover</a>
+          <a href="#" class="text-gray-600 font-semibold text-sm hover:text-gray-900">Help</a>
+        </nav>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="relative hidden md:block">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">🔍</span>
+          <input
+            type="text"
+            placeholder="Search for sets, themes..."
+            class="pl-8 pr-3 py-1.5 rounded-lg bg-gray-100 text-sm border border-transparent focus:bg-white focus:border-gray-300 focus:outline-none w-64"
+          />
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="w-9 h-9 rounded-full flex items-center justify-center text-lg text-gray-600 hover:bg-gray-100">♡</button>
+          <a href="cart.html" class="relative">
+            <button class="w-9 h-9 rounded-full flex items-center justify-center text-lg text-gray-600 hover:bg-gray-100">🛒</button>
+            <span class="absolute -top-1 -right-1 bg-yellow-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-white">0</span>
+          </a>
+          <button id="accountButton" class="w-9 h-9 rounded-full flex items-center justify-center text-lg text-white bg-gray-600 hover:bg-gray-700">
+            👤
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
 
-<body>
+  <!-- Main layout -->
+  <div class="flex max-w-[1400px] mx-auto mt-6 px-4 gap-6">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white rounded-lg shadow-sm h-fit overflow-hidden">
+      <div class="flex flex-col text-sm text-gray-700">
+        <a href="profile.html" class="sidebar-item active-sidebar p-3 flex items-center gap-3">
+          <i class="fa-solid fa-house"></i> Account Overview
+        </a>
+        <a href="order.html" class="sidebar-item p-3 border-t flex items-center gap-3">
+          <i class="fa-solid fa-box"></i> My Orders
+        </a>
+        <a href="wishlist.html" class="sidebar-item p-3 border-t flex items-center gap-3">
+          <i class="fa-solid fa-star"></i> My wishlist
+        </a>
+        <a href="collection.html" class="sidebar-item p-3 border-t flex items-center gap-3">
+          <i class="fa-solid fa-coins"></i> My collection
+        </a>
+        <a href="address.html" class="sidebar-item p-3 border-t flex items-center gap-3">
+          <i class="fa-solid fa-address-card"></i> Personal Details
+        </a>
+        <button id="logoutSidebar" class="text-left sidebar-item p-3 border-t flex items-center gap-3 text-red-600 bg-transparent w-full">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+        </button>
+      </div>
+    </aside>
 
-<!-- NAVBAR -->
+    <!-- Main content -->
+    <main class="flex-1">
+      <h1 class="text-2xl font-bold mb-2">My Account</h1>
+      <p class="text-sm text-gray-600 mb-4">
+        Logged in as <span id="profileEmail" class="font-semibold"></span>
+      </p>
 
-<header class="navbar">
+      <div class="bg-white rounded-lg p-6 mb-6 flex justify-between items-center relative overflow-hidden border">
+        <div class="z-10 w-2/3">
+          <p class="mb-4 text-gray-700">
+            Unlock a world of awesome LEGO® benefits and rewards including early access sets, gifts with purchase, and member-only discounts.
+          </p>
+          <button class="lego-blue text-white px-6 py-2 rounded-full font-bold hover:bg-blue-700 transition">
+            Become a LEGO® Insider!
+          </button>
+        </div>
+        <div class="text-right z-10">
+          <p class="font-bold">It's FREE to be VIP</p>
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Lego_Insiders_Logo.png"
+            class="h-12 mt-2 ml-auto"
+            alt="Insiders"
+          />
+        </div>
+        <div class="absolute top-0 right-0 w-32 h-full bg-green-500 opacity-20 -skew-x-12 translate-x-16"></div>
+      </div>
 
-<a href="index.html" class="logo">PLAYARENA</a>
+      <div class="bg-white border-2 border-dashed border-gray-300 rounded-lg p-10 text-center mb-6">
+        <h3 class="font-bold text-lg">Create your wish list</h3>
+        <p class="text-gray-500 mb-4">
+          Wish lists help keep track of LEGO sets for you and your loved ones.
+        </p>
+        <button class="border-2 border-blue-500 text-blue-500 px-6 py-2 rounded-full font-bold">
+          + Create new list
+        </button>
+      </div>
 
-<nav>
-<a href="products.html">SHOP</a>
-<a href="#">DISCOVER</a>
-<a href="#">HELP</a>
-</nav>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-white p-6 rounded-lg border shadow-sm">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold">LEGO® Insiders rewards</h3>
+            <div class="flex gap-2">
+              <button class="w-8 h-8 rounded-full border flex items-center justify-center">←</button>
+              <button class="w-8 h-8 rounded-full border flex items-center justify-center">→</button>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-1/2 text-center text-xs">
+              <div class="bg-gray-100 p-4 rounded-md mb-2 h-32 flex items-center justify-center">
+                <img
+                  src="https://www.lego.com/cdn/cs/set/assets/bltf9507f30097f4c01/40589.png"
+                  class="max-h-full"
+                />
+              </div>
+              <p class="font-bold">Fish Tank</p>
+              <p class="text-gray-500">2400 Points</p>
+            </div>
+            <div class="w-1/2 text-center text-xs">
+              <div class="bg-gray-100 p-4 rounded-md mb-2 h-32 flex items-center justify-center">
+                <img
+                  src="https://www.lego.com/cdn/cs/set/assets/bltc2a39243765103d3/40580.png"
+                  class="max-h-full"
+                />
+              </div>
+              <p class="font-bold">Retro Space Explorer</p>
+              <p class="text-gray-500">2400 Points</p>
+            </div>
+          </div>
+          <button class="mt-4 border border-blue-500 text-blue-500 px-4 py-1 rounded-full text-sm font-bold">
+            View All Rewards
+          </button>
+        </div>
 
-<div class="search">
-<input type="text" placeholder="Search">
-</div>
+        <div class="bg-white p-6 rounded-lg border shadow-sm">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold">Gift with Purchase</h3>
+            <div class="flex gap-2">
+              <button class="w-8 h-8 rounded-full border flex items-center justify-center">←</button>
+              <button class="w-8 h-8 rounded-full border flex items-center justify-center">→</button>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-1/2 text-center text-xs">
+              <div class="bg-gray-100 p-4 rounded-md mb-2 h-32 flex items-center justify-center">
+                <img
+                  src="https://www.lego.com/cdn/cs/set/assets/blt511894d80a996053/40588.png"
+                  class="max-h-full"
+                />
+              </div>
+              <p class="font-bold">Floral Picture Frame</p>
+            </div>
+            <div class="w-1/2 text-center text-xs">
+              <div class="bg-gray-100 p-4 rounded-md mb-2 h-32 flex items-center justify-center">
+                <img
+                  src="https://www.lego.com/cdn/cs/set/assets/blt9044b70275817c76/40587.png"
+                  class="max-h-full"
+                />
+              </div>
+              <p class="font-bold">Bunny Ear Bag</p>
+            </div>
+          </div>
+          <button class="mt-4 border border-blue-500 text-blue-500 px-4 py-1 rounded-full text-sm font-bold">
+            View special offers
+          </button>
+        </div>
+      </div>
 
-<div class="icons">
-<a id="accountIcon" href="profile.html">👤</a>
-<span>♡</span>
-<a href="cart.html" class="cart-icon">
-🛒
-<span class="cart-count">0</span>
-</a>
-</div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+        <div class="bg-white p-4 rounded-lg flex items-center gap-4 border">
+          <div class="bg-blue-100 p-3 rounded-full">🎁</div>
+          <div>
+            <p class="font-bold text-sm">Preferences & Personalization</p>
+            <a href="#" class="text-blue-500 text-xs underline">Manage your preferences</a>
+          </div>
+        </div>
+        <div class="bg-white p-4 rounded-lg border grid grid-cols-2 gap-2 text-xs">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-truck"></i> Deliveries
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-circle-question"></i> FAQs
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-envelope"></i> Contact
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-wrench"></i> Replacement Parts
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 
-</header>
+  <script>
+  const API_BASE = "http://localhost:3000";
 
+  function doLogout() {
+    localStorage.clear();
+    window.location.href = "login.html";
+  }
 
-<!-- PROFILE -->
+  document.addEventListener("DOMContentLoaded", async function () {
+    const token = localStorage.getItem("token");
 
-<section class="profile-page">
+    if (!token) {
+      window.location.href = "login.html";
+      return;
+    }
 
-<div class="profile-card">
+    // account button in header
+    const accountBtn = document.getElementById("accountButton");
+    if (accountBtn) {
+      accountBtn.addEventListener("click", function () {
+        window.location.href = "profile.html";
+      });
+    }
 
-<h1>Builder Profile</h1>
+    // logout in sidebar
+    const logoutSidebar = document.getElementById("logoutSidebar");
+    if (logoutSidebar) {
+      logoutSidebar.addEventListener("click", doLogout);
+    }
 
-<p class="profile-email" id="userEmail"></p>
+    // optimistic email from localStorage
+    const cachedEmail = localStorage.getItem("userEmail");
+    if (cachedEmail) {
+      document.getElementById("profileEmail").innerText = cachedEmail;
+    }
 
-<div class="profile-actions">
+    // verify with backend /profile
+    try {
+      const res = await fetch(API_BASE + "/profile", {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
 
-<a href="cart.html" class="profile-btn">My Orders</a>
+      if (!res.ok) {
+        doLogout();
+        return;
+      }
 
-<button class="profile-btn">Saved Sets</button>
-
-<button class="logout-btn" onclick="logout()">Logout</button>
-
-</div>
-
-</div>
-
-</section>
-
-
-<footer class="footer">
-<p>© PLAYARENA</p>
-</footer>
-
-
-<script src="cart-system.js"></script>
-
-<script>
-
-/* CHECK LOGIN */
-
-const token = localStorage.getItem("token")
-
-if(!token){
-window.location.href="login.html"
-}
-
-
-/* LOGOUT */
-
-function logout(){
-
-localStorage.removeItem("token")
-localStorage.removeItem("role")
-
-window.location.href="index.html"
-
-}
-
-
-/* NAVBAR ACCOUNT ICON */
-
-const icon=document.getElementById("accountIcon")
-
-if(icon){
-icon.href="profile.html"
-}
-
-</script>
-
+      const data = await res.json();
+      if (data.email) {
+        document.getElementById("profileEmail").innerText = data.email;
+        localStorage.setItem("userEmail", data.email);
+      }
+      if (data.role) {
+        localStorage.setItem("role", data.role);
+      }
+    } catch (e) {
+      // nếu lỗi backend, vẫn dùng localStorage tạm
+    }
+  });
+  </script>
 </body>
 </html>
