@@ -7,6 +7,8 @@ const path = require("path")
 
 const app = express()
 
+const DB_PATH = path.join(__dirname, "users.db")
+
 app.use(cors())
 app.use(express.json())
 
@@ -16,7 +18,7 @@ app.use(express.static("public"))
 
 const SECRET = "supersecretkey"
 
-const db = new sqlite3.Database("./users.db")
+const db = new sqlite3.Database(DB_PATH)
 
 /* CREATE TABLES */
 
@@ -84,152 +86,275 @@ db.get("SELECT COUNT(*) as count FROM products", (err, row) => {
 
 /* REGISTER */
 
-app.post("/register", async (req,res)=>{
+app.post("/register", async (req, res) => {
+  const { email, password } = req.body
 
-const {email,password} = req.body
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and password required" })
+  }
 
-if(!email || !password){
-return res.status(400).json({message:"Email and password required"})
-}
+  try {
+    const hash = await bcrypt.hash(password, 10)
 
-try{
+    db.run(
+      "INSERT INTO users(email,password,role) VALUES(?,?,?)",
+      [email, hash, "user"],
+      function (err) {
+        if (err) {
+          return res.status(400).json({ message: "User already exists" })
+        }
 
-const hash = await bcrypt.hash(password,10)
-
-db.run(
-"INSERT INTO users(email,password,role) VALUES(?,?,?)",
-[email,hash,"user"],
-function(err){
-
-if(err){
-return res.status(400).json({message:"User already exists"})
-}
-
-res.json({
-message:"User created",
-userId:this.lastID
+        res.json({
+          message: "User created",
+          userId: this.lastID,
+        })
+      }
+    )
+  } catch (err) {
+    res.status(500).json({ message: "Server error" })
+  }
 })
 
+/* LOGIN — JWT chứa role để phân quyền admin */
+
+app.post("/login", (req, res) => {
+  const { email, password } = req.body
+
+  db.get("SELECT * FROM users WHERE email=?", [email], async (err, user) => {
+    if (!user) {
+      return res.status(401).json({ message: "User not found" })
+    }
+
+    const match = await bcrypt.compare(password, user.password)
+
+    if (!match) {
+      return res.status(401).json({ message: "Wrong password" })
+    }
+
+    const token = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+        role: user.role || "user",
+      },
+      SECRET,
+      { expiresIn: "1h" }
+    )
+
+    res.json({
+      token: token,
+      role: user.role,
+    })
+  })
 })
 
-}catch(err){
+/* VERIFY TOKEN */
 
-res.status(500).json({message:"Server error"})
+function verifyToken(req, res, next) {
+  const authHeader = req.headers["authorization"]
 
+  if (!authHeader) {
+    return res.status(403).json({ message: "No token" })
+  }
+
+  const token = authHeader.split(" ")[1]
+
+  jwt.verify(token, SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ message: "Invalid token" })
+    }
+
+    req.user = user
+    next()
+  })
 }
 
+function requireAdmin(req, res, next) {
+  if (!req.user || req.user.id == null) {
+    return res.status(403).json({ message: "Chỉ dành cho quản trị viên" })
+  }
+  if (req.user.role === "admin") {
+    return next()
+  }
+  /* Token cũ không có role trong JWT — kiểm tra DB */
+  db.get(
+    "SELECT role FROM users WHERE id=?",
+    [req.user.id],
+    (err, row) => {
+      if (err || !row || row.role !== "admin") {
+        return res.status(403).json({ message: "Chỉ dành cho quản trị viên" })
+      }
+      req.user.role = row.role
+      next()
+    }
+  )
+}
+
+/* PROFILE */
+
+app.get("/profile", verifyToken, (req, res) => {
+  db.get(
+    "SELECT id,email,role FROM users WHERE id=?",
+    [req.user.id],
+    (err, user) => {
+      if (!user) {
+        return res.status(404).json({ message: "User not found" })
+      }
+
+      res.json(user)
+    }
+  )
 })
 
-/* LOGIN */
+/* PRODUCTS — public */
 
-app.post("/login",(req,res)=>{
+app.get("/products", (req, res) => {
+  db.all(
+    "SELECT id,name,price,image_url,age_min,pieces,theme FROM products ORDER BY id DESC",
+    [],
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error" })
+      }
 
-const {email,password} = req.body
-
-db.get(
-"SELECT * FROM users WHERE email=?",
-[email],
-async (err,user)=>{
-
-if(!user){
-return res.status(401).json({message:"User not found"})
-}
-
-const match = await bcrypt.compare(password,user.password)
-
-if(!match){
-return res.status(401).json({message:"Wrong password"})
-}
-
-const token = jwt.sign(
-{ id:user.id,email:user.email },
-SECRET,
-{expiresIn:"1h"}
-)
-
-res.json({
-token:token,
-role:user.role
+      res.json(rows)
+    }
+  )
 })
 
+/* ADMIN — sản phẩm */
+
+app.post("/admin/products", verifyToken, requireAdmin, (req, res) => {
+  const { name, price, image_url, age_min, pieces, theme } = req.body
+
+  if (!name || price === undefined || price === null || price === "") {
+    return res.status(400).json({ message: "Cần có tên và giá sản phẩm" })
+  }
+
+  const p = Number(price)
+  if (Number.isNaN(p) || p < 0) {
+    return res.status(400).json({ message: "Giá không hợp lệ" })
+  }
+
+  db.run(
+    "INSERT INTO products(name,price,image_url,age_min,pieces,theme) VALUES(?,?,?,?,?,?)",
+    [
+      String(name).trim(),
+      p,
+      image_url ? String(image_url).trim() : null,
+      age_min !== undefined && age_min !== "" && age_min !== null
+        ? parseInt(age_min, 10)
+        : null,
+      pieces !== undefined && pieces !== "" && pieces !== null
+        ? parseInt(pieces, 10)
+        : null,
+      theme ? String(theme).trim() : null,
+    ],
+    function (err) {
+      if (err) {
+        return res.status(500).json({ message: "Database error" })
+      }
+      res.status(201).json({ message: "Đã tạo sản phẩm", id: this.lastID })
+    }
+  )
 })
 
+app.put("/admin/products/:id", verifyToken, requireAdmin, (req, res) => {
+  const { name, price, image_url, age_min, pieces, theme } = req.body
+  const id = req.params.id
+
+  if (!name || price === undefined || price === null || price === "") {
+    return res.status(400).json({ message: "Cần có tên và giá sản phẩm" })
+  }
+
+  const p = Number(price)
+  if (Number.isNaN(p) || p < 0) {
+    return res.status(400).json({ message: "Giá không hợp lệ" })
+  }
+
+  db.run(
+    "UPDATE products SET name=?, price=?, image_url=?, age_min=?, pieces=?, theme=? WHERE id=?",
+    [
+      String(name).trim(),
+      p,
+      image_url ? String(image_url).trim() : null,
+      age_min !== undefined && age_min !== "" && age_min !== null
+        ? parseInt(age_min, 10)
+        : null,
+      pieces !== undefined && pieces !== "" && pieces !== null
+        ? parseInt(pieces, 10)
+        : null,
+      theme ? String(theme).trim() : null,
+      id,
+    ],
+    function (err) {
+      if (err) {
+        return res.status(500).json({ message: "Database error" })
+      }
+      if (this.changes === 0) {
+        return res.status(404).json({ message: "Không tìm thấy sản phẩm" })
+      }
+      res.json({ message: "Đã cập nhật" })
+    }
+  )
 })
 
-/* VERIFY TOKEN MIDDLEWARE */
-
-function verifyToken(req,res,next){
-
-const authHeader = req.headers["authorization"]
-
-if(!authHeader){
-return res.status(403).json({message:"No token"})
-}
-
-const token = authHeader.split(" ")[1]
-
-jwt.verify(token,SECRET,(err,user)=>{
-
-if(err){
-return res.status(403).json({message:"Invalid token"})
-}
-
-req.user = user
-next()
-
+app.delete("/admin/products/:id", verifyToken, requireAdmin, (req, res) => {
+  db.run("DELETE FROM products WHERE id=?", [req.params.id], function (err) {
+    if (err) {
+      return res.status(500).json({ message: "Database error" })
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ message: "Không tìm thấy sản phẩm" })
+    }
+    res.json({ message: "Đã xóa" })
+  })
 })
 
-}
+/* ADMIN — danh sách user (không trả password) */
 
-/* PROFILE API */
-
-app.get("/profile",verifyToken,(req,res)=>{
-
-db.get(
-"SELECT id,email,role FROM users WHERE id=?",
-[req.user.id],
-(err,user)=>{
-
-if(!user){
-return res.status(404).json({message:"User not found"})
-}
-
-res.json(user)
-
+app.get("/admin/users", verifyToken, requireAdmin, (req, res) => {
+  db.all(
+    "SELECT id, email, role FROM users ORDER BY id ASC",
+    [],
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error" })
+      }
+      res.json(rows)
+    }
+  )
 })
 
-})
+app.patch("/admin/users/:id/role", verifyToken, requireAdmin, (req, res) => {
+  const { role } = req.body
+  const uid = req.params.id
 
-/* PRODUCTS API (read-only for shop page) */
+  if (role !== "user" && role !== "admin") {
+    return res.status(400).json({ message: "Role phải là user hoặc admin" })
+  }
 
-app.get("/products",(req,res)=>{
-
-db.all(
-"SELECT id,name,price,image_url,age_min,pieces,theme FROM products ORDER BY id DESC",
-[],
-(err,rows)=>{
-
-if(err){
-return res.status(500).json({message:"Database error"})
-}
-
-res.json(rows)
-
-}
-)
-
+  db.run(
+    "UPDATE users SET role=? WHERE id=?",
+    [role, uid],
+    function (err) {
+      if (err) {
+        return res.status(500).json({ message: "Database error" })
+      }
+      if (this.changes === 0) {
+        return res.status(404).json({ message: "Không tìm thấy user" })
+      }
+      res.json({ message: "Đã cập nhật role" })
+    }
+  )
 })
 
 /* DEFAULT ROUTE */
 
-app.get("/",(req,res)=>{
-
-res.sendFile(path.join(__dirname,"public","index.html"))
-
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"))
 })
 
-/* START SERVER */
-
-app.listen(3000,()=>{
-console.log("Server running on http://localhost:3000")
+app.listen(3000, () => {
+  console.log("Server running on http://localhost:3000")
 })
