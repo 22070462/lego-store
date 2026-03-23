@@ -27,7 +27,7 @@
 | 2 | Dau Khanh Linh | | UI/UX design for Home, Shop, About, and Help pages; Tailwind styling; consistent navigation and branding |
 | 3 | Nguyen Thanh Dung |  | Cart, wishlist, and checkout features; integrate `GET /products`; persist cart in `localStorage`; cart page implementation |
 | 4 | Nguyen Duc Hiep |  | Backend core: Express + SQLite; JWT login/register; profile endpoint; authentication middleware |
-| 5 |  |  | Orders backend (`POST/GET /orders`, order details); `orders` / `order_items` schema; admin APIs for products and users |
+| 5 |Nguyen Minh Tung  |  | Orders backend (`POST/GET /orders`, order details); `orders` / `order_items` schema; admin APIs for products and users |
 | 6 | |  | Admin dashboard UI; API testing with Postman; test scenarios; demo execution and presentation slides |
 
 ---
