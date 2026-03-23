@@ -1,122 +1,122 @@
 # Capstone Project 2 — MIS for a Toy Store
 
-**Đề tài:** Hệ thống thông tin quản lý (MIS) hỗ trợ vận hành **cửa hàng đồ chơi trực tuyến** — nghiệp vụ bán lẻ, quản lý danh mục sản phẩm, khách hàng, giỏ hàng/đơn hàng và báo cáo vận hành cơ bản cho quản trị.
+**Topic:** A Management Information System (MIS) that supports operations for an **online toy store**, including retail workflows, product catalog management, customer management, cart/order processing, and basic operational reporting for administrators.
 
-**Tên hệ thống demo:** **PLAYARENA** — website bán đồ chơi lắp ráp (phong cách LEGO-style), phục vụ mục đích học tập.
+**Demo system name:** **PLAYARENA** — a LEGO-style toy e-commerce website built for academic purposes.
 
 ---
 
-## Tổng quan MIS
+## MIS Overview
 
-| Khía cạnh | Mô tả |
+| Aspect | Description |
 |-----------|--------|
-| **Đối tượng** | Khách hàng (mua hàng), quản trị viên (sản phẩm, người dùng, đơn) |
-| **Luồng dữ liệu** | Giao diện web → API → SQLite (người dùng, sản phẩm, đơn hàng, chi tiết đơn) |
-| **Quyết định hỗ trợ** | Theo dõi đơn hàng, quản lý kho danh mục (CRUD), phân quyền user/admin |
-| **Công nghệ** | Frontend tĩnh (HTML/CSS/JS), backend Node.js + Express, JWT + bcrypt |
+| **Stakeholders** | Customers (shopping) and administrators (products, users, orders) |
+| **Data flow** | Web interface -> API -> SQLite (users, products, orders, order items) |
+| **Decision support** | Order tracking, catalog management (CRUD), and user/admin role control |
+| **Technology** | Static frontend (HTML/CSS/JS), Node.js + Express backend, JWT + bcrypt |
 
 ---
 
-## Thành viên nhóm & phân công
+## Team Members and Task Allocation
 
-*Nhóm cập nhật cột **Họ tên** và **MSSV** theo đúng danh sách lớp.*
+*Please update the **Full Name** and **Student ID** columns with your actual team information.*
 
-| STT | Họ tên | MSSV | Nhiệm vụ (Tasks) |
+| No. | Full Name | Student ID | Tasks |
 |:---:|:------|:----:|:-----------------|
-| 1 | *(điền)* | *(điền)* | Phân tích nghiệp vụ MIS cửa hàng đồ chơi; phạm vi chức năng; README & tài liệu Capstone; tổng hợp báo cáo |
-| 2 | *(điền)* | *(điền)* | Thiết kế UI/UX: trang chủ, Shop, About, Help; Tailwind; đồng bộ navigation & branding |
-| 3 | *(điền)* | *(điền)* | Giỏ hàng, wishlist, checkout; tích hợp `GET /products`; lưu giỏ `localStorage`; trang giỏ hàng |
-| 4 | *(điền)* | *(điền)* | Backend: Express, SQLite; đăng ký/đăng nhập JWT; profile; middleware xác thực |
-| 5 | *(điền)* | *(điền)* | Backend: đơn hàng (`POST/GET /orders`, chi tiết đơn); schema `orders` / `order_items`; API admin sản phẩm & người dùng |
-| 6 | *(điền)* | *(điền)* | Trang admin dashboard; kiểm thử API (Postman); kịch bản test; demo & slide thuyết trình |
+| 1 | *(fill in)* | *(fill in)* | Analyze toy-store MIS business requirements; define functional scope; maintain README and Capstone documentation; compile final report |
+| 2 | *(fill in)* | *(fill in)* | UI/UX design for Home, Shop, About, and Help pages; Tailwind styling; consistent navigation and branding |
+| 3 | *(fill in)* | *(fill in)* | Cart, wishlist, and checkout features; integrate `GET /products`; persist cart in `localStorage`; cart page implementation |
+| 4 | *(fill in)* | *(fill in)* | Backend core: Express + SQLite; JWT login/register; profile endpoint; authentication middleware |
+| 5 | *(fill in)* | *(fill in)* | Orders backend (`POST/GET /orders`, order details); `orders` / `order_items` schema; admin APIs for products and users |
+| 6 | *(fill in)* | *(fill in)* | Admin dashboard UI; API testing with Postman; test scenarios; demo execution and presentation slides |
 
 ---
 
-## Công nghệ
+## Technology Stack
 
-| Phần | Công nghệ |
+| Layer | Technology |
 |------|-----------|
 | Frontend | HTML, Tailwind CSS (CDN), JavaScript |
 | Backend | Node.js, Express |
-| Cơ sở dữ liệu | SQLite (`backend/users.db`) |
-| Xác thực | JWT, bcrypt |
+| Database | SQLite (`backend/users.db`) |
+| Authentication | JWT, bcrypt |
 
-## Yêu cầu môi trường
+## Prerequisites
 
-- [Node.js](https://nodejs.org/) (khuyến nghị bản LTS)
+- [Node.js](https://nodejs.org/) (LTS version recommended)
 
-## Cài đặt
+## Installation
 
-Trong thư mục gốc của project:
+From the project root:
 
 ```bash
 npm install
 ```
 
-## Chạy hệ thống
+## Run the System
 
-Luôn chạy server từ thư mục **`backend`** (đường dẫn `users.db` chuẩn):
+Always start the server from the **`backend`** directory (so the `users.db` path is correct):
 
 ```bash
 cd backend
 node server.js
 ```
 
-- API & phục vụ file HTML tĩnh: **http://localhost:3000**
+- API and static frontend hosting: **http://localhost:3000**
 - **Shop:** [http://localhost:3000/products.html](http://localhost:3000/products.html)  
-- **Trang chủ:** [http://localhost:3000/](http://localhost:3000/)
+- **Home:** [http://localhost:3000/](http://localhost:3000/)
 
-Frontend gọi API cùng origin khi mở qua port 3000; nếu mở file trực tiếp (`file://`) hoặc Live Server port khác, code vẫn trỏ tới `http://localhost:3000` — cần bật backend trước.
+When opened via port 3000, the frontend uses same-origin API calls. If you open pages directly via `file://` or use Live Server on another port, the code still targets `http://localhost:3000`, so the backend must be running.
 
-## Cơ sở dữ liệu
+## Database
 
-- File SQLite: **`backend/users.db`** — bảng `users`, `products`, `orders`, `order_items`.
-- Khởi tạo schema: `cd backend` → `node initDb.js`.
-- Server tự seed vài sản phẩm demo nếu bảng `products` trống (lần chạy đầu).
+- SQLite file: **`backend/users.db`** with tables `users`, `products`, `orders`, `order_items`.
+- Initialize schema manually: `cd backend` -> `node initDb.js`.
+- The server auto-seeds demo products when the `products` table is empty (first run).
 
-## Tài khoản admin (phát triển)
+## Admin Account (Development)
 
-### Cách 1 — Tài khoản tạm
+### Method 1 — Temporary Admin
 
 ```bash
 cd backend
 node seedTempAdmin.js
 ```
 
-Đăng nhập bằng email/mật khẩu in ra trong terminal. **Chỉ dùng lúc dev.**
+Log in using the email/password printed in the terminal. **Development use only.**
 
-### Cách 2 — Nâng user đã đăng ký lên admin
+### Method 2 — Promote an Existing User to Admin
 
 ```bash
 cd backend
-node makeAdmin.js email-da-dang-ky@example.com
+node makeAdmin.js registered-email@example.com
 ```
 
-Liệt kê user: `node checkUsers.js`.
+List users with: `node checkUsers.js`.
 
-## API (tóm tắt)
+## API Summary
 
-| Phương thức | Đường dẫn | Mô tả |
+| Method | Endpoint | Description |
 |-------------|-----------|--------|
-| POST | `/register` | Đăng ký |
-| POST | `/login` | Đăng nhập → `token`, `role` |
-| GET | `/profile` | Header `Authorization: Bearer <token>` |
-| GET | `/products` | Danh sách sản phẩm (public) |
-| POST | `/orders` | Đặt hàng (`items[]`, cần đăng nhập) |
-| GET | `/orders` | Đơn của user hiện tại |
-| GET | `/orders/:id` | Chi tiết đơn (chủ đơn hoặc admin) |
-| GET | `/admin/orders` | Tất cả đơn (admin) |
-| POST | `/admin/products` | Thêm sản phẩm (admin) |
-| PUT | `/admin/products/:id` | Sửa sản phẩm (admin) |
-| DELETE | `/admin/products/:id` | Xóa sản phẩm (admin) |
-| GET | `/admin/users` | Danh sách user (admin) |
-| PATCH | `/admin/users/:id/role` | Đổi role (admin) |
+| POST | `/register` | Register a new account |
+| POST | `/login` | Login -> returns `token`, `role` |
+| GET | `/profile` | Requires `Authorization: Bearer <token>` |
+| GET | `/products` | Public product list |
+| POST | `/orders` | Place an order (`items[]`, login required) |
+| GET | `/orders` | Current user's orders |
+| GET | `/orders/:id` | Order details (owner or admin) |
+| GET | `/admin/orders` | All orders (admin) |
+| POST | `/admin/products` | Create product (admin) |
+| PUT | `/admin/products/:id` | Update product (admin) |
+| DELETE | `/admin/products/:id` | Delete product (admin) |
+| GET | `/admin/users` | List users (admin) |
+| PATCH | `/admin/users/:id/role` | Update role (admin) |
 
-## Cấu trúc thư mục (chính)
+## Main Project Structure
 
 ```
 ├── backend/
-│   ├── server.js          # API Express + static frontend
+│   ├── server.js          # Express API + static frontend
 │   ├── users.db           # SQLite
 │   ├── initDb.js
 │   ├── seedTempAdmin.js
@@ -134,15 +134,15 @@ Liệt kê user: `node checkUsers.js`.
 └── package.json
 ```
 
-## Bảo mật (nộp bài / deploy)
+## Security Notes (Submission / Deployment)
 
-- Chuyển JWT `SECRET` sang biến môi trường (`.env`), không commit secret thật.
-- Không đưa mật khẩu thật vào README hoặc repo công khai.
+- Move JWT `SECRET` to environment variables (`.env`), and never commit real secrets.
+- Do not expose real passwords in the README or any public repository.
 
-## Ghi chú pháp lý & kỹ thuật
+## Legal and Technical Notes
 
-- LEGO® là thương hiệu của LEGO Group. Project phục vụ học tập / demo.
-- Giỏ hàng lưu **localStorage**; **Thanh toán** (đã đăng nhập) gửi đơn lên server → SQLite. Xem **Đơn hàng** (`orders.html`) và **chi tiết** (`order-detail.html?id=`).
+- LEGO(R) is a trademark of the LEGO Group. This project is for educational/demo use.
+- The cart is stored in **localStorage**. On **Checkout** (after login), order data is sent to the server and stored in SQLite. View orders in `orders.html` and order details in `order-detail.html?id=`.
 
 ---
 
