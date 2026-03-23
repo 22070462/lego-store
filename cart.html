@@ -149,7 +149,7 @@
             <span class="font-bold text-slate-900">Tổng cộng</span>
             <span class="total-price text-xl font-black text-primary">$0.00</span>
           </div>
-          <button type="button" class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3.5 rounded-xl transition-colors shadow-sm">
+          <button type="button" id="btnCheckout" class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3.5 rounded-xl transition-colors shadow-sm">
             Thanh toán an toàn
           </button>
           <p class="text-[11px] text-slate-400 text-center mt-3">Đơn hàng demo — không trừ tiền thật.</p>
@@ -499,6 +499,59 @@
       window.addEventListener("wishlistchange", function () {
         renderWishlist();
       });
+
+      var btnCheckout = document.getElementById("btnCheckout");
+      if (btnCheckout) {
+        btnCheckout.addEventListener("click", async function () {
+          if (cart.length === 0) {
+            alert("Giỏ hàng không có sản phẩm.");
+            return;
+          }
+          var token = localStorage.getItem("token");
+          if (!token) {
+            alert("Vui lòng đăng nhập để đặt hàng.");
+            window.location.href = "login.html";
+            return;
+          }
+          try {
+            var res = await fetch(API_BASE + "/orders", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + token,
+              },
+              body: JSON.stringify({
+                items: cart.map(function (i) {
+                  return {
+                    id: i.id,
+                    name: i.name,
+                    price: Number(i.price),
+                    qty: i.qty,
+                    img: i.img || "",
+                  };
+                }),
+              }),
+            });
+            var data = await res.json();
+            if (!res.ok) {
+              alert(data.message || "Đặt hàng thất bại.");
+              return;
+            }
+            localStorage.setItem("cart", "[]");
+            if (typeof reloadCartFromStorage === "function") {
+              reloadCartFromStorage();
+            }
+            cart = [];
+            renderCart();
+            if (typeof updateCartBadge === "function") {
+              updateCartBadge();
+            }
+            window.location.href = "order-detail.html?id=" + data.orderId;
+          } catch (e) {
+            alert("Không kết nối được server. Hãy bật backend (port 3000).");
+          }
+        });
+      }
     });
   </script>
 </body>

@@ -122,6 +122,30 @@
         </table>
       </div>
     </section>
+
+    <!-- Đơn hàng -->
+    <section>
+      <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+        <span class="w-1 h-6 bg-orange-500 rounded"></span>
+        Đơn hàng (toàn hệ thống)
+      </h2>
+      <p class="text-sm text-slate-500 mb-3">Nhấn mã đơn để xem chi tiết (giống khách).</p>
+      <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/30">
+        <table class="w-full text-sm text-left">
+          <thead class="text-xs text-slate-500 uppercase bg-slate-900/80">
+            <tr>
+              <th class="px-4 py-3">Mã</th>
+              <th class="px-4 py-3">Email KH</th>
+              <th class="px-4 py-3">Ngày</th>
+              <th class="px-4 py-3">TT</th>
+              <th class="px-4 py-3 text-right">Tổng</th>
+            </tr>
+          </thead>
+          <tbody id="adminOrderRows" class="divide-y divide-slate-800"></tbody>
+        </table>
+      </div>
+      <p id="adminOrdersEmpty" class="hidden text-slate-500 text-sm mt-3">Chưa có đơn hàng.</p>
+    </section>
   </main>
 
   <script>
@@ -378,11 +402,64 @@
       }
     }
 
+    async function loadAdminOrders() {
+      const tbody = document.getElementById("adminOrderRows");
+      const empty = document.getElementById("adminOrdersEmpty");
+      tbody.innerHTML =
+        '<tr><td colspan="5" class="px-4 py-6 text-center text-slate-500">Đang tải...</td></tr>';
+      try {
+        const res = await fetch(API_BASE + "/admin/orders", { headers: authHeaders() });
+        const list = await res.json();
+        tbody.innerHTML = "";
+        if (!res.ok) {
+          tbody.innerHTML =
+            '<tr><td colspan="5" class="px-4 py-6 text-center text-red-400">Không tải được.</td></tr>';
+          return;
+        }
+        if (!list.length) {
+          empty.classList.remove("hidden");
+          return;
+        }
+        empty.classList.add("hidden");
+        list.forEach(function (o) {
+          const tr = document.createElement("tr");
+          tr.className = "hover:bg-slate-800/50";
+          const d = o.created_at
+            ? new Date(String(o.created_at).replace(" ", "T")).toLocaleString("vi-VN")
+            : "—";
+          tr.innerHTML =
+            '<td class="px-4 py-3">' +
+            '<a href="order-detail.html?id=' +
+            o.id +
+            '" class="text-orange-400 font-bold hover:underline" target="_blank">#' +
+            o.id +
+            "</a></td>" +
+            '<td class="px-4 py-3 text-slate-300 max-w-[180px] truncate">' +
+            (o.user_email || "—") +
+            "</td>" +
+            '<td class="px-4 py-3 text-slate-400 text-xs">' +
+            d +
+            "</td>" +
+            '<td class="px-4 py-3">' +
+            (o.status || "—") +
+            "</td>" +
+            '<td class="px-4 py-3 text-right font-semibold">$' +
+            Number(o.total).toFixed(2) +
+            "</td>";
+          tbody.appendChild(tr);
+        });
+      } catch (e) {
+        tbody.innerHTML =
+          '<tr><td colspan="5" class="px-4 py-6 text-center text-red-400">Lỗi mạng.</td></tr>';
+      }
+    }
+
     document.addEventListener("DOMContentLoaded", async function () {
       const ok = await ensureAdmin();
       if (!ok) return;
       loadProducts();
       loadUsers();
+      loadAdminOrders();
     });
   </script>
 </body>

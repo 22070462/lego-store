@@ -1,6 +1,6 @@
 # PLAYARENA — Website bán đồ chơi lắp ráp (LEGO-style)
 
-Đồ án web: cửa hàng trực tuyến với giao diện tĩnh (HTML/CSS/JS), backend Node.js + SQLite, đăng nhập JWT, trang quản trị sản phẩm và người dùng.
+Đồ án web: cửa hàng trực tuyến với giao diện tĩnh (HTML/CSS/JS), backend Node.js + SQLite, đăng nhập JWT, đặt hàng lưu server, trang quản trị sản phẩm / người dùng / đơn hàng.
 
 ## Công nghệ
 
@@ -45,7 +45,7 @@ Nếu gặp lỗi CORS khi mở file `file://`, nên dùng Live Server hoặc ph
 
 ## Cơ sở dữ liệu
 
-- File SQLite: **`backend/users.db`** (bảng `users`, `products`).
+- File SQLite: **`backend/users.db`** (bảng `users`, `products`, `orders`, `order_items`).
 - Tạo schema nhanh (nếu cần): `cd backend` → `node initDb.js`.
 
 ## Tài khoản admin
@@ -79,6 +79,10 @@ Xem danh sách user: `node checkUsers.js`.
 | POST | `/login` | Đăng nhập → trả `token`, `role` |
 | GET | `/profile` | Header `Authorization: Bearer <token>` |
 | GET | `/products` | Danh sách sản phẩm (public) |
+| POST | `/orders` | Đặt hàng (body `items[]`, cần đăng nhập) |
+| GET | `/orders` | Danh sách đơn của user hiện tại |
+| GET | `/orders/:id` | Chi tiết đơn + dòng sản phẩm (chủ đơn hoặc admin) |
+| GET | `/admin/orders` | Tất cả đơn (admin) |
 | POST | `/admin/products` | Thêm sản phẩm (admin) |
 | PUT | `/admin/products/:id` | Sửa sản phẩm (admin) |
 | DELETE | `/admin/products/:id` | Xóa sản phẩm (admin) |
@@ -99,6 +103,8 @@ Xem danh sách user: `node checkUsers.js`.
 ├── products.html
 ├── cart.html
 ├── login.html
+├── orders.html            # Danh sách đơn (user)
+├── order-detail.html      # Chi tiết đơn
 ├── admin.html             # Trang quản trị
 ├── cart-system.js
 ├── wishlist.js
@@ -113,7 +119,7 @@ Xem danh sách user: `node checkUsers.js`.
 ## Ghi chú
 
 - LEGO® là thương hiệu của LEGO Group. Project mang tính học tập / demo.
-- Giỏ hàng lưu trên **localStorage** trình duyệt; không đồng bộ server trừ khi bạn mở rộng thêm.
+- Giỏ hàng lưu trên **localStorage**; khi bấm **Thanh toán** (đã đăng nhập), đơn được gửi lên server và lưu trong SQLite. Xem **Đơn hàng của tôi** (`orders.html`) và **chi tiết** (`order-detail.html?id=`).
 
 ---
 

@@ -8,13 +8,14 @@ const path = require("path")
 const app = express()
 
 const DB_PATH = path.join(__dirname, "users.db")
+const FRONTEND_ROOT = path.join(__dirname, "..")
 
 app.use(cors())
 app.use(express.json())
 
-/* SERVE FRONTEND */
+/* SERVE FRONTEND — HTML/CSS/JS nằm ở thư mục gốc project (không có backend/public) */
 
-app.use(express.static("public"))
+app.use(express.static(FRONTEND_ROOT))
 
 const SECRET = "supersecretkey"
 
@@ -43,46 +44,30 @@ theme TEXT
 )
 `)
 
-// seed a few demo products if table is empty
-db.get("SELECT COUNT(*) as count FROM products", (err, row) => {
-  if (err) {
-    return
-  }
-  if (row && row.count === 0) {
-    const seedStmt = db.prepare(
-      "INSERT INTO products(name,price,image_url,age_min,pieces,theme) VALUES(?,?,?,?,?,?)"
-    )
+db.run(`
+CREATE TABLE IF NOT EXISTS orders(
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+user_id INTEGER NOT NULL,
+created_at TEXT NOT NULL,
+subtotal REAL NOT NULL,
+tax REAL NOT NULL,
+shipping REAL NOT NULL,
+total REAL NOT NULL,
+status TEXT DEFAULT 'confirmed'
+)
+`)
 
-    seedStmt.run(
-      "Galactic Starship Explorer MK-II",
-      89.99,
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuClOZB0117OOwgcKaTwWWu32EuXvVY4ijhc8rXdY15TsWtIG4_mAzMBnXYnXPGYHoiyZnaP7kuB-5-GwFiUSO1KSXXrbfhgRhODbBvUXRDd1T_o3A8m0ue1qLPET212pB0ODi6l85q1HmuuCtmAhu62flb72B2UCwLPmbHPVQ1k8eRIzC0Fu83lMrPwkrtItFuORIycUzgZMpJb1fFBhW3I5QMEbSE93TYr07FcZ_YnXMPdNNMs5vryU-rb6hMVelC8oYRVGZv9MLQ",
-      9,
-      1248,
-      "Space Exploration"
-    )
-
-    seedStmt.run(
-      "Industrial High-Lift Crane",
-      149.99,
-      "https://i.pinimg.com/736x/91/23/74/91237419d1788d6cc0994186290dac14.jpg",
-      12,
-      2105,
-      "Technic"
-    )
-
-    seedStmt.run(
-      "Botanical Collection: Wildflower",
-      59.99,
-      "https://i.pinimg.com/736x/ea/e0/5f/eae05f47cbe606f33b6f103d863df94f.jpg",
-      18,
-      758,
-      "Botanical"
-    )
-
-    seedStmt.finalize()
-  }
-})
+db.run(`
+CREATE TABLE IF NOT EXISTS order_items(
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+order_id INTEGER NOT NULL,
+product_id TEXT,
+name TEXT NOT NULL,
+price REAL NOT NULL,
+qty INTEGER NOT NULL,
+image_url TEXT
+)
+`)
 
 /* REGISTER */
 
@@ -222,6 +207,158 @@ app.get("/products", (req, res) => {
   )
 })
 
+/* Đơn hàng — tính tổng giống giỏ hàng (thuế 8%, ship $10 nếu tạm tính ≤ $100) */
+
+function computeOrderTotals(items) {
+  const TAX_RATE = 0.08
+  const SHIPPING_THRESHOLD = 100
+  const SHIPPING_COST = 10
+  let subtotal = 0
+  if (!Array.isArray(items) || items.length === 0) {
+    return null
+  }
+  for (const i of items) {
+    const q = Math.max(1, parseInt(i.qty, 10) || 1)
+    const p = Number(i.price)
+    if (Number.isNaN(p) || p < 0) {
+      return null
+    }
+    subtotal += p * q
+  }
+  const tax = subtotal * TAX_RATE
+  const shipping = subtotal > SHIPPING_THRESHOLD ? 0 : SHIPPING_COST
+  const total = subtotal + tax + shipping
+  return { subtotal, tax, shipping, total }
+}
+
+app.post("/orders", verifyToken, (req, res) => {
+  const items = req.body.items
+  const totals = computeOrderTotals(items)
+  if (!totals) {
+    return res.status(400).json({ message: "Giỏ hàng không hợp lệ hoặc trống" })
+  }
+
+  const uid = req.user.id
+
+  db.run(
+    `INSERT INTO orders(user_id, created_at, subtotal, tax, shipping, total, status) VALUES (?, datetime('now'), ?, ?, ?, ?, ?)`,
+    [
+      uid,
+      totals.subtotal,
+      totals.tax,
+      totals.shipping,
+      totals.total,
+      "confirmed",
+    ],
+    function (err) {
+      if (err) {
+        return res.status(500).json({ message: "Database error" })
+      }
+      const orderId = this.lastID
+      let pending = items.length
+      if (pending === 0) {
+        return res.status(201).json({ message: "Đặt hàng thành công", orderId })
+      }
+      items.forEach(function (item) {
+        const qty = Math.max(1, parseInt(item.qty, 10) || 1)
+        db.run(
+          `INSERT INTO order_items(order_id, product_id, name, price, qty, image_url) VALUES (?,?,?,?,?,?)`,
+          [
+            orderId,
+            item.id != null ? String(item.id) : null,
+            String(item.name || "").slice(0, 500),
+            Number(item.price),
+            qty,
+            item.img || item.image_url || null,
+          ],
+          function () {
+            pending--
+            if (pending === 0) {
+              res.status(201).json({ message: "Đặt hàng thành công", orderId })
+            }
+          }
+        )
+      })
+    }
+  )
+})
+
+app.get("/orders", verifyToken, (req, res) => {
+  db.all(
+    `SELECT id, created_at, subtotal, tax, shipping, total, status FROM orders WHERE user_id = ? ORDER BY id DESC`,
+    [req.user.id],
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error" })
+      }
+      res.json(rows)
+    }
+  )
+})
+
+app.get("/orders/:id", verifyToken, (req, res) => {
+  const oid = req.params.id
+
+  db.get("SELECT * FROM orders WHERE id=?", [oid], (err, order) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error" })
+    }
+    if (!order) {
+      return res.status(404).json({ message: "Không tìm thấy đơn hàng" })
+    }
+
+    function sendDetail() {
+      db.all(
+        "SELECT * FROM order_items WHERE order_id=? ORDER BY id",
+        [oid],
+        (e3, items) => {
+          if (e3) {
+            return res.status(500).json({ message: "Database error" })
+          }
+          db.get("SELECT email FROM users WHERE id=?", [order.user_id], (e4, urow) => {
+            res.json({
+              order: order,
+              items: items,
+              userEmail: urow ? urow.email : null,
+            })
+          })
+        }
+      )
+    }
+
+    if (Number(order.user_id) === Number(req.user.id)) {
+      return sendDetail()
+    }
+
+    if (req.user.role === "admin") {
+      return sendDetail()
+    }
+
+    db.get("SELECT role FROM users WHERE id=?", [req.user.id], (e2, r2) => {
+      if (!e2 && r2 && r2.role === "admin") {
+        return sendDetail()
+      }
+      return res.status(403).json({ message: "Không có quyền xem đơn này" })
+    })
+  })
+})
+
+app.get("/admin/orders", verifyToken, requireAdmin, (req, res) => {
+  db.all(
+    `SELECT o.id, o.user_id, o.created_at, o.total, o.status, u.email AS user_email
+     FROM orders o
+     LEFT JOIN users u ON u.id = o.user_id
+     ORDER BY o.id DESC`,
+    [],
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error" })
+      }
+      res.json(rows)
+    }
+  )
+})
+
 /* ADMIN — sản phẩm */
 
 app.post("/admin/products", verifyToken, requireAdmin, (req, res) => {
@@ -352,9 +489,59 @@ app.patch("/admin/users/:id/role", verifyToken, requireAdmin, (req, res) => {
 /* DEFAULT ROUTE */
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"))
+  res.sendFile(path.join(FRONTEND_ROOT, "index.html"))
 })
 
-app.listen(3000, () => {
-  console.log("Server running on http://localhost:3000")
+function ensureDemoProducts(done) {
+  db.get("SELECT COUNT(*) as count FROM products", (err, row) => {
+    if (err) {
+      return done(err)
+    }
+    if (row && row.count === 0) {
+      const seedStmt = db.prepare(
+        "INSERT INTO products(name,price,image_url,age_min,pieces,theme) VALUES(?,?,?,?,?,?)"
+      )
+
+      seedStmt.run(
+        "Galactic Starship Explorer MK-II",
+        89.99,
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuClOZB0117OOwgcKaTwWWu32EuXvVY4ijhc8rXdY15TsWtIG4_mAzMBnXYnXPGYHoiyZnaP7kuB-5-GwFiUSO1KSXXrbfhgRhODbBvUXRDd1T_o3A8m0ue1qLPET212pB0ODi6l85q1HmuuCtmAhu62flb72B2UCwLPmbHPVQ1k8eRIzC0Fu83lMrPwkrtItFuORIycUzgZMpJb1fFBhW3I5QMEbSE93TYr07FcZ_YnXMPdNNMs5vryU-rb6hMVelC8oYRVGZv9MLQ",
+        9,
+        1248,
+        "Space Exploration"
+      )
+
+      seedStmt.run(
+        "Industrial High-Lift Crane",
+        149.99,
+        "https://i.pinimg.com/736x/91/23/74/91237419d1788d6cc0994186290dac14.jpg",
+        12,
+        2105,
+        "Technic"
+      )
+
+      seedStmt.run(
+        "Botanical Collection: Wildflower",
+        59.99,
+        "https://i.pinimg.com/736x/ea/e0/5f/eae05f47cbe606f33b6f103d863df94f.jpg",
+        18,
+        758,
+        "Botanical"
+      )
+
+      seedStmt.finalize(done)
+    } else {
+      done(null)
+    }
+  })
+}
+
+ensureDemoProducts((err) => {
+  if (err) {
+    console.error("ensureDemoProducts:", err)
+  }
+  app.listen(3000, () => {
+    console.log("Server running on http://localhost:3000")
+    console.log("Open Shop: http://localhost:3000/products.html")
+  })
 })

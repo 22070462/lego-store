@@ -172,7 +172,11 @@
   <script src="wishlist.js"></script>
   <script src="cart-system.js"></script>
   <script>
-  const API_BASE = "http://localhost:3000";
+  /* Cùng origin khi mở qua http://localhost:3000/... — tránh lỗi fetch/CORS */
+  const API_BASE =
+    window.location.port === "3000" && window.location.protocol === "http:"
+      ? ""
+      : "http://localhost:3000";
 
   document.addEventListener("DOMContentLoaded", function () {
     const token = localStorage.getItem("token");
@@ -212,6 +216,11 @@
 
       if (!res.ok) {
         grid.innerHTML = "<p class='col-span-full text-center text-sm text-red-500'>Failed to load products.</p>";
+        return;
+      }
+
+      if (!Array.isArray(data)) {
+        grid.innerHTML = "<p class='col-span-full text-center text-sm text-red-500'>Invalid product data from server.</p>";
         return;
       }
 
@@ -272,26 +281,28 @@
         '    <span class="text-xl font-black text-slate-900">$' +
         Number(p.price).toFixed(2) +
         "</span>" +
-        '    <button class="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2 text-sm transition-colors whitespace-nowrap">' +
+        '    <button type="button" data-add-cart class="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2 text-sm transition-colors whitespace-nowrap">' +
         '      <span class="material-symbols-outlined text-lg">add_shopping_cart</span>' +
         "      Add" +
         "    </button>" +
         "  </div>" +
         "</div>";
 
-      const addBtn = card.querySelector(".bg-primary");
-      addBtn.addEventListener("click", function () {
-        const productForCart = {
-          id: String(p.id),
-          name: p.name,
-          price: Number(p.price),
-          img: imgUrl,
-          qty: 1,
-        };
-        if (typeof addToCart === "function") {
-          addToCart(productForCart);
-        }
-      });
+      const addBtn = card.querySelector("[data-add-cart]");
+      if (addBtn) {
+        addBtn.addEventListener("click", function () {
+          const productForCart = {
+            id: String(p.id),
+            name: p.name,
+            price: Number(p.price),
+            img: imgUrl,
+            qty: 1,
+          };
+          if (typeof addToCart === "function") {
+            addToCart(productForCart);
+          }
+        });
+      }
 
       const wishBtn = card.querySelector(".wishlist-toggle");
       const wishIcon = wishBtn.querySelector(".wishlist-icon");
