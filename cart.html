@@ -1,230 +1,383 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PLAYARENA | Cart</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>PLAYARENA - Cart</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                legoYellow: '#ffcf00',
+                legoRed: '#d11013',
+                legoOrange: '#fd8024',
+                legoNavy: '#20214b',
+                legoGrey: '#f8f8f8',
+              },
+              fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+            }
+          }
+        }
+    </script>
+    <style>
+        .brand-heading { font-weight: 900; text-transform: uppercase; font-style: italic; }
+        .hover-scale { transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        .group:hover .hover-scale { transform: scale(1.1); }
+        .active-press:active { transform: scale(0.96); filter: brightness(0.9); }
+        .wishlist-btn.is-active svg { fill: #ef4444; stroke: #ef4444; }
+        
+        /* Navbar Custom Styles */
+        .header { background-color: #ffffff; height: 70px; display: flex; align-items: center; padding: 0 40px; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; z-index: 1000; }
+        .nav-link { text-decoration: none; color: #4b5563; font-weight: 600; font-size: 15px; position: relative; padding: 8px 0; transition: color 0.3s; }
+        .nav-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background-color: #1a1a1a; transition: width 0.3s ease; }
+        .nav-link:hover::after { width: 100%; }
+        .search-bar { position: relative; background-color: #f3f4f6; border-radius: 8px; padding: 8px 12px 8px 36px; width: 280px; transition: all 0.3s; }
+        .search-bar:focus-within { background-color: #fff; border-color: #d1d5db; width: 320px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .btn-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #4b5563; transition: all 0.2s; }
+        .btn-icon:hover { background-color: #f3f4f6; color: #1a1a1a; }
+        .badge { position: absolute; top: 4px; right: 4px; background-color: #f39c12; color: white; font-size: 10px; font-weight: bold; padding: 2px 5px; border-radius: 10px; border: 2px solid white; }
+        
+        /* Cart Page Styles */
+        .cart-page { max-width: 1280px; margin: 0 auto; padding: 2rem 1rem; }
+        .cart-layout { display: flex; flex-direction: column; gap: 2rem; }
+        @media (min-width: 1024px) {
+            .cart-layout { flex-direction: row; }
+        }
+        .cart-items { flex: 1; display: flex; flex-direction: column; gap: 1rem; }
+        .cart-item { background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 1rem; display: flex; align-items: center; gap: 1rem; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+        .cart-item img { border-radius: 0.5rem; object-fit: cover; }
+        .cart-item h4 { font-weight: 700; color: #111827; }
+        .cart-item p { color: #4b5563; font-weight: 600; }
+        .cart-item button { background: #ef4444; color: white; padding: 0.25rem 0.75rem; border-radius: 0.25rem; border: none; cursor: pointer; transition: background-color 0.2s; }
+        .cart-item button:hover { background: #dc2626; }
+        .order-summary { width: 100%; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); height: fit-content; }
+        @media (min-width: 1024px) {
+            .order-summary { width: 24rem; }
+        }
+        .order-summary h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; }
+        .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; }
+        .summary-row.total { border-top: 1px solid #e5e7eb; padding-top: 1rem; font-weight: 700; font-size: 1.125rem; }
+        .checkout { width: 100%; background: #f39c12; color: white; font-weight: 700; padding: 0.75rem; border-radius: 0.5rem; border: none; cursor: pointer; transition: background-color 0.2s; margin-bottom: 0.5rem; }
+        .checkout:hover { background: #e8910c; }
+        .paypal { width: 100%; background: #0070ba; color: white; font-weight: 700; padding: 0.75rem; border-radius: 0.5rem; border: none; cursor: pointer; transition: background-color 0.2s; }
+        .paypal:hover { background: #005a8a; }
+        .recommended { max-width: 1280px; margin: 0 auto; padding: 3rem 1rem; }
+        .recommended h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .product-grid { display: grid; grid-template-columns: repeat(1, minmax(0, 1fr)); gap: 1.5rem; }
+        @media (min-width: 768px) {
+            .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+        .product-card { background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 1rem; text-align: center; }
+        .product-card img { width: 100%; height: 12rem; object-fit: cover; border-radius: 0.5rem; margin-bottom: 0.75rem; }
+        .product-card h4 { font-weight: 700; margin-bottom: 0.5rem; }
+        .product-card p { font-size: 1.125rem; font-weight: 700; color: #f39c12; margin-bottom: 0.75rem; }
+        .product-card button { background: #111827; color: white; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; cursor: pointer; transition: background-color 0.2s; }
+        .product-card button:hover { background: #1f2937; }
+    </style>
 </head>
 
-<body>
+<body class="bg-gray-50 text-gray-900 font-sans">
 
-<header class="navbar">
-  <a href="index.html" class="logo">PLAYARENA</a>
-  <nav class="nav-links">
-    <a href="products.html">Shop</a>
-    <a href="about.html">Discover</a>
-    <a href="help.html">Help</a>
-  </nav>
-
-  <div class="search">
-    <input type="text" placeholder="Search sets, themes, and more">
-  </div>
-
-  <div class="icons">
-    <a id="accountIcon" href="login.html">👤</a>
-    <span>♡</span>
-    <a href="cart.html" class="cart-icon">
-      🛒
-      <span class="cart-count">0</span>
-    </a>
-  </div>
-</header>
-
-<main class="page-content">
-  <section class="cart-page">
-    <div class="cart-header">
-      <div>
-        <p class="breadcrumb">Home / Cart</p>
-        <h1>Your shopping bag</h1>
-        <p class="cart-copy">Review your selected products, adjust quantities, and complete checkout with confidence.</p>
-      </div>
-      <div class="cart-status">
-        <span>Ready to checkout</span>
-        <strong class="cart-summary">0 items</strong>
-      </div>
+    <header class="header">
+    <div class="max-w-[1440px] w-full mx-auto flex justify-between items-center">
+        <div class="flex items-center gap-12">
+            <a href="index.html" class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-[#f39c12] rounded-md flex items-center justify-center text-white font-bold text-lg">B</div>
+                <span class="text-xl font-extrabold tracking-tight">PLAYARENA</span>
+            </a>
+            <nav class="flex gap-7">
+                <a href="products.html" class="nav-link">Shop</a>
+                <a href="about.html" class="nav-link">Discover</a>
+                <a href="help.html" class="nav-link">Help</a>
+            </nav>
+        </div>
+        <div class="flex items-center gap-5">
+            <div class="search-bar">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+                <input type="text" class="bg-transparent border-none outline-none text-sm w-full focus:ring-0" placeholder="Search...">
+            </div>
+            <div class="flex gap-2">
+                <a href="wishlist.html">
+                    <button class="btn-icon">♡</button>
+                </a>
+                <a href="cart.html" class="relative">
+                    <button class="btn-icon">🛒</button>
+                    <span id="cartCount" class="badge">0</span>
+                </a>
+                <a href="login.html" id="accountLink">
+                    <button id="accountIcon" class="btn-icon bg-gray-600 !text-white">👤</button>
+                </a>
+            </div>
+        </div>
     </div>
+    </header>
 
-    <div class="cart-layout">
-      <div class="cart-items"></div>
 
-      <aside class="order-summary">
-        <h3>Order Summary</h3>
+<!-- CART PAGE -->
 
-        <div class="summary-row">
-          <span class="subtotal-items">Subtotal (0 items)</span>
-          <span class="subtotal-price">$0.00</span>
+<section class="cart-page">
+
+<h1>My Bag (0)</h1>
+
+<div class="cart-layout">
+
+<!-- LEFT SIDE -->
+
+<div class="cart-items"></div>
+
+
+
+
+<!-- RIGHT SIDE -->
+
+<div class="order-summary">
+
+<h3>Order Summary</h3>
+
+<div class="summary-row">
+<span class="subtotal-items">Subtotal (0 items)</span>
+<span class="subtotal-price">$0</span>
+</div>
+
+<div class="summary-row">
+<span>Estimated Shipping</span>
+<span class="shipping">FREE</span>
+</div>
+
+<div class="summary-row">
+<span>Estimated Tax</span>
+<span class="tax">$0</span>
+</div>
+
+<hr>
+
+<div class="summary-row total">
+<span>Total</span>
+<span class="total-price">$0</span>
+</div>
+
+<button class="checkout">Checkout Securely</button>
+
+<button class="paypal">Pay with PayPal</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- RECOMMENDED -->
+
+<section class="recommended">
+
+<h2>Recommended For You</h2>
+
+<div id="recommendedProducts" class="product-grid">
+
+<!-- Products will be loaded dynamically -->
+
+</div>
+
+</section>
+
+
+<footer class="bg-[#0d1425] text-[#a0a7b5] py-16 px-[10%]">
+        <div class="flex flex-wrap justify-between gap-10 pb-12">
+            <div class="flex-1 min-w-[250px]">
+                <div class="bg-orange-400 w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-xl mb-6">★</div>
+                <p class="text-sm leading-relaxed">Inspiring the builders of tomorrow since 1995. Explore our universe of creative building sets.</p>
+            </div>
+            <div class="flex gap-12 flex-wrap">
+                <div>
+                    <h4 class="text-white uppercase text-xs font-bold mb-6">Support</h4>
+                    <ul class="text-sm space-y-3"><li><a href="#" class="hover:text-white">Contact Us</a></li><li><a href="#" class="hover:text-white">Shipping</a></li></ul>
+                </div>
+                <div>
+                    <h4 class="text-white uppercase text-xs font-bold mb-6">Account</h4>
+                    <ul class="text-sm space-y-3"><li><a href="#" class="hover:text-white">Wishlist</a></li><li><a href="#" class="hover:text-white">Track Order</a></li></ul>
+                </div>
+            </div>
+            <div class="flex-1 min-w-[280px]">
+                <h4 class="text-white uppercase text-xs font-bold mb-6">Newsletter</h4>
+                <div class="flex gap-2">
+                    <input type="email" placeholder="Your email" class="bg-[#1a233a] border-none rounded-md p-3 flex-grow text-sm text-white focus:ring-1 focus:ring-orange-400">
+                    <button class="bg-orange-400 text-white px-5 py-2 rounded-md font-bold text-sm">Join</button>
+                </div>
+            </div>
         </div>
-
-        <div class="summary-row">
-          <span>Estimated Shipping</span>
-          <span class="shipping">FREE</span>
+        <div class="border-t border-gray-800 pt-8 flex flex-wrap justify-between text-[11px]">
+            <p>© 2026 BrickWorld Systems A/S. All rights reserved.</p>
+            <div class="flex gap-6"><a href="#" class="hover:text-white">Privacy Policy</a><a href="#" class="hover:text-white">Terms</a></div>
         </div>
+    </footer>
 
-        <div class="summary-row">
-          <span>Estimated Tax</span>
-          <span class="tax">$0.00</span>
-        </div>
+    <script src="cart-system.js"></script>
+    <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-        <hr>
+    const container = document.querySelector(".cart-items");
+    const totalPrice = document.querySelector(".total-price");
+    const subtotalPrice = document.querySelector(".subtotal-price");
+    const subtotalItems = document.querySelector(".subtotal-items");
+    const cartTitle = document.querySelector(".cart-page h1");
+    const cartBadge = document.getElementById("cartCount");
 
-        <div class="summary-row total">
-          <span>Total</span>
-          <span class="total-price">$0.00</span>
-        </div>
+    document.addEventListener("DOMContentLoaded", function() {
+        const token = localStorage.getItem("token");
+        const accountLink = document.getElementById("accountLink");
+        const accountIcon = document.getElementById("accountIcon");
 
-        <button class="checkout">Checkout Securely</button>
-        <button class="paypal">Pay with PayPal</button>
-      </aside>
-    </div>
-  </section>
+        if (token) {
+            accountLink.href = "profile.html"; 
+            accountIcon.classList.remove("bg-gray-600");
+            accountIcon.classList.add("bg-legoYellow");
+        }
+        updateCartBadge();
+        renderCart();
+        updateCartCount();
+    });
 
-  <section class="recommended">
-    <h2>Recommended for you</h2>
+    /* RENDER CART */
+    function renderCart() {
+        const cartItemsContainer = document.querySelector(".cart-items");
+        let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+        
+        if(cart.length === 0) {
+            cartItemsContainer.innerHTML = "<p>Giỏ hàng trống</p>";
+            return;
+        }
 
-    <div class="product-grid">
-      <div class="product-card">
-        <img src="images/mario.jpg" alt="Mario Kart™ Luigi">
-        <h4>Mario Kart™ Luigi</h4>
-        <p>$179.99</p>
-        <button>Add to Bag</button>
-      </div>
+        cartItemsContainer.innerHTML = cart.map(item => `
+            <div class="cart-item">
+                <img src="${item.img || 'images/default.jpg'}" width="80">
+                <div>
+                    <h4>${item.name}</h4>
+                    <p>$${item.price}</p>
+                </div>
+                <button onclick="removeItem(${item.id})">Xóa</button>
+            </div>
+        `).join('');
+        updateTotal();
+    }
 
-      <div class="product-card">
-        <img src="images/zelda.jpg" alt="Zelda Final Battle">
-        <h4>Zelda Final Battle</h4>
-        <p>$159.99</p>
-        <button>Add to Bag</button>
-      </div>
+    /* CHANGE QTY */
+    function changeQty(id, delta) {
+        const item = cart.find(p=>p.id===id);
+        if(!item) return;
+        item.qty += delta;
+        if(item.qty <= 0) {
+            cart = cart.filter(p=>p.id!==id);
+        }
+        saveCart();
+        renderCart();
+    }
 
-      <div class="product-card">
-        <img src="images/sunflower.jpg" alt="Sunflower Bouquet">
-        <h4>Sunflower Bouquet</h4>
-        <p>$14.99</p>
-        <button>Add to Bag</button>
-      </div>
-    </div>
-  </section>
-</main>
+    /* REMOVE ITEM */
+    function removeItem(id) {
+        cart = JSON.parse(localStorage.getItem("cart") || "[]");
+        cart = cart.filter(p => String(p.id) !== String(id));
+        saveCart();
+        renderCart();
+        updateCartCount();
+    }
 
-<footer class="footer">
-  <p>© PLAYARENA</p>
-</footer>
+    /* SAVE */
+    function saveCart() {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }
 
-<script src="cart-system.js"></script>
-<script>
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-const cartItemsContainer = document.querySelector(".cart-items");
-const totalPrice = document.querySelector(".total-price");
-const subtotalPrice = document.querySelector(".subtotal-price");
-const subtotalItems = document.querySelector(".subtotal-items");
-const cartTitle = document.querySelector(".cart-page h1");
-const cartBadge = document.querySelector(".cart-count");
-const cartSummary = document.querySelector(".cart-summary");
+    const TAX_RATE = 0.08;
+    const SHIPPING_THRESHOLD = 100;
+    const SHIPPING_COST = 10;
 
-function renderCart() {
-  if (!cartItemsContainer) return;
-  if (cart.length === 0) {
-    cartItemsContainer.innerHTML = `
-      <div class="empty-cart">
-        <p>Giỏ hàng của bạn hiện đang trống.</p>
-        <p>Thêm sản phẩm yêu thích vào giỏ và quay lại tại đây để thanh toán.</p>
-      </div>
-    `;
-    updateTotal();
-    return;
-  }
+    function updateTotal() {
+        let subtotal = 0;
+        let count = 0;
 
-  cartItemsContainer.innerHTML = cart.map(item => {
-    const quantity = item.qty || 1;
-    return `
-      <article class="cart-item">
-        <img src="${item.img || 'images/default.jpg'}" alt="${item.name}">
-        <div class="item-meta">
-          <h3>${item.name}</h3>
-          <p class="item-price">$${Number(item.price).toFixed(2)}</p>
-          <div class="quantity-controls">
-            <button type="button" onclick="changeQty(${item.id}, -1)">−</button>
-            <span>${quantity}</span>
-            <button type="button" onclick="changeQty(${item.id}, 1)">+</button>
-          </div>
-        </div>
-        <button class="remove-item" onclick="removeItem(${item.id})">Xóa</button>
-      </article>
-    `;
-  }).join("");
-  updateTotal();
-}
+        cart.forEach(p => {
+            subtotal += p.price * p.qty;
+            count += p.qty;
+        });
 
-function changeQty(id, delta) {
-  const item = cart.find(p => p.id === id);
-  if (!item) return;
+        let tax = subtotal * TAX_RATE;
+        let shipping = subtotal > SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+        let total = subtotal + tax + shipping;
 
-  item.qty = (item.qty || 1) + delta;
-  if (item.qty <= 0) {
-    cart = cart.filter(p => p.id !== id);
-  }
+        /* UPDATE UI */
+        subtotalPrice.innerText = "$" + subtotal.toFixed(2);
+        subtotalItems.innerText = "Subtotal (" + count + " items)";
 
-  saveCart();
-  renderCart();
-  updateCartCount();
-}
+        document.querySelector(".tax").innerText = "$" + tax.toFixed(2);
+        document.querySelector(".shipping").innerText = shipping === 0 ? "FREE" : "$" + shipping;
+        totalPrice.innerText = "$" + total.toFixed(2);
+        cartTitle.innerText = "My Bag (" + count + ")";
+    }
 
-function removeItem(id) {
-  cart = cart.filter(p => p.id !== id);
-  saveCart();
-  renderCart();
-  updateCartCount();
-}
+    /* CART BADGE */
+    function updateCartCount() {
+        const total = cart.reduce((sum, item) => sum + item.qty, 0);
+        if(cartBadge) cartBadge.innerText = total;
+    }
 
-function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
-  if (typeof window.updateCartBadge === "function") {
-    window.updateCartBadge();
-  }
-}
+    /* LOAD RECOMMENDED PRODUCTS */
+    async function loadRecommendedProducts() {
+        const API_BASE = window.location.port === '3000' ? 'http://localhost:3000' : '';
+        const recommendedContainer = document.getElementById('recommendedProducts');
+        
+        try {
+            const res = await fetch(API_BASE + '/products');
+            const products = await res.json();
+            
+            if (!res.ok || !Array.isArray(products)) {
+                recommendedContainer.innerHTML = '<p class="col-span-full text-center text-gray-500">Unable to load recommended products.</p>';
+                return;
+            }
+            
+            // Display first 3 products as recommended
+            const recommendedProducts = products.slice(0, 3);
+            
+            recommendedContainer.innerHTML = recommendedProducts.map(product => `
+                <div class="product-card">
+                    <img src="${product.image_url || 'https://images.lego.com/is/image/LEGO/ldd_product?$main$&layers=0&fmt=png-alpha'}" alt="${product.name || 'Product'}" style="object-fit: contain; padding: 1rem;">
+                    <h4>${product.name || 'Product'}</h4>
+                    <p>$${Number(product.price).toFixed(2)}</p>
+                    <button onclick="addRecommendedToCart(${product.id}, '${product.name.replace(/'/g, "\\'")}', ${product.price}, '${product.image_url || 'https://images.lego.com/is/image/LEGO/ldd_product?$main$&layers=0&fmt=png-alpha'}')">Add to Bag</button>
+                </div>
+            `).join('');
+        } catch (e) {
+            recommendedContainer.innerHTML = '<p class="col-span-full text-center text-gray-500">Unable to load recommended products.</p>';
+        }
+    }
 
-const TAX_RATE = 0.08;
-const SHIPPING_THRESHOLD = 100;
-const SHIPPING_COST = 10;
+    /* ADD RECOMMENDED PRODUCT TO CART */
+    function addRecommendedToCart(id, name, price, img) {
+        const productForCart = {
+            id: String(id),
+            name: name,
+            price: Number(price),
+            img: img,
+            qty: 1,
+        };
+        
+        // Check if product already exists in cart
+        const existingItem = cart.find(item => String(item.id) === String(id));
+        if (existingItem) {
+            existingItem.qty += 1;
+        } else {
+            cart.push(productForCart);
+        }
+        
+        saveCart();
+        renderCart();
+        updateCartCount();
+    }
 
-function updateTotal() {
-  let subtotal = 0;
-  let count = 0;
-
-  cart.forEach(p => {
-    const quantity = p.qty || 1;
-    subtotal += Number(p.price) * quantity;
-    count += quantity;
-  });
-
-  const tax = subtotal * TAX_RATE;
-  const shipping = subtotal > SHIPPING_THRESHOLD || count === 0 ? 0 : SHIPPING_COST;
-  const total = subtotal + tax + shipping;
-
-  subtotalPrice.innerText = "$" + subtotal.toFixed(2);
-  subtotalItems.innerText = "Subtotal (" + count + " items)";
-  document.querySelector(".tax").innerText = "$" + tax.toFixed(2);
-  document.querySelector(".shipping").innerText = shipping === 0 ? "FREE" : "$" + shipping;
-  totalPrice.innerText = "$" + total.toFixed(2);
-
-  cartTitle.innerText = "Your shopping bag (" + count + ")";
-  if (cartSummary) cartSummary.innerText = count + " item" + (count !== 1 ? "s" : "");
-}
-
-function updateCartCount() {
-  const total = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
-  if (cartBadge) cartBadge.innerText = total;
-}
-
-renderCart();
-updateCartCount();
-</script>
-</body>
-</html>
-
-</script>
-
-</body>
-</html>
+    // Load recommended products on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadRecommendedProducts();
+    });
+    </script>

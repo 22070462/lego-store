@@ -1,58 +1,79 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Account - ĐKL</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-  <style>
-    body { background-color: #f4f4f4; font-family: sans-serif; }
-    .lego-yellow { background-color: #ffd500; }
-    .lego-blue { background-color: #006db7; }
-    .sidebar-item:hover { background-color: #e5e7eb; }
-    .active-sidebar { background-color: #006db7; color: white !important; }
-  </style>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>PLAYARENA - Profile</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                legoYellow: '#ffcf00',
+                legoRed: '#d11013',
+                legoOrange: '#fd8024',
+                legoNavy: '#20214b',
+                legoGrey: '#f8f8f8',
+              },
+              fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+            }
+          }
+        }
+    </script>
+    <style>
+        .brand-heading { font-weight: 900; text-transform: uppercase; font-style: italic; }
+        .hover-scale { transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        .group:hover .hover-scale { transform: scale(1.1); }
+        .active-press:active { transform: scale(0.96); filter: brightness(0.9); }
+        .wishlist-btn.is-active svg { fill: #ef4444; stroke: #ef4444; }
+        
+        /* Navbar Custom Styles */
+        .header { background-color: #ffffff; height: 70px; display: flex; align-items: center; padding: 0 40px; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; z-index: 1000; }
+        .nav-link { text-decoration: none; color: #4b5563; font-weight: 600; font-size: 15px; position: relative; padding: 8px 0; transition: color 0.3s; }
+        .nav-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background-color: #1a1a1a; transition: width 0.3s ease; }
+        .nav-link:hover::after { width: 100%; }
+        .search-bar { position: relative; background-color: #f3f4f6; border-radius: 8px; padding: 8px 12px 8px 36px; width: 280px; transition: all 0.3s; }
+        .search-bar:focus-within { background-color: #fff; border-color: #d1d5db; width: 320px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .btn-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #4b5563; transition: all 0.2s; }
+        .btn-icon:hover { background-color: #f3f4f6; color: #1a1a1a; }
+        .badge { position: absolute; top: 4px; right: 4px; background-color: #f39c12; color: white; font-size: 10px; font-weight: bold; padding: 2px 5px; border-radius: 10px; border: 2px solid white; }
+    </style>
 </head>
-<body class="bg-white text-gray-900 font-sans">
-  <!-- Header -->
-  <header class="header bg-white border-b border-gray-200">
-    <div class="max-w-[1440px] mx-auto flex items-center justify-between px-10 h-16">
-      <div class="flex items-center gap-12">
-        <a href="index.html" class="logo-link">
-          <div class="flex items-center gap-2 cursor-pointer">
-            <div class="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center text-white font-bold">B</div>
-            <span class="text-xl font-extrabold tracking-tight text-gray-900">ĐKL</span>
-          </div>
-        </a>
-        <nav class="hidden md:flex gap-7">
-          <a href="products.html" class="text-gray-600 font-semibold text-sm hover:text-gray-900">Shop</a>
-          <a href="about.html" class="text-gray-600 font-semibold text-sm hover:text-gray-900">Discover</a>
-          <a href="help.html" class="text-gray-600 font-semibold text-sm hover:text-gray-900">Help</a>
-        </nav>
-      </div>
-      <div class="flex items-center gap-4">
-        <div class="relative hidden md:block">
-          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">🔍</span>
-          <input
-            type="text"
-            placeholder="Search for sets, themes..."
-            class="pl-8 pr-3 py-1.5 rounded-lg bg-gray-100 text-sm border border-transparent focus:bg-white focus:border-gray-300 focus:outline-none w-64"
-          />
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+    <header class="header">
+    <div class="max-w-[1440px] w-full mx-auto flex justify-between items-center">
+        <div class="flex items-center gap-12">
+            <a href="index.html" class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-[#f39c12] rounded-md flex items-center justify-center text-white font-bold text-lg">B</div>
+                <span class="text-xl font-extrabold tracking-tight">PLAYARENA</span>
+            </a>
+            <nav class="flex gap-7">
+                <a href="products.html" class="nav-link">Shop</a>
+                <a href="about.html" class="nav-link">Discover</a>
+                <a href="help.html" class="nav-link">Help</a>
+            </nav>
         </div>
-        <div class="flex items-center gap-2">
-          <button class="w-9 h-9 rounded-full flex items-center justify-center text-lg text-gray-600 hover:bg-gray-100">♡</button>
-          <a href="cart.html" class="relative">
-            <button class="w-9 h-9 rounded-full flex items-center justify-center text-lg text-gray-600 hover:bg-gray-100">🛒</button>
-            <span class="absolute -top-1 -right-1 bg-yellow-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-white">0</span>
-          </a>
-          <button id="accountButton" class="w-9 h-9 rounded-full flex items-center justify-center text-lg text-white bg-gray-600 hover:bg-gray-700">
-            👤
-          </button>
+        <div class="flex items-center gap-5">
+            <div class="search-bar">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+                <input type="text" class="bg-transparent border-none outline-none text-sm w-full focus:ring-0" placeholder="Search...">
+            </div>
+            <div class="flex gap-2">
+                <button class="btn-icon">♡</button>
+                <a href="cart.html" class="relative">
+                    <button class="btn-icon">🛒</button>
+                    <span id="cartCount" class="badge">0</span>
+                </a>
+                <a href="login.html" id="accountLink">
+                    <button id="accountIcon" class="btn-icon bg-legoYellow !text-white">👤</button>
+                </a>
+            </div>
         </div>
-      </div>
     </div>
-  </header>
+    </header>
 
   <!-- Main layout -->
   <div class="flex max-w-[1400px] mx-auto mt-6 px-4 gap-6">
@@ -62,14 +83,11 @@
         <a href="profile.html" class="sidebar-item active-sidebar p-3 flex items-center gap-3">
           <i class="fa-solid fa-house"></i> Account Overview
         </a>
-        <a href="orders.html" class="sidebar-item p-3 border-t flex items-center gap-3">
+        <a href="cart.html" class="sidebar-item p-3 border-t flex items-center gap-3">
           <i class="fa-solid fa-box"></i> Đơn hàng của tôi
         </a>
         <a href="wishlist.html" class="sidebar-item p-3 border-t flex items-center gap-3">
           <i class="fa-solid fa-star"></i> My wishlist
-        </a>
-        <a href="collection.html" class="sidebar-item p-3 border-t flex items-center gap-3">
-          <i class="fa-solid fa-coins"></i> My collection
         </a>
         <a href="address.html" class="sidebar-item p-3 border-t flex items-center gap-3">
           <i class="fa-solid fa-address-card"></i> Personal Details
@@ -213,6 +231,7 @@
     </main>
   </div>
 
+  <script src="cart-system.js"></script>
   <script>
   const API_BASE = "http://localhost:3000";
 
@@ -230,11 +249,13 @@
     }
 
     // account button in header
-    const accountBtn = document.getElementById("accountButton");
-    if (accountBtn) {
-      accountBtn.addEventListener("click", function () {
-        window.location.href = "profile.html";
-      });
+    const accountLink = document.getElementById("accountLink");
+    const accountIcon = document.getElementById("accountIcon");
+    
+    if (token) {
+      accountLink.href = "profile.html";
+      accountIcon.classList.remove("bg-gray-600");
+      accountIcon.classList.add("bg-legoYellow");
     }
 
     // logout in sidebar
@@ -247,6 +268,11 @@
     const cachedEmail = localStorage.getItem("userEmail");
     if (cachedEmail) {
       document.getElementById("profileEmail").innerText = cachedEmail;
+    }
+
+    // update cart badge
+    if (typeof updateCartBadge === "function") {
+      updateCartBadge();
     }
 
     // verify with backend /profile

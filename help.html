@@ -23,6 +23,13 @@
         }
     </script>
     <style>
+        .brand-heading { font-weight: 900; text-transform: uppercase; font-style: italic; }
+        .hover-scale { transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        .group:hover .hover-scale { transform: scale(1.1); }
+        .active-press:active { transform: scale(0.96); filter: brightness(0.9); }
+        .wishlist-btn.is-active svg { fill: #ef4444; stroke: #ef4444; }
+        
+        /* Navbar Custom Styles */
         .header { background-color: #ffffff; height: 70px; display: flex; align-items: center; padding: 0 40px; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; z-index: 1000; }
         .nav-link { text-decoration: none; color: #4b5563; font-weight: 600; font-size: 15px; position: relative; padding: 8px 0; transition: color 0.3s; }
         .nav-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background-color: #1a1a1a; transition: width 0.3s ease; }
@@ -30,6 +37,7 @@
         .nav-link-active { color: #1a1a1a; }
         .nav-link-active::after { width: 100%; }
         .search-bar { position: relative; background-color: #f3f4f6; border-radius: 8px; padding: 8px 12px 8px 36px; width: 280px; transition: all 0.3s; }
+        .search-bar:focus-within { background-color: #fff; border-color: #d1d5db; width: 320px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
         .btn-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #4b5563; transition: all 0.2s; }
         .btn-icon:hover { background-color: #f3f4f6; color: #1a1a1a; }
         .badge { position: absolute; top: 4px; right: 4px; background-color: #f39c12; color: white; font-size: 10px; font-weight: bold; padding: 2px 5px; border-radius: 10px; border: 2px solid white; }
@@ -122,10 +130,33 @@
         </p>
     </main>
 
-    <footer class="bg-[#0d1425] text-[#a0a7b5] py-10 px-[10%] mt-auto">
-        <div class="max-w-[1440px] mx-auto flex flex-wrap justify-between gap-6 text-sm">
-            <p>© PLAYARENA — Trợ giúp &amp; thông tin website</p>
-            <a href="index.html" class="hover:text-white">Trang chủ</a>
+    <footer class="bg-[#0d1425] text-[#a0a7b5] py-16 px-[10%] mt-auto">
+        <div class="flex flex-wrap justify-between gap-10 pb-12">
+            <div class="flex-1 min-w-[250px]">
+                <div class="bg-orange-400 w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-xl mb-6">★</div>
+                <p class="text-sm leading-relaxed">Inspiring the builders of tomorrow since 1995. Explore our universe of creative building sets.</p>
+            </div>
+            <div class="flex gap-12 flex-wrap">
+                <div>
+                    <h4 class="text-white uppercase text-xs font-bold mb-6">Support</h4>
+                    <ul class="text-sm space-y-3"><li><a href="#" class="hover:text-white">Contact Us</a></li><li><a href="#" class="hover:text-white">Shipping</a></li></ul>
+                </div>
+                <div>
+                    <h4 class="text-white uppercase text-xs font-bold mb-6">Account</h4>
+                    <ul class="text-sm space-y-3"><li><a href="#" class="hover:text-white">Wishlist</a></li><li><a href="#" class="hover:text-white">Track Order</a></li></ul>
+                </div>
+            </div>
+            <div class="flex-1 min-w-[280px]">
+                <h4 class="text-white uppercase text-xs font-bold mb-6">Newsletter</h4>
+                <div class="flex gap-2">
+                    <input type="email" placeholder="Your email" class="bg-[#1a233a] border-none rounded-md p-3 flex-grow text-sm text-white focus:ring-1 focus:ring-orange-400">
+                    <button class="bg-orange-400 text-white px-5 py-2 rounded-md font-bold text-sm">Join</button>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 pt-8 flex flex-wrap justify-between text-[11px]">
+            <p>© 2026 BrickWorld Systems A/S. All rights reserved.</p>
+            <div class="flex gap-6"><a href="#" class="hover:text-white">Privacy Policy</a><a href="#" class="hover:text-white">Terms</a></div>
         </div>
     </footer>
 
