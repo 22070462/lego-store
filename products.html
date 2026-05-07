@@ -587,7 +587,7 @@
         '      <button type="button" class="wishlist-toggle bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-3 rounded-lg flex items-center justify-center text-sm transition-colors" data-pid="' +
         p.id +
         '" title="Add to Wishlist">' +
-        '      <span class="material-symbols-outlined text-lg wishlist-icon">favorite</span>' +
+        '      <span class="material-symbols-outlined text-lg wishlist-icon">Wishlist</span>' +
         "      </button>" +
         "    </div>" +
         "  </div>" +
@@ -635,7 +635,7 @@
 
         const on = typeof isWishlisted === "function" && isWishlisted(p.id);
 
-        wishIcon.textContent = on ? "favorite" : "favorite";
+        wishIcon.textContent = on ? "Wishlist" : "Wishlist";
 
         wishBtn.classList.toggle("text-red-500", on);
 
