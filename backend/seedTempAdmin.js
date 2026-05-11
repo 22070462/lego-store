@@ -1,6 +1,6 @@
 /**
- * Tạo / reset tài khoản admin tạm để đăng nhập (chỉ dùng lúc dev).
- * Chạy: node seedTempAdmin.js
+ * Create / reset a temporary admin account for login (dev only).
+ * Run: node seedTempAdmin.js
  */
 const sqlite3 = require("sqlite3").verbose();
 const bcrypt = require("bcrypt");
@@ -35,7 +35,7 @@ async function main() {
               db.close();
               process.exit(1);
             }
-            printDone("Đã reset mật khẩu + role admin cho user có sẵn.");
+            printDone("Password and admin role reset for existing user.");
             db.close();
           }
         );
@@ -49,7 +49,7 @@ async function main() {
               db.close();
               process.exit(1);
             }
-            printDone("Đã tạo tài khoản admin mới.");
+            printDone("New admin account created.");
             db.close();
           }
         );
@@ -61,9 +61,9 @@ async function main() {
 function printDone(msg) {
   console.log("\n--- " + msg + " ---");
   console.log("Email:    ", TEMP_EMAIL);
-  console.log("Mật khẩu: ", TEMP_PASSWORD);
-  console.log("\nĐăng nhập tại login.html → sẽ vào admin.html.");
-  console.log("(Xóa hoặc đổi mật khẩu khi deploy thật.)\n");
+  console.log("Password: ", TEMP_PASSWORD);
+  console.log("\nLog in at login.html → will redirect to admin.html.");
+  console.log("(Delete or change the password before deploying to production.)\n");
 }
 
 main().catch(function (e) {

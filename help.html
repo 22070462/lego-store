@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Trợ giúp — PLAYARENA</title>
+    <title>Help — PLAYARENA</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet"/>
     <script>
@@ -78,55 +78,55 @@
     </header>
 
     <main class="flex-1 max-w-3xl mx-auto px-4 py-12 w-full">
-        <p class="text-xs font-semibold text-[#f39c12] uppercase tracking-widest mb-2">Trợ giúp</p>
-        <h1 class="text-3xl md:text-4xl font-black text-gray-900 mb-4">Về PLAYARENA</h1>
+        <p class="text-xs font-semibold text-[#f39c12] uppercase tracking-widest mb-2">Help</p>
+        <h1 class="text-3xl md:text-4xl font-black text-gray-900 mb-4">About PLAYARENA</h1>
         <p class="text-gray-600 leading-relaxed mb-10">
-            PLAYARENA là website đồ án cửa hàng đồ chơi lắp ráp (LEGO®-style), nơi bạn có thể xem bộ sưu tập,
-            thêm sản phẩm vào giỏ và quản lý tài khoản. Trang được xây dựng với giao diện hiện đại, tối ưu cho cả máy tính và điện thoại.
+            PLAYARENA is a demo online store for building-block toys (LEGO®-style), where you can browse the collection,
+            add products to your cart, and manage your account. The site features a modern interface optimized for both desktop and mobile.
         </p>
 
         <section class="space-y-8">
             <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                <h2 class="text-lg font-bold text-gray-900 mb-3">Mua sắm &amp; sản phẩm</h2>
+                <h2 class="text-lg font-bold text-gray-900 mb-3">Shopping &amp; Products</h2>
                 <ul class="text-sm text-gray-600 space-y-2 list-disc pl-5">
-                    <li>Vào <a href="products.html" class="text-[#f39c12] font-semibold hover:underline">Shop</a> để xem toàn bộ sản phẩm được tải từ máy chủ (API).</li>
-                    <li>Bạn có thể sắp xếp theo giá và tìm kiếm theo tên ngay trên trang cửa hàng.</li>
-                    <li>Ảnh và thông tin (độ tuổi, số mảnh, chủ đề) hiển thị theo dữ liệu từ hệ thống.</li>
+                    <li>Visit the <a href="products.html" class="text-[#f39c12] font-semibold hover:underline">Shop</a> to browse all products loaded from the server (API).</li>
+                    <li>You can sort by price and search by name directly on the store page.</li>
+                    <li>Images and details (age range, piece count, theme) are displayed from the system data.</li>
                 </ul>
             </div>
 
             <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                <h2 class="text-lg font-bold text-gray-900 mb-3">Tài khoản &amp; đăng nhập</h2>
+                <h2 class="text-lg font-bold text-gray-900 mb-3">Account &amp; Sign In</h2>
                 <ul class="text-sm text-gray-600 space-y-2 list-disc pl-5">
-                    <li>Dùng <a href="login.html" class="text-[#f39c12] font-semibold hover:underline">Đăng nhập</a> để tạo tài khoản mới hoặc đăng nhập bằng email và mật khẩu.</li>
-                    <li>Sau khi đăng nhập, biểu tượng tài khoản chuyển màu và bạn có thể mở trang hồ sơ khi đã lưu phiên đăng nhập.</li>
-                    <li>Phiên làm việc sử dụng mã bảo mật (token); hãy đăng xuất nếu dùng chung máy.</li>
+                    <li>Use <a href="login.html" class="text-[#f39c12] font-semibold hover:underline">Sign In</a> to create a new account or log in with your email and password.</li>
+                    <li>After signing in, the account icon changes color and you can access your profile page while your session is active.</li>
+                    <li>Sessions use a security token (JWT); sign out if you are on a shared device.</li>
                 </ul>
             </div>
 
             <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                <h2 class="text-lg font-bold text-gray-900 mb-3">Giỏ hàng</h2>
+                <h2 class="text-lg font-bold text-gray-900 mb-3">Cart</h2>
                 <ul class="text-sm text-gray-600 space-y-2 list-disc pl-5">
-                    <li>Sản phẩm thêm từ trang Shop được lưu trong trình duyệt (giỏ hàng cục bộ).</li>
-                    <li>Mở <a href="cart.html" class="text-[#f39c12] font-semibold hover:underline">Giỏ hàng</a> để xem chi tiết, đổi số lượng, xóa mặt hàng và xem tổng tiền (gồm thuế và phí vận chuyển ước tính).</li>
-                    <li>Số trên biểu tượng giỏ hàng cập nhật theo tổng số lượng sản phẩm.</li>
+                    <li>Products added from the Shop page are stored in your browser (local cart).</li>
+                    <li>Open the <a href="cart.html" class="text-[#f39c12] font-semibold hover:underline">Cart</a> to view details, update quantities, remove items, and see the total (including estimated tax and shipping).</li>
+                    <li>The badge on the cart icon updates to reflect the total number of items.</li>
                 </ul>
             </div>
 
             <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                <h2 class="text-lg font-bold text-gray-900 mb-3">Kỹ thuật &amp; hỗ trợ</h2>
+                <h2 class="text-lg font-bold text-gray-900 mb-3">Technical &amp; Support</h2>
                 <p class="text-sm text-gray-600 leading-relaxed">
-                    Nếu trang Shop không tải sản phẩm, hãy kiểm tra máy chủ backend đã được bật (cổng mặc định trong dự án là
-                    <span class="font-mono bg-gray-100 px-1 rounded">localhost:3000</span>) và thử tải lại trang.
+                    If the Shop page fails to load products, make sure the backend server is running (default port is
+                    <span class="font-mono bg-gray-100 px-1 rounded">localhost:3000</span>) and try refreshing the page.
                 </p>
                 <p class="text-sm text-gray-500 mt-3">
-                    Đây là phiên bản demo phục vụ học tập; thông tin liên hệ và chính sách có thể được bổ sung trong báo cáo đồ án của bạn.
+                    This is a demo version for academic purposes; contact information and policies can be added to your project report.
                 </p>
             </div>
         </section>
 
         <p class="mt-10 text-center">
-            <a href="index.html" class="inline-flex items-center gap-2 text-[#f39c12] font-bold hover:underline">← Về trang chủ</a>
+            <a href="index.html" class="inline-flex items-center gap-2 text-[#f39c12] font-bold hover:underline">← Back to Home</a>
         </p>
     </main>
 

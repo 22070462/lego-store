@@ -1,5 +1,5 @@
 /**
- * Giỏ hàng — một nguồn dữ liệu trong closure, tránh trùng `let cart` với script khác trên cùng trang.
+ * Cart — single data source in a closure, prevents `let cart` conflicts with other scripts on the same page.
  * API: window.addToCart, window.updateCartBadge, window.reloadCartFromStorage
  */
 (function () {
