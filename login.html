@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Đăng nhập — PLAYARENA</title>
+<title>Sign In — PLAYARENA</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
@@ -52,12 +52,12 @@ PLAYARENA
 </h2>
 
 <p class="text-slate-400 text-sm mt-1">
-Đăng nhập hoặc tạo tài khoản mới
+Sign in or create a new account
 </p>
 
 </div>
 
-<!-- Đăng nhập -->
+<!-- Sign In -->
 <form id="loginForm" class="space-y-4 login-view">
 
 <div class="space-y-2">
@@ -72,7 +72,7 @@ class="w-full bg-slate-800 border border-slate-700 rounded-2xl py-3.5 px-5 text-
 </div>
 
 <div class="space-y-2">
-<label class="text-sm font-bold text-slate-300 ml-1" for="password">Mật khẩu</label>
+<label class="text-sm font-bold text-slate-300 ml-1" for="password">Password</label>
 <input
 id="password"
 type="password"
@@ -87,12 +87,12 @@ class="w-full bg-slate-800 border border-slate-700 rounded-2xl py-3.5 px-5 text-
 type="submit"
 class="w-full bg-orange-500 hover:bg-orange-600 text-white font-black py-4 rounded-2xl mt-2 transition-colors"
 >
-ĐĂNG NHẬP
+SIGN IN
 </button>
 
 </form>
 
-<!-- Đăng ký -->
+<!-- Register -->
 <form id="registerForm" class="space-y-4 register-view hidden">
 
 <div class="space-y-2">
@@ -107,30 +107,30 @@ class="w-full bg-slate-800 border border-slate-700 rounded-2xl py-3.5 px-5 text-
 </div>
 
 <div class="space-y-2">
-<label class="text-sm font-bold text-slate-300 ml-1" for="regPassword">Mật khẩu</label>
+<label class="text-sm font-bold text-slate-300 ml-1" for="regPassword">Password</label>
 <input
 id="regPassword"
 type="password"
 autocomplete="new-password"
-placeholder="Tạo mật khẩu"
+placeholder="Create a password"
 class="w-full bg-slate-800 border border-slate-700 rounded-2xl py-3.5 px-5 text-white placeholder-slate-500 focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 outline-none transition"
 />
-<!-- Thanh độ mật khẩu -->
+<!-- Password strength bar -->
 <div class="mt-2 space-y-1.5">
 <div class="h-2 rounded-full bg-slate-700/80 overflow-hidden">
 <div id="strengthFill" class="strength-fill h-full w-0 rounded-full bg-slate-600"></div>
 </div>
-<p id="strengthLabel" class="text-xs font-semibold text-slate-500 pl-0.5">Nhập mật khẩu để xem độ mạnh</p>
+<p id="strengthLabel" class="text-xs font-semibold text-slate-500 pl-0.5">Enter a password to see its strength</p>
 </div>
 </div>
 
 <div class="space-y-2">
-<label class="text-sm font-bold text-slate-300 ml-1" for="regPassword2">Nhập lại mật khẩu</label>
+<label class="text-sm font-bold text-slate-300 ml-1" for="regPassword2">Confirm Password</label>
 <input
 id="regPassword2"
 type="password"
 autocomplete="new-password"
-placeholder="Nhập lại mật khẩu"
+placeholder="Confirm your password"
 class="w-full bg-slate-800 border border-slate-700 rounded-2xl py-3.5 px-5 text-white placeholder-slate-500 focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 outline-none transition"
 />
 <p id="registerError" class="text-sm text-red-400 min-h-[1.25rem] hidden pl-1" role="alert"></p>
@@ -140,7 +140,7 @@ class="w-full bg-slate-800 border border-slate-700 rounded-2xl py-3.5 px-5 text-
 type="submit"
 class="w-full bg-orange-500 hover:bg-orange-600 text-white font-black py-4 rounded-2xl mt-1 transition-colors"
 >
-ĐĂNG KÝ
+SIGN UP
 </button>
 
 </form>
@@ -148,13 +148,13 @@ class="w-full bg-orange-500 hover:bg-orange-600 text-white font-black py-4 round
 <div class="mt-8 text-center border-t border-slate-700 pt-6">
 
 <p class="text-sm text-slate-400 toggle-login register-view hidden">
-Đã có tài khoản?
-<button type="button" id="showLoginBtn" class="text-orange-400 font-black hover:underline ml-1">Đăng nhập</button>
+Already have an account?
+<button type="button" id="showLoginBtn" class="text-orange-400 font-black hover:underline ml-1">Sign In</button>
 </p>
 
 <p class="text-sm text-slate-400 toggle-register login-view">
-Chưa có tài khoản?
-<button type="button" id="showRegisterBtn" class="text-orange-400 font-black hover:underline ml-1">Đăng ký</button>
+Don't have an account?
+<button type="button" id="showRegisterBtn" class="text-orange-400 font-black hover:underline ml-1">Sign Up</button>
 </p>
 
 </div>
@@ -205,10 +205,10 @@ function showLoginError(msg) {
   loginPasswordError.classList.remove("hidden");
 }
 
-/** Thanh độ mật khẩu — tone cam PLAYARENA + amber/red */
+/** Password strength bar — PLAYARENA orange + amber/red */
 function getPasswordStrength(pw) {
   if (!pw) {
-    return { percent: 0, label: "Nhập mật khẩu để xem độ mạnh", barClass: "bg-slate-600" };
+    return { percent: 0, label: "Enter a password to see its strength", barClass: "bg-slate-600" };
   }
   let score = 0;
   if (pw.length >= 6) score++;
@@ -220,20 +220,20 @@ function getPasswordStrength(pw) {
   if (score <= 2) {
     return {
       percent: 33,
-      label: "Mật khẩu yếu — thêm chữ hoa, số hoặc ký tự đặc biệt",
+      label: "Weak password — add uppercase letters, numbers, or special characters",
       barClass: "bg-red-500",
     };
   }
   if (score <= 4) {
     return {
       percent: 66,
-      label: "Mật khẩu trung bình — có thể dài hơn để an toàn hơn",
+      label: "Medium password — try making it longer for better security",
       barClass: "bg-amber-400",
     };
   }
   return {
     percent: 100,
-    label: "Mật khẩu mạnh",
+    label: "Strong password",
     barClass: "bg-orange-500",
   };
 }
@@ -265,7 +265,7 @@ loginForm.addEventListener("submit", async function (e) {
   const password = passwordInput.value;
 
   if (!email || !password) {
-    showLoginError("Vui lòng nhập email và mật khẩu.");
+    showLoginError("Please enter your email and password.");
     return;
   }
 
@@ -280,11 +280,11 @@ loginForm.addEventListener("submit", async function (e) {
 
     if (!res.ok) {
       if (data.message === "Wrong password") {
-        showLoginError("Mật khẩu không đúng.");
+        showLoginError("Incorrect password.");
       } else if (data.message === "User not found") {
-        showLoginError("Email chưa được đăng ký.");
+        showLoginError("Email not registered.");
       } else {
-        showLoginError(data.message || "Đăng nhập thất bại.");
+        showLoginError(data.message || "Login failed.");
       }
       return;
     }
@@ -300,10 +300,10 @@ loginForm.addEventListener("submit", async function (e) {
         window.location.href = "index.html";
       }
     } else {
-      showLoginError(data.message || "Đăng nhập thất bại.");
+      showLoginError(data.message || "Login failed.");
     }
   } catch (err) {
-    showLoginError("Không kết nối được máy chủ. Hãy chạy backend (port 3000).");
+    showLoginError("Cannot connect to server. Make sure the backend is running (port 3000).");
   }
 });
 
@@ -317,13 +317,13 @@ registerForm.addEventListener("submit", async function (e) {
   const password2 = document.getElementById("regPassword2").value;
 
   if (!email || !password) {
-    registerError.textContent = "Vui lòng nhập email và mật khẩu.";
+    registerError.textContent = "Please enter your email and password.";
     registerError.classList.remove("hidden");
     return;
   }
 
   if (password !== password2) {
-    registerError.textContent = "Hai lần nhập mật khẩu không khớp.";
+    registerError.textContent = "Passwords do not match.";
     registerError.classList.remove("hidden");
     return;
   }
@@ -340,18 +340,18 @@ registerForm.addEventListener("submit", async function (e) {
     if (!res.ok) {
       registerError.textContent =
         data.message === "User already exists"
-          ? "Email này đã được đăng ký."
-          : data.message || "Đăng ký thất bại.";
+          ? "This email is already registered."
+          : data.message || "Registration failed.";
       registerError.classList.remove("hidden");
       return;
     }
 
-    alert(data.message || "Tạo tài khoản thành công. Bạn có thể đăng nhập.");
+    alert(data.message || "Account created successfully. You can now sign in.");
     showLoginView();
     document.getElementById("email").value = email;
     document.getElementById("password").value = "";
   } catch (err) {
-    registerError.textContent = "Không kết nối được máy chủ.";
+    registerError.textContent = "Cannot connect to server.";
     registerError.classList.remove("hidden");
   }
 });
