@@ -74,77 +74,148 @@
     </div>
   </header>
 
-  <main class="max-w-5xl mx-auto px-4 py-12">
-    <section class="mb-12">
-      <p class="text-xs font-semibold tracking-[0.2em] text-gray-500 mb-3 uppercase">ABOUT US</p>
-      <h1 class="text-4xl md:text-5xl font-black mb-4 leading-tight">
-        Building a playground<br />for every kind of imagination.
-      </h1>
-      <p class="text-gray-600 max-w-2xl">
-        PLAYARENA is a high-fidelity LEGO®-inspired experience where collectors, families, and dreamers
-        can discover brick sets curated for every age, fandom, and building style.
-      </p>
-    </section>
-
-    <section class="grid md:grid-cols-3 gap-8 mb-12">
-      <div class="md:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-        <h2 class="text-xl font-bold mb-3">Our story</h2>
-        <p class="text-sm text-gray-600 mb-3">
-          We started as a tiny fan project in 2015, collecting and photographing our favorite sets from classic
-          city scenes to sci‑fi starships. Over time, PLAYARENA grew into a digital showroom that celebrates
-          creativity, detail, and playful design.
-        </p>
-        <p class="text-sm text-gray-600">
-          Today, our mission is simple: make it feel magical to browse and build again — whether you are buying
-          your first starter kit or hunting for your next display piece.
-        </p>
+  <main>
+    <!-- Hero Section -->
+    <section class="relative w-full h-[600px] bg-gradient-to-br from-legoNavy via-legoNavy to-legoRed overflow-hidden">
+      <div class="absolute inset-0 bg-black/40"></div>
+      <div class="absolute inset-0">
+        <img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=1920" alt="LEGO sets" class="w-full h-full object-cover opacity-50" />
       </div>
-      <div class="bg-[#0d1425] text-[#a0a7b5] rounded-2xl p-6 flex flex-col justify-between">
-        <div>
-          <h3 class="text-sm font-bold text-white mb-3 uppercase">In numbers</h3>
-          <ul class="space-y-3 text-sm">
-            <li><span class="text-white font-bold">1,200+</span> curated sets</li>
-            <li><span class="text-white font-bold">40+</span> themes & universes</li>
-            <li><span class="text-white font-bold">24/7</span> browsing experience</li>
-          </ul>
+      <div class="relative z-10 max-w-6xl mx-auto px-4 h-full flex items-center">
+        <div class="text-white">
+          <p class="text-xs font-semibold tracking-[0.3em] text-legoYellow mb-4 uppercase">About PLAYARENA</p>
+          <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">
+            Building Dreams<br />
+            <span class="text-legoYellow">One Brick at a Time</span>
+          </h1>
+          <p class="text-xl text-gray-200 max-w-2xl mb-8">
+            PLAYARENA is your ultimate LEGO®-inspired destination where imagination meets creativity. Discover, build, and play with thousands of curated sets.
+          </p>
+          <a href="products.html" class="inline-flex items-center justify-center px-8 py-4 rounded-full bg-legoYellow text-legoNavy text-lg font-bold shadow-lg hover:scale-105 transition-transform">
+            Explore Our Collection
+          </a>
         </div>
-        <p class="mt-6 text-[11px] text-gray-400">
-          PLAYARENA is a fan-made concept experience and is not affiliated with the LEGO Group.
-        </p>
       </div>
     </section>
 
-    <section class="grid md:grid-cols-3 gap-8 mb-12">
-      <div class="bg-white rounded-2xl border border-gray-200 p-6">
-        <h3 class="text-sm font-bold mb-2 uppercase text-gray-500">For Collectors</h3>
-        <p class="text-sm text-gray-600">
-          High-resolution visuals, set details, and price clarity so you can plan your next centerpiece build.
-        </p>
-      </div>
-      <div class="bg-white rounded-2xl border border-gray-200 p-6">
-        <h3 class="text-sm font-bold mb-2 uppercase text-gray-500">For Families</h3>
-        <p class="text-sm text-gray-600">
-          Age, piece count, and difficulty highlights help you quickly find builds that are fun for everyone.
-        </p>
-      </div>
-      <div class="bg-white rounded-2xl border border-gray-200 p-6">
-        <h3 class="text-sm font-bold mb-2 uppercase text-gray-500">For Dreamers</h3>
-        <p class="text-sm text-gray-600">
-          Curated themes and inspirations to spark new ideas, from tiny dioramas to massive display worlds.
-        </p>
+    <!-- Stats Section -->
+    <section class="bg-legoYellow py-16">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div>
+            <p class="text-5xl md:text-6xl font-black text-legoNavy mb-2">1,200+</p>
+            <p class="text-sm font-semibold text-legoNavy/70 uppercase tracking-wide">Curated Sets</p>
+          </div>
+          <div>
+            <p class="text-5xl md:text-6xl font-black text-legoNavy mb-2">40+</p>
+            <p class="text-sm font-semibold text-legoNavy/70 uppercase tracking-wide">Themes</p>
+          </div>
+          <div>
+            <p class="text-5xl md:text-6xl font-black text-legoNavy mb-2">50K+</p>
+            <p class="text-sm font-semibold text-legoNavy/70 uppercase tracking-wide">Happy Builders</p>
+          </div>
+          <div>
+            <p class="text-5xl md:text-6xl font-black text-legoNavy mb-2">24/7</p>
+            <p class="text-sm font-semibold text-legoNavy/70 uppercase tracking-wide">Support</p>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-      <div>
-        <h2 class="text-lg font-bold mb-1">Join the PLAYARENA community</h2>
-        <p class="text-sm text-gray-600">
-          Be the first to see new mockups, layouts, and experimental features as we expand the experience.
-        </p>
+    <!-- Story Section -->
+    <section class="max-w-6xl mx-auto px-4 py-20">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div class="order-2 md:order-1">
+          <p class="text-xs font-semibold tracking-[0.2em] text-legoRed mb-3 uppercase">Our Story</p>
+          <h2 class="text-4xl md:text-5xl font-black mb-6 text-legoNavy">
+            From Passion to<br />Platform
+          </h2>
+          <p class="text-gray-600 mb-4 text-lg">
+            PLAYARENA began in 2015 as a humble fan project, born from a shared love for building and collecting. What started as photographing our favorite city scenes and starships has evolved into a premier digital showroom.
+          </p>
+          <p class="text-gray-600 mb-6 text-lg">
+            Today, we're proud to serve collectors, families, and dreamers worldwide, making it magical to browse and build again — whether you're buying your first starter kit or hunting for your next centerpiece.
+          </p>
+          <div class="flex gap-4">
+            <div class="w-12 h-12 bg-legoRed rounded-lg flex items-center justify-center text-white text-2xl">🎯</div>
+            <div class="w-12 h-12 bg-legoOrange rounded-lg flex items-center justify-center text-white text-2xl">🚀</div>
+            <div class="w-12 h-12 bg-legoYellow rounded-lg flex items-center justify-center text-legoNavy text-2xl">⭐</div>
+          </div>
+        </div>
+        <div class="order-1 md:order-2">
+          <img src="https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=800" alt="LEGO builder" class="rounded-2xl shadow-2xl w-full h-96 object-cover" />
+        </div>
       </div>
-      <a href="products.html" class="inline-flex items-center justify-center px-6 py-3 rounded-full bg-[#f39c12] text-white text-sm font-bold shadow-sm hover:brightness-110 transition">
-        Start browsing sets
-      </a>
+    </section>
+
+    <!-- Image Gallery -->
+    <section class="bg-gradient-to-br from-legoGrey to-white py-20">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="text-center mb-12">
+          <p class="text-xs font-semibold tracking-[0.2em] text-legoRed mb-3 uppercase">Our Universe</p>
+          <h2 class="text-4xl md:text-5xl font-black text-legoNavy mb-4">Explore the Possibilities</h2>
+          <p class="text-gray-600 text-lg max-w-2xl mx-auto">From classic cityscapes to fantasy worlds, discover sets that spark creativity in builders of all ages.</p>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="col-span-2 row-span-2">
+            <img src="https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=800" alt="LEGO city" class="w-full h-full object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300" />
+          </div>
+          <div>
+            <img src="https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=400" alt="LEGO space" class="w-full h-full object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300" />
+          </div>
+          <div>
+            <img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=400" alt="LEGO sets" class="w-full h-full object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300" />
+          </div>
+          <div>
+            <img src="https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=400" alt="LEGO bricks" class="w-full h-full object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300" />
+          </div>
+          <div>
+            <img src="https://images.unsplash.com/photo-1589923188900-85dae523342b?w=400" alt="LEGO minifigures" class="w-full h-full object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="max-w-6xl mx-auto px-4 py-20">
+      <div class="text-center mb-12">
+        <p class="text-xs font-semibold tracking-[0.2em] text-legoRed mb-3 uppercase">Why Choose Us</p>
+        <h2 class="text-4xl md:text-5xl font-black text-legoNavy mb-4">Built for Every Builder</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white rounded-2xl p-8 border-2 border-legoYellow hover:border-legoRed transition-colors shadow-lg">
+          <div class="w-16 h-16 bg-legoYellow rounded-2xl flex items-center justify-center mb-6">
+            <span class="text-3xl">🎨</span>
+          </div>
+          <h3 class="text-xl font-bold text-legoNavy mb-3">For Collectors</h3>
+          <p class="text-gray-600">High-resolution visuals, detailed specifications, and price clarity to help you plan your next masterpiece.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-8 border-2 border-legoOrange hover:border-legoRed transition-colors shadow-lg">
+          <div class="w-16 h-16 bg-legoOrange rounded-2xl flex items-center justify-center mb-6">
+            <span class="text-3xl">👨‍👩‍👧‍👦</span>
+          </div>
+          <h3 class="text-xl font-bold text-legoNavy mb-3">For Families</h3>
+          <p class="text-gray-600">Age-appropriate recommendations, piece counts, and difficulty ratings to make building fun for everyone.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-8 border-2 border-legoRed hover:border-legoNavy transition-colors shadow-lg">
+          <div class="w-16 h-16 bg-legoRed rounded-2xl flex items-center justify-center mb-6">
+            <span class="text-3xl">✨</span>
+          </div>
+          <h3 class="text-xl font-bold text-legoNavy mb-3">For Dreamers</h3>
+          <p class="text-gray-600">Curated themes and creative inspirations to spark new ideas, from tiny dioramas to massive display worlds.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-legoNavy py-20">
+      <div class="max-w-4xl mx-auto px-4 text-center">
+        <h2 class="text-4xl md:text-5xl font-black text-white mb-6">Ready to Start Building?</h2>
+        <p class="text-xl text-gray-300 mb-8">Join thousands of builders who've discovered their next favorite set.</p>
+        <a href="products.html" class="inline-flex items-center justify-center px-8 py-4 rounded-full bg-legoYellow text-legoNavy text-lg font-bold shadow-lg hover:scale-105 transition-transform">
+          Browse All Sets
+        </a>
+      </div>
     </section>
   </main>
 
