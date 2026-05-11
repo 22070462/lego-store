@@ -6,8 +6,8 @@ const fs = require("fs");
 const emailArg = process.argv[2];
 
 if (!emailArg || !emailArg.includes("@")) {
-  console.error("Cách dùng: node makeAdmin.js <email-da-dang-ky>");
-  console.error("Ví dụ: node makeAdmin.js 22070006@vnu.edu.vn");
+  console.error("Usage: node makeAdmin.js <registered-email>");
+  console.error("Example: node makeAdmin.js 22070006@vnu.edu.vn");
   process.exit(1);
 }
 
@@ -19,7 +19,7 @@ const dbRoot = path.join(__dirname, "..", "users.db");
 function listUsers(dbPath, label) {
   return new Promise(function (resolve) {
     if (!fs.existsSync(dbPath)) {
-      console.log(label + ": (không có file)");
+      console.log(label + ": (file not found)");
       resolve([]);
       return;
     }
@@ -27,13 +27,13 @@ function listUsers(dbPath, label) {
     db.all("SELECT id, email, role FROM users ORDER BY id", function (err, rows) {
       db.close();
       if (err) {
-        console.log(label + ": lỗi đọc —", err.message);
+        console.log(label + ": read error —", err.message);
         resolve([]);
         return;
       }
       console.log("\n" + label + " (" + dbPath + "):");
       if (!rows || rows.length === 0) {
-        console.log("  (chưa có user nào)");
+        console.log("  (no users found)");
       } else {
         rows.forEach(function (r) {
           console.log("  id=" + r.id + " | " + r.email + " | role=" + r.role);
@@ -65,38 +65,38 @@ function trySetAdmin(dbPath) {
 }
 
 (async function () {
-  console.log("Email cần set admin (chuẩn hóa):", normalized);
+  console.log("Email to set as admin (normalized):", normalized);
 
   let r1 = await trySetAdmin(dbBackend);
   if (!r1.skipped && r1.changes > 0) {
-    console.log("\nOK — Đã cập nhật", r1.changes, "dòng trong:\n  ", r1.path);
-    console.log("→ Đăng nhập lại bằng đúng mật khẩu lúc đăng ký.");
+    console.log("\nOK — Updated", r1.changes, "row(s) in:\n  ", r1.path);
+    console.log("→ Log in again using the password you registered with.");
     process.exit(0);
   }
 
   let r2 = await trySetAdmin(dbRoot);
   if (!r2.skipped && r2.changes > 0) {
     console.log(
-      "\nOK — Đã cập nhật trong file ở thư mục gốc project (không phải backend):"
+      "\nOK — Updated record in the project root file (not backend):"
     );
     console.log("  ", r2.path);
     console.log(
-      "\n⚠ Server hiện tại thường dùng backend/users.db. Nếu đăng nhập vẫn không phải admin,"
+      "\n⚠ The server typically uses backend/users.db. If you still don't have admin access after login,"
     );
-    console.log("  hãy chạy lại makeAdmin sau khi đã đăng ký lại, hoặc xóa file users.db thừa ở thư mục gốc.");
-    console.log("→ Đăng nhập lại bằng đúng mật khẩu lúc đăng ký.");
+    console.log("  re-run makeAdmin after re-registering, or delete the extra users.db in the project root.");
+    console.log("→ Log in again using the password you registered with.");
     process.exit(0);
   }
 
-  console.log("\n--- Không khớp email nào trong cả hai file (số dòng cập nhật: 0) ---");
+  console.log("\n--- No email match found in either database file (rows updated: 0) ---");
   await listUsers(dbBackend, "backend/users.db");
-  await listUsers(dbRoot, "thư mục gốc project users.db");
+  await listUsers(dbRoot, "project root users.db");
 
   console.log(
-    "\n→ Hãy đăng ký tài khoản trên web trước (cùng email bạn vừa gõ), rồi chạy lại lệnh."
+    "\n→ Register an account on the web first (using the same email you typed), then run this command again."
   );
   console.log(
-    "→ Copy email **y hệt** một dòng trong danh sách trên (hoặc dùng đúng email đã đăng ký)."
+    "→ Copy the email **exactly** as it appears in the list above (or use the exact email you registered with)."
   );
   process.exit(1);
 })();

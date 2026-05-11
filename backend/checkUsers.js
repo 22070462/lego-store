@@ -1,6 +1,6 @@
 /**
- * Liệt kê user trong users.db (cùng thư mục backend).
- * Chạy: node checkUsers.js
+ * List all users in users.db (in the backend directory).
+ * Run: node checkUsers.js
  */
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
@@ -10,7 +10,7 @@ const db = new sqlite3.Database(dbPath);
 
 db.all("SELECT id, email, role FROM users ORDER BY id", (err, rows) => {
   if (err) {
-    console.error("Lỗi:", err.message);
+    console.error("Error:", err.message);
     db.close();
     process.exit(1);
   }

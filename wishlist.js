@@ -1,6 +1,6 @@
 /**
- * Danh sách yêu thích — dùng chung cart / products / trang giỏ
- * localStorage key: wishlist — mảng { id, name, price, img }
+ * Wishlist — shared across cart / products / cart page
+ * localStorage key: wishlist — array of { id, name, price, img }
  */
 const WISHLIST_KEY = "wishlist";
 
@@ -23,7 +23,7 @@ function isWishlisted(productId) {
   });
 }
 
-/** Trả về true nếu đã thêm vào yêu thích, false nếu đã gỡ */
+/** Returns true if added to wishlist, false if removed */
 function toggleWishlist(product) {
   const list = getWishlist();
   const id = String(product.id);

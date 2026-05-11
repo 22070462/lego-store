@@ -1,5 +1,5 @@
 /**
- * Tạo users.db + schema (giống server.js). Chạy: node initDb.js
+ * Create users.db and schema (mirrors server.js). Run: node initDb.js
  */
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
@@ -57,5 +57,5 @@ db.close((err) => {
     console.error(err);
     process.exit(1);
   }
-  console.log("Đã tạo:", dbPath);
+  console.log("Created:", dbPath);
 });

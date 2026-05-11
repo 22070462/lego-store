@@ -279,11 +279,11 @@
 
     function addToCart(name, price, img) {
         let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-        // Thêm ID và ảnh để file cart.html hiển thị được
+        // Assign ID and image so cart.html can render the item
         cart.push({ id: Date.now(), name: name, price: price, qty: 1, img: img });
         localStorage.setItem("cart", JSON.stringify(cart));
         updateCartBadge();
-        alert("Đã thêm " + name + " vào giỏ!");
+        alert(name + " added to your cart!");
     }
 
     function updateCartBadge() {

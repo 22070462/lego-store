@@ -1,4 +1,4 @@
-<!-- nếu muốn cho promo lại vào (đã sẵn css) --><
+<!-- if you want to add the promo back (CSS is ready) --><
 
 div class="promo">
 Add a Promo Code
