@@ -558,8 +558,49 @@
     }
 
     function confirmPayment() {
-        alert("Thank you! Your payment is being verified.\nWe will process your order shortly.");
-        closePaymentModal();
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("Please login to place an order.");
+            return;
+        }
+
+        const rawCart = JSON.parse(localStorage.getItem("cart") || "[]");
+        if (rawCart.length === 0) {
+            alert("Your cart is empty.");
+            return;
+        }
+
+        // Prepare order items
+        const items = rawCart.map(item => ({
+            productId: item.id,
+            qty: item.qty || 1
+        }));
+
+        fetch("http://localhost:3000/orders", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({ items: items })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert("Thank you! Your payment is being verified.\nWe will process your order shortly.");
+                // Clear cart after successful order
+                localStorage.setItem("cart", "[]");
+                renderCart();
+                updateCartCount();
+                closePaymentModal();
+            } else {
+                alert("Error placing order: " + (data.error || "Unknown error"));
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Error placing order. Please try again.");
+        });
     }
 
     function copyText(text, btn) {
