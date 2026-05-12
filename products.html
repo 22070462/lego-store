@@ -306,6 +306,26 @@
       <aside class="w-full lg:w-64 flex-shrink-0 space-y-6">
         <div class="bg-white rounded-2xl p-6 border-2 border-legoYellow shadow-lg">
           <h3 class="text-lg font-bold text-legoNavy mb-4">Filters</h3>
+          
+          <!-- Age Filter -->
+          <div class="mb-6">
+            <h4 class="text-sm font-bold text-legoNavy mb-3">Age Group</h4>
+            <div class="space-y-2">
+              <label class="flex items-center gap-3 cursor-pointer hover:bg-legoYellow/5 p-2 rounded-lg transition-colors">
+                <input type="radio" name="ageFilter" value="under9" class="w-4 h-4 text-legoOrange focus:ring-legoYellow border-gray-300">
+                <span class="text-sm text-gray-700">Under 9 years</span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer hover:bg-legoYellow/5 p-2 rounded-lg transition-colors">
+                <input type="radio" name="ageFilter" value="over10" class="w-4 h-4 text-legoOrange focus:ring-legoYellow border-gray-300">
+                <span class="text-sm text-gray-700">10+ years</span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer hover:bg-legoYellow/5 p-2 rounded-lg transition-colors">
+                <input type="radio" name="ageFilter" value="all" checked class="w-4 h-4 text-legoOrange focus:ring-legoYellow border-gray-300">
+                <span class="text-sm text-gray-700">All Ages</span>
+              </label>
+            </div>
+          </div>
+
           <div class="bg-legoYellow/10 p-4 rounded-xl border border-legoYellow/30 flex items-center justify-between">
             <span class="text-sm font-bold text-legoNavy">Show In Stock Only</span>
             <button class="w-10 h-5 bg-legoYellow rounded-full relative opacity-50 cursor-not-allowed">
@@ -313,9 +333,6 @@
             </button>
           </div>
         </div>
-        <p class="text-xs text-gray-500 italic">
-          More filters coming soon. All products are loaded from the backend.
-        </p>
       </aside>
 
 
@@ -418,6 +435,14 @@
     const searchInput = document.getElementById("searchInput");
 
     searchInput.addEventListener("input", applySearch);
+
+
+
+    // Age filter event listeners
+    const ageFilters = document.querySelectorAll('input[name="ageFilter"]');
+    ageFilters.forEach(filter => {
+      filter.addEventListener("change", applyFilters);
+    });
 
   });
 
@@ -698,50 +723,44 @@
 
 
 
-  function applySort() {
-
+  function applyFilters() {
     const sortSelect = document.getElementById("sortSelect");
+    let filtered = [...productsData];
 
-    let sorted = [...productsData];
-
-
-
-    if (sortSelect.value === "low") {
-
-      sorted.sort((a, b) => a.price - b.price);
-
-    } else if (sortSelect.value === "high") {
-
-      sorted.sort((a, b) => b.price - a.price);
-
+    // Apply age filter
+    const ageFilter = document.querySelector('input[name="ageFilter"]:checked');
+    if (ageFilter && ageFilter.value !== "all") {
+      if (ageFilter.value === "under9") {
+        filtered = filtered.filter(p => p.age_min && p.age_min < 9);
+      } else if (ageFilter.value === "over10") {
+        filtered = filtered.filter(p => p.age_min && p.age_min >= 10);
+      }
     }
 
-
-
+    // Apply search filter
     const search = document.getElementById("searchInput").value.toLowerCase();
-
     if (search) {
-
-      sorted = sorted.filter((p) =>
-
+      filtered = filtered.filter(p =>
         String(p.name || "").toLowerCase().includes(search)
-
       );
-
     }
 
+    // Apply sort
+    if (sortSelect.value === "low") {
+      filtered.sort((a, b) => a.price - b.price);
+    } else if (sortSelect.value === "high") {
+      filtered.sort((a, b) => b.price - a.price);
+    }
 
-
-    renderProducts(sorted);
-
+    renderProducts(filtered);
   }
 
-
+  function applySort() {
+    applyFilters();
+  }
 
   function applySearch() {
-
-    applySort();
-
+    applyFilters();
   }
 
   // Modal functionality
