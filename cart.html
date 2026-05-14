@@ -437,7 +437,10 @@
         
         try {
             const res = await fetch(API_BASE + '/products');
-            const products = await res.json();
+            const data = await res.json();
+            
+            // Handle both response formats
+            const products = data.data || data;
             
             if (!res.ok || !Array.isArray(products)) {
                 recommendedContainer.innerHTML = '<p class="col-span-full text-center text-gray-500">Unable to load recommended products.</p>';
@@ -492,11 +495,22 @@
     <script>
     /* ── PAYMENT MODAL ── */
     const VND_RATE = 25000; // 1 USD = 25,000 VND
+    const API_BASE = 'http://localhost:3000'; // Always use localhost:3000 for API
+    let currentOrderId = null;
+    let currentTxRef = null;
 
-    function openPaymentModal() {
+    async function openPaymentModal() {
         const rawCart = JSON.parse(localStorage.getItem("cart") || "[]");
         if (rawCart.length === 0) {
             alert("Your cart is empty. Please add items before checking out.");
+            return;
+        }
+
+        // Check if user is logged in
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("Please login to checkout.");
+            window.location.href = "login.html";
             return;
         }
 
@@ -510,9 +524,8 @@
         const shipping = subtotal > 100 ? 0 : 10;
         const total    = subtotal + tax + shipping;
         const totalVND = Math.round(total * VND_RATE);
-        const ref      = "PLAYARENA" + Date.now().toString().slice(-6);
 
-        /* ── Populate items list ── */
+        /* ── Populate items list (temporary) ── */
         document.getElementById("payModalItems").innerHTML = rawCart.map(function(item) {
             return '<div class="pay-item">' +
                 '<img src="' + (item.img || '') + '" alt="' + (item.name || '') + '" onerror="this.style.display=\'none\'">' +
@@ -524,7 +537,7 @@
             '</div>';
         }).join('');
 
-        /* ── Populate price rows ── */
+        /* ── Populate price rows (temporary) ── */
         document.getElementById("paySubtotal").textContent = "$" + subtotal.toFixed(2);
         document.getElementById("payShipping").textContent = shipping === 0 ? "FREE" : "$" + shipping.toFixed(2);
         document.getElementById("payTax").textContent      = "$" + tax.toFixed(2);
@@ -532,23 +545,93 @@
         document.getElementById("payVND").textContent      = totalVND.toLocaleString("en-US") + " ₫";
         document.getElementById("payAmountBadge").textContent  = totalVND.toLocaleString("en-US") + " ₫";
         document.getElementById("payBankAmount").textContent   = totalVND.toLocaleString("en-US") + " ₫";
-        document.getElementById("payReference").textContent    = ref;
+        document.getElementById("payReference").textContent    = "Loading...";
 
-        /* ── Generate VietQR URL ── */
-        const qrUrl = "https://img.vietqr.io/image/BIDV-2601601784-compact2.png" +
-            "?amount=" + totalVND +
-            "&addInfo=" + encodeURIComponent(ref) +
-            "&accountName=" + encodeURIComponent("NGUYEN QUANG BAO");
-        document.getElementById("payQRCode").src = qrUrl;
-
-        /* ── Show modal ── */
+        /* ── Show modal with loading state ── */
         document.getElementById("paymentModal").classList.remove("hidden");
         document.body.style.overflow = "hidden";
+
+        // Disable confirm button while creating order
+        const confirmBtn = document.querySelector(".btn-done");
+        confirmBtn.disabled = true;
+        confirmBtn.style.opacity = "0.5";
+        confirmBtn.textContent = "Creating Order...";
+
+        try {
+            /* ── Create order via API ── */
+            const orderItems = rawCart.map(function(item) {
+                return {
+                    productId: item.id,
+                    qty: item.qty || 1
+                };
+            });
+
+            console.log('Creating order with items:', orderItems); // Debug log
+
+            const response = await fetch(API_BASE + '/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({ items: orderItems })
+            });
+
+            const result = await response.json();
+
+            console.log('API Response:', result); // Debug log
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Failed to create order');
+            }
+
+            // Validate response structure
+            if (!result.data || !result.data.order || !result.data.payment) {
+                console.error('Invalid response structure:', result);
+                throw new Error('Invalid response from server');
+            }
+
+            // Store order ID and transaction reference
+            currentOrderId = result.data.order.id;
+            currentTxRef = result.data.payment.tx_ref;
+
+            /* ── Update modal with real payment data ── */
+            document.getElementById("payReference").textContent = currentTxRef;
+
+            /* ── Generate VietQR URL with real transaction reference ── */
+            const qrUrl = "https://img.vietqr.io/image/BIDV-2601601784-compact2.png" +
+                "?amount=" + totalVND +
+                "&addInfo=" + encodeURIComponent(currentTxRef) +
+                "&accountName=" + encodeURIComponent("NGUYEN QUANG BAO");
+            document.getElementById("payQRCode").src = qrUrl;
+
+            // Re-enable confirm button
+            confirmBtn.disabled = false;
+            confirmBtn.style.opacity = "1";
+            confirmBtn.textContent = "I've Transferred ✓";
+
+        } catch (error) {
+            console.error('Order creation error:', error);
+            console.error('Error details:', {
+                message: error.message,
+                stack: error.stack
+            });
+            
+            // Re-enable button
+            confirmBtn.disabled = false;
+            confirmBtn.style.opacity = "1";
+            confirmBtn.textContent = "I've Transferred ✓";
+            
+            alert('Failed to create order: ' + error.message + '\n\nPlease check the browser console for details.');
+            closePaymentModal();
+        }
     }
 
     function closePaymentModal() {
         document.getElementById("paymentModal").classList.add("hidden");
         document.body.style.overflow = "";
+        currentOrderId = null;
+        currentTxRef = null;
     }
 
     function handleBackdropClick(e) {
@@ -558,49 +641,22 @@
     }
 
     function confirmPayment() {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            alert("Please login to place an order.");
+        if (!currentOrderId) {
+            alert("Order not created. Please try again.");
+            closePaymentModal();
             return;
         }
 
-        const rawCart = JSON.parse(localStorage.getItem("cart") || "[]");
-        if (rawCart.length === 0) {
-            alert("Your cart is empty.");
-            return;
-        }
+        // Clear cart
+        localStorage.removeItem("cart");
+        cart = [];
 
-        // Prepare order items
-        const items = rawCart.map(item => ({
-            productId: item.id,
-            qty: item.qty || 1
-        }));
-
-        fetch("http://localhost:3000/orders", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + token
-            },
-            body: JSON.stringify({ items: items })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-                alert("Thank you! Your payment is being verified.\nWe will process your order shortly.");
-                // Clear cart after successful order
-                localStorage.setItem("cart", "[]");
-                renderCart();
-                updateCartCount();
-                closePaymentModal();
-            } else {
-                alert("Error placing order: " + (data.error || "Unknown error"));
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            alert("Error placing order. Please try again.");
-        });
+        // Show success message
+        alert("Thank you! Your order #" + currentOrderId + " has been created.\nPlease complete the payment transfer.\nYou can view your order status in the Orders page.");
+        
+        // Close modal and redirect to orders page
+        closePaymentModal();
+        window.location.href = "orders.html";
     }
 
     function copyText(text, btn) {

@@ -1,4 +1,41 @@
-# Capstone Project 2 — MIS for a Toy Store
+# 🎮 PLAYARENA - LEGO E-Commerce MIS
+
+**Version 2.0** - Complete Refactored & Production-Ready
+
+A comprehensive Management Information System (MIS) for an online LEGO toy store, featuring retail workflows, product catalog management, customer management, cart/order processing, and administrative reporting.
+
+**🚀 Quick Start**: See `START_HERE.md`
+
+---
+
+## ⚡ What's New in v2.0
+
+### Complete Architecture Refactoring
+- ✅ **30+ modular files** (was 1 monolithic file)
+- ✅ **Clean layered architecture** (Controller → Service → Repository)
+- ✅ **Environment-based configuration** (.env file)
+- ✅ **Production-ready** code structure
+- ✅ **100% backward compatible** with existing frontend
+
+### Key Improvements
+- 🔧 Centralized error handling
+- 🔒 Enhanced security (JWT, bcrypt, validation)
+- 📝 Standardized API responses
+- 🎯 Separation of concerns
+- 📚 Comprehensive documentation
+
+---
+
+## 📋 Quick Links
+
+- **🚀 Start Here**: `START_HERE.md` - Get running in 3 steps
+- **📖 Setup Guide**: `SETUP_GUIDE.md` - Complete installation guide
+- **🏗️ Architecture**: `REFACTORING_GUIDE.md` - Code structure explained
+- **📝 Changelog**: `CHANGELOG.md` - What's new in v2.0
+
+---
+
+## 🎯 Capstone Project 2 — MIS for a Toy Store
 
 **Topic:** A Management Information System (MIS) that supports operations for an **online toy store**, including retail workflows, product catalog management, customer management, cart/order processing, and basic operational reporting for administrators.
 
@@ -53,18 +90,29 @@ From the project root:
 npm install
 ```
 
-## Run the System
+## 🚀 Run the System
 
-Always start the server from the **`backend`** directory (so the `users.db` path is correct):
+### Quick Start (Refactored v2.0 - Recommended)
 
 ```bash
-cd backend
-node server.js
+npm install
+npm start
 ```
 
-- API and static frontend hosting: **http://localhost:3000**
-- **Shop:** [http://localhost:3000/products.html](http://localhost:3000/products.html)  
-- **Home:** [http://localhost:3000/](http://localhost:3000/)
+### Legacy Version (v1.0)
+
+```bash
+npm run legacy
+```
+
+**Access Points:**
+- **Frontend**: http://localhost:3000
+- **Admin Panel**: http://localhost:3000/admin.html
+- **API Health**: http://localhost:3000/api/health
+
+**Default Admin:**
+- Email: `admin@playarena.local`
+- Password: `Admin123!`
 
 When opened via port 3000, the frontend uses same-origin API calls. If you open pages directly via `file://` or use Live Server on another port, the code still targets `http://localhost:3000`, so the backend must be running.
 

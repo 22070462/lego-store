@@ -236,7 +236,11 @@
       }
       try {
         const res = await fetch(API_BASE + "/products");
-        const list = await res.json();
+        const data = await res.json();
+        
+        // Handle both response formats
+        const list = data.data || data;
+        
         if (!res.ok || !Array.isArray(list) || !list.length) {
           grid.innerHTML =
             '<p class="text-sm text-gray-300 col-span-full">No new sets yet. Add sets from Admin to see them here.</p>';

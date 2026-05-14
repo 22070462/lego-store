@@ -1,21 +1,33 @@
 {
-  "name": "my-website",
-  "version": "1.0.0",
-  "main": "cart-system.js",
+  "name": "playarena-lego-store",
+  "version": "2.0.0",
+  "description": "PLAYARENA - LEGO E-Commerce Management Information System",
+  "main": "backend/src/server.js",
   "scripts": {
-    "start": "node backend/server.js",
+    "start": "node backend/src/server.js",
+    "dev": "node backend/src/server.js",
+    "legacy": "node backend/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "ecommerce",
+    "lego",
+    "mis",
+    "express",
+    "sqlite"
+  ],
+  "author": "PLAYARENA Team",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.1.1",
     "sqlite3": "^5.1.7"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }

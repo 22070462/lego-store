@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Login</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1e1e1e; color: #d4d4d4; }
+        .container { max-width: 800px; margin: 0 auto; }
+        button { background: #0e639c; color: white; border: none; padding: 10px 20px; cursor: pointer; margin: 5px; }
+        button:hover { background: #1177bb; }
+        pre { background: #252526; padding: 15px; border-radius: 5px; overflow-x: auto; white-space: pre-wrap; }
+        .success { color: #4ec9b0; }
+        .error { color: #f48771; }
+        .info { color: #9cdcfe; }
+        input { background: #3c3c3c; border: 1px solid #555; color: #d4d4d4; padding: 8px; margin: 5px 0; width: 100%; }
+        .section { margin: 20px 0; padding: 15px; background: #252526; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Login Debug Tool</h1>
+        
+        <div class="section">
+            <h2>1. Check LocalStorage</h2>
+            <button onclick="checkLocalStorage()">Check LocalStorage</button>
+            <button onclick="clearLocalStorage()">Clear LocalStorage</button>
+            <pre id="localStorageResult">Click button to check...</pre>
+        </div>
+
+        <div class="section">
+            <h2>2. Test Login API</h2>
+            <input type="email" id="email" placeholder="Email" value="test@example.com">
+            <input type="password" id="password" placeholder="Password" value="password123">
+            <button onclick="testLogin()">Test Login</button>
+            <pre id="loginResult">Click button to test...</pre>
+        </div>
+
+        <div class="section">
+            <h2>3. Manual Redirect Test</h2>
+            <button onclick="redirectToIndex()">Redirect to index.html</button>
+            <button onclick="redirectToAdmin()">Redirect to admin.html</button>
+            <pre id="redirectResult">Click button to test redirect...</pre>
+        </div>
+
+        <div class="section">
+            <h2>4. Check Backend</h2>
+            <button onclick="checkBackend()">Check Backend</button>
+            <pre id="backendResult">Click button to check...</pre>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000';
+
+        function log(elementId, message, type = 'info') {
+            const el = document.getElementById(elementId);
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : 'info';
+            el.innerHTML = `<span class="${className}">${message}</span>`;
+        }
+
+        function checkLocalStorage() {
+            const token = localStorage.getItem('token');
+            const role = localStorage.getItem('role');
+            const email = localStorage.getItem('userEmail');
+            
+            const result = {
+                token: token ? token.substring(0, 50) + '...' : null,
+                role: role,
+                email: email,
+                allKeys: Object.keys(localStorage)
+            };
+            
+            if (token) {
+                log('localStorageResult', `✅ Token found!\n\n${JSON.stringify(result, null, 2)}`, 'success');
+            } else {
+                log('localStorageResult', `❌ No token found!\n\n${JSON.stringify(result, null, 2)}`, 'error');
+            }
+        }
+
+        function clearLocalStorage() {
+            localStorage.clear();
+            log('localStorageResult', '✅ LocalStorage cleared!', 'success');
+        }
+
+        async function testLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            log('loginResult', '⏳ Logging in...', 'info');
+
+            try {
+                const response = await fetch(API_BASE + '/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                console.log('Full response:', data);
+
+                if (response.ok) {
+                    // Handle both formats
+                    const tokenData = data.data || data;
+                    
+                    if (tokenData.token) {
+                        localStorage.setItem('token', tokenData.token);
+                        localStorage.setItem('role', tokenData.role);
+                        localStorage.setItem('userEmail', email);
+                        
+                        log('loginResult', 
+                            `✅ Login successful!\n\n` +
+                            `Response format: ${data.data ? 'NEW (wrapped)' : 'OLD (direct)'}\n` +
+                            `Token: ${tokenData.token.substring(0, 50)}...\n` +
+                            `Role: ${tokenData.role}\n\n` +
+                            `Saved to localStorage:\n` +
+                            `- token: ${localStorage.getItem('token').substring(0, 50)}...\n` +
+                            `- role: ${localStorage.getItem('role')}\n` +
+                            `- email: ${localStorage.getItem('userEmail')}\n\n` +
+                            `Full response:\n${JSON.stringify(data, null, 2)}`,
+                            'success'
+                        );
+                    } else {
+                        log('loginResult', `❌ No token in response!\n\n${JSON.stringify(data, null, 2)}`, 'error');
+                    }
+                } else {
+                    log('loginResult', `❌ Login failed!\nStatus: ${response.status}\n\n${JSON.stringify(data, null, 2)}`, 'error');
+                }
+            } catch (error) {
+                log('loginResult', `❌ Error!\n${error.message}\n${error.stack}`, 'error');
+            }
+        }
+
+        function redirectToIndex() {
+            log('redirectResult', '⏳ Redirecting to index.html in 2 seconds...', 'info');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
+        }
+
+        function redirectToAdmin() {
+            log('redirectResult', '⏳ Redirecting to admin.html in 2 seconds...', 'info');
+            setTimeout(() => {
+                window.location.href = 'admin.html';
+            }, 2000);
+        }
+
+        async function checkBackend() {
+            try {
+                const response = await fetch(API_BASE + '/products');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    log('backendResult', `✅ Backend is running!\nStatus: ${response.status}\nProducts: ${Array.isArray(data) ? data.length : (data.data ? data.data.length : 'N/A')}`, 'success');
+                } else {
+                    log('backendResult', `❌ Backend error!\nStatus: ${response.status}\n\n${JSON.stringify(data, null, 2)}`, 'error');
+                }
+            } catch (error) {
+                log('backendResult', `❌ Cannot connect to backend!\n${error.message}`, 'error');
+            }
+        }
+
+        // Auto-check on load
+        window.addEventListener('DOMContentLoaded', () => {
+            checkLocalStorage();
+            checkBackend();
+        });
+    </script>
+</body>
+</html>

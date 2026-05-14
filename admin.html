@@ -115,7 +115,6 @@
                   <th class="px-4 py-3 text-left">Date</th>
                   <th class="px-4 py-3 text-left">Status</th>
                   <th class="px-4 py-3 text-right">Total</th>
-                  <th class="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody id="orderRows"></tbody>
@@ -179,18 +178,6 @@
     </form>
   </dialog>
 
-  <dialog id="orderDetailModal" class="backdrop:bg-slate-900/50 rounded-xl p-0 w-full max-w-2xl">
-    <div class="bg-white rounded-xl p-5">
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="font-black text-xl">Order Details</h3>
-        <button type="button" id="closeOrderModal" class="text-slate-500 text-2xl">&times;</button>
-      </div>
-      <div id="orderDetailContent">
-        <!-- Order details will be loaded here -->
-      </div>
-    </div>
-  </dialog>
-
   <script>
     const API_BASE = "http://localhost:3000";
     const LOW_STOCK_THRESHOLD = 10;
@@ -219,11 +206,31 @@
     async function ensureAdmin() {
       const token = localStorage.getItem("token");
       if (!token) { window.location.href = "login.html"; return false; }
-      const res = await fetch(API_BASE + "/profile", { headers: authHeaders() });
-      const data = await res.json();
-      if (!res.ok || data.role !== "admin") { window.location.href = "login.html"; return false; }
-      document.getElementById("adminEmail").textContent = data.email || "";
-      return true;
+      
+      try {
+        const res = await fetch(API_BASE + "/profile", { headers: authHeaders() });
+        const data = await res.json();
+        
+        // Handle both response formats
+        const userData = data.data || data;
+        
+        console.log('Profile response:', data);
+        console.log('User data:', userData);
+        console.log('User role:', userData.role);
+        
+        if (!res.ok || userData.role !== "admin") { 
+          console.error('Not admin or request failed');
+          window.location.href = "login.html"; 
+          return false; 
+        }
+        
+        document.getElementById("adminEmail").textContent = userData.email || "";
+        return true;
+      } catch (error) {
+        console.error('ensureAdmin error:', error);
+        window.location.href = "login.html";
+        return false;
+      }
     }
 
     function switchTab(nextTab) {
@@ -300,8 +307,7 @@
           '<td class="px-4 py-3"><select class="order-status border border-slate-300 rounded px-2 py-1" data-id="' + o.id + '">' +
           ["pending","processing","shipped","completed","cancelled","confirmed"].map((s)=>'<option value="'+s+'"'+(s===o.status?" selected":"")+">"+s+"</option>").join("") +
           "</select></td>" +
-          '<td class="px-4 py-3 text-right font-semibold">' + fmtMoney(o.total) + "</td>" +
-          '<td class="px-4 py-3 text-right"><button class="btn-view-detail text-blue-600 font-semibold" data-id="' + o.id + '">View Detail</button></td>';
+          '<td class="px-4 py-3 text-right font-semibold">' + fmtMoney(o.total) + "</td>";
         rows.appendChild(tr);
       });
       rows.querySelectorAll(".order-status").forEach((sel) => {
@@ -312,73 +318,6 @@
           await loadAllData();
         });
       });
-      rows.querySelectorAll(".btn-view-detail").forEach((btn) => {
-        btn.addEventListener("click", () => viewOrderDetail(btn.dataset.id));
-      });
-    }
-
-    async function viewOrderDetail(orderId) {
-      try {
-        const response = await fetch(API_BASE + "/orders/" + orderId, { headers: authHeaders() });
-        const orderData = await response.json();
-        
-        if (!orderData || orderData.message) {
-          alert("Failed to load order details");
-          return;
-        }
-
-        const content = document.getElementById("orderDetailContent");
-        content.innerHTML = `
-          <div class="space-y-4">
-            <div class="grid grid-cols-2 gap-4 text-sm">
-              <div><span class="font-semibold">Order ID:</span> #${orderData.id}</div>
-              <div><span class="font-semibold">Customer:</span> ${orderData.user_email || "N/A"}</div>
-              <div><span class="font-semibold">Date:</span> ${fmtDate(orderData.created_at)}</div>
-              <div><span class="font-semibold">Status:</span> <span class="px-2 py-1 rounded ${getStatusColor(orderData.status)}">${orderData.status}</span></div>
-            </div>
-            
-            <div class="border-t pt-4">
-              <h4 class="font-bold mb-3">Order Items</h4>
-              <div class="space-y-3">
-                ${orderData.items && orderData.items.length ? orderData.items.map(item => `
-                  <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
-                    <img src="${item.image_url || 'https://via.placeholder.com/50'}" alt="${item.name}" class="w-12 h-12 object-cover rounded" onerror="this.style.display='none'"/>
-                    <div class="flex-1">
-                      <div class="font-semibold">${item.name}</div>
-                      <div class="text-sm text-slate-600">Qty: ${item.qty} × $${Number(item.price).toFixed(2)}</div>
-                    </div>
-                    <div class="font-semibold">$${(Number(item.price) * Number(item.qty)).toFixed(2)}</div>
-                  </div>
-                `).join('') : '<p class="text-slate-500">No items found</p>'}
-              </div>
-            </div>
-            
-            <div class="border-t pt-4 space-y-2 text-sm">
-              <div class="flex justify-between"><span>Subtotal:</span><span>$${Number(orderData.subtotal).toFixed(2)}</span></div>
-              <div class="flex justify-between"><span>Tax:</span><span>$${Number(orderData.tax).toFixed(2)}</span></div>
-              <div class="flex justify-between"><span>Shipping:</span><span>$${Number(orderData.shipping).toFixed(2)}</span></div>
-              <div class="flex justify-between font-bold text-lg pt-2 border-t"><span>Total:</span><span>$${Number(orderData.total).toFixed(2)}</span></div>
-            </div>
-          </div>
-        `;
-        
-        document.getElementById("orderDetailModal").showModal();
-      } catch (error) {
-        console.error("Error loading order details:", error);
-        alert("Error loading order details");
-      }
-    }
-
-    function getStatusColor(status) {
-      const colors = {
-        pending: "bg-yellow-100 text-yellow-800",
-        processing: "bg-blue-100 text-blue-800",
-        shipped: "bg-purple-100 text-purple-800",
-        completed: "bg-green-100 text-green-800",
-        cancelled: "bg-red-100 text-red-800",
-        confirmed: "bg-green-100 text-green-800"
-      };
-      return colors[status] || "bg-gray-100 text-gray-800";
     }
 
     function renderUsers() {
@@ -444,14 +383,36 @@
     }
 
     async function loadAllData() {
+      console.log('Loading admin data...');
+      
       const [pRes, oRes, uRes] = await Promise.all([
         fetch(API_BASE + "/products"),
         fetch(API_BASE + "/admin/orders", { headers: authHeaders() }),
         fetch(API_BASE + "/admin/users", { headers: authHeaders() }),
       ]);
-      state.products = (await pRes.json()) || [];
-      state.orders = (await oRes.json()) || [];
-      state.users = (await uRes.json()) || [];
+      
+      console.log('Products response status:', pRes.status);
+      console.log('Orders response status:', oRes.status);
+      console.log('Users response status:', uRes.status);
+      
+      const pData = await pRes.json();
+      const oData = await oRes.json();
+      const uData = await uRes.json();
+      
+      console.log('Products data:', pData);
+      console.log('Orders data:', oData);
+      console.log('Users data:', uData);
+      
+      // Handle both response formats (wrapped or direct)
+      state.products = (pData.data || pData) || [];
+      state.orders = (oData.data || oData) || [];
+      state.users = (uData.data || uData) || [];
+      
+      console.log('State after loading:');
+      console.log('- Products:', state.products.length);
+      console.log('- Orders:', state.orders.length);
+      console.log('- Users:', state.users.length);
+      
       renderAll();
     }
 
@@ -486,8 +447,25 @@
     }
     async function removeProduct(id) {
       if (!confirm("Delete this set?")) return;
-      await fetch(API_BASE + "/admin/products/" + id, { method: "DELETE", headers: authHeaders() });
-      await loadAllData();
+      
+      try {
+        const res = await fetch(API_BASE + "/admin/products/" + id, { 
+          method: "DELETE", 
+          headers: authHeaders() 
+        });
+        
+        const data = await res.json();
+        
+        if (res.ok) {
+          alert('Product deleted successfully!');
+          await loadAllData();
+        } else {
+          alert('Failed to delete product: ' + (data.message || 'Unknown error'));
+        }
+      } catch (error) {
+        console.error('Delete error:', error);
+        alert('Error deleting product: ' + error.message);
+      }
     }
 
     document.getElementById("productForm").addEventListener("submit", async function (e) {
@@ -519,7 +497,6 @@
     document.getElementById("btnQuickAdd").addEventListener("click", openCreateProduct);
     document.getElementById("closeModal").addEventListener("click", () => document.getElementById("productModal").close());
     document.getElementById("btnCancelEdit").addEventListener("click", () => document.getElementById("productModal").close());
-    document.getElementById("closeOrderModal").addEventListener("click", () => document.getElementById("orderDetailModal").close());
     document.getElementById("btnLogout").addEventListener("click", logout);
     document.getElementById("searchInput").addEventListener("input", () => { state.page = 1; renderInventory(); });
     document.getElementById("themeFilter").addEventListener("change", () => { state.page = 1; renderInventory(); });

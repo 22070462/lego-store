@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Order API</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1e1e1e; color: #d4d4d4; }
+        .container { max-width: 800px; margin: 0 auto; }
+        button { background: #0e639c; color: white; border: none; padding: 10px 20px; cursor: pointer; margin: 5px; }
+        button:hover { background: #1177bb; }
+        pre { background: #252526; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        .success { color: #4ec9b0; }
+        .error { color: #f48771; }
+        .info { color: #9cdcfe; }
+        input { background: #3c3c3c; border: 1px solid #555; color: #d4d4d4; padding: 8px; margin: 5px 0; width: 100%; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Order API</h1>
+        
+        <h2>1. Check Backend Status</h2>
+        <button onclick="checkBackend()">Check Backend</button>
+        <pre id="backendStatus">Click button to check...</pre>
+
+        <h2>2. Login</h2>
+        <input type="email" id="email" placeholder="Email" value="test@example.com">
+        <input type="password" id="password" placeholder="Password" value="password123">
+        <button onclick="login()">Login</button>
+        <pre id="loginResult">Not logged in</pre>
+
+        <h2>3. Get Products</h2>
+        <button onclick="getProducts()">Get Products</button>
+        <pre id="productsResult">Click button to fetch...</pre>
+
+        <h2>4. Create Order</h2>
+        <p class="info">Product ID: <input type="text" id="productId" value="2" style="width: 100px;"> Qty: <input type="number" id="qty" value="1" style="width: 100px;"></p>
+        <button onclick="createOrder()">Create Order</button>
+        <pre id="orderResult">Click button to create order...</pre>
+
+        <h2>5. Get Orders</h2>
+        <button onclick="getOrders()">Get My Orders</button>
+        <pre id="ordersResult">Click button to fetch...</pre>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000';
+        let token = localStorage.getItem('token');
+
+        function log(elementId, message, type = 'info') {
+            const el = document.getElementById(elementId);
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : 'info';
+            el.innerHTML = `<span class="${className}">${message}</span>`;
+        }
+
+        async function checkBackend() {
+            try {
+                const response = await fetch(API_BASE + '/products');
+                const data = await response.json();
+                log('backendStatus', `✅ Backend is running!\nStatus: ${response.status}\nProducts found: ${Array.isArray(data) ? data.length : 'N/A'}`, 'success');
+            } catch (error) {
+                log('backendStatus', `❌ Backend not responding!\nError: ${error.message}`, 'error');
+            }
+        }
+
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch(API_BASE + '/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const result = await response.json();
+                
+                // Handle both response formats:
+                // New format: { success: true, data: { token, role, user } }
+                // Old format: { token, role, user }
+                const tokenData = result.data || result;
+                
+                if (response.ok && tokenData.token) {
+                    token = tokenData.token;
+                    localStorage.setItem('token', token);
+                    log('loginResult', `✅ Login successful!\nToken: ${token.substring(0, 20)}...\nRole: ${tokenData.role}\n\n${JSON.stringify(result, null, 2)}`, 'success');
+                } else {
+                    log('loginResult', `❌ Login failed!\n${JSON.stringify(result, null, 2)}`, 'error');
+                }
+            } catch (error) {
+                log('loginResult', `❌ Login error!\n${error.message}`, 'error');
+            }
+        }
+
+        async function getProducts() {
+            try {
+                const response = await fetch(API_BASE + '/products');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    log('productsResult', `✅ Products fetched!\nCount: ${data.length}\n\n${JSON.stringify(data.slice(0, 3), null, 2)}`, 'success');
+                } else {
+                    log('productsResult', `❌ Failed to fetch products!\n${JSON.stringify(data, null, 2)}`, 'error');
+                }
+            } catch (error) {
+                log('productsResult', `❌ Error!\n${error.message}`, 'error');
+            }
+        }
+
+        async function createOrder() {
+            if (!token) {
+                log('orderResult', '❌ Please login first!', 'error');
+                return;
+            }
+
+            const productId = document.getElementById('productId').value;
+            const qty = parseInt(document.getElementById('qty').value);
+
+            const orderData = {
+                items: [
+                    { productId: productId, qty: qty }
+                ]
+            };
+
+            try {
+                console.log('Sending order request:', orderData);
+                
+                const response = await fetch(API_BASE + '/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                const result = await response.json();
+                
+                console.log('Order response:', result);
+
+                if (response.ok) {
+                    log('orderResult', `✅ Order created successfully!\n\nResponse:\n${JSON.stringify(result, null, 2)}`, 'success');
+                } else {
+                    log('orderResult', `❌ Order creation failed!\nStatus: ${response.status}\n\nResponse:\n${JSON.stringify(result, null, 2)}`, 'error');
+                }
+            } catch (error) {
+                log('orderResult', `❌ Error creating order!\n${error.message}\n${error.stack}`, 'error');
+            }
+        }
+
+        async function getOrders() {
+            if (!token) {
+                log('ordersResult', '❌ Please login first!', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(API_BASE + '/orders', {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    log('ordersResult', `✅ Orders fetched!\nCount: ${result.data ? result.data.length : 0}\n\n${JSON.stringify(result, null, 2)}`, 'success');
+                } else {
+                    log('ordersResult', `❌ Failed to fetch orders!\n${JSON.stringify(result, null, 2)}`, 'error');
+                }
+            } catch (error) {
+                log('ordersResult', `❌ Error!\n${error.message}`, 'error');
+            }
+        }
+
+        // Auto-check backend on load
+        window.addEventListener('DOMContentLoaded', () => {
+            checkBackend();
+            if (token) {
+                log('loginResult', `ℹ️ Token found in localStorage:\n${token.substring(0, 20)}...`, 'info');
+            }
+        });
+    </script>
+</body>
+</html>

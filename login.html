@@ -289,17 +289,40 @@ loginForm.addEventListener("submit", async function (e) {
       return;
     }
 
-    if (data.token) {
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("role", data.role);
+    // Handle both response formats:
+    // New format: { success: true, data: { token, role, user } }
+    // Old format: { token, role }
+    const tokenData = data.data || data;
+
+    console.log('Login response:', data);
+    console.log('Token data:', tokenData);
+    console.log('Token:', tokenData.token);
+    console.log('Role:', tokenData.role);
+
+    if (tokenData.token) {
+      localStorage.setItem("token", tokenData.token);
+      localStorage.setItem("role", tokenData.role);
       localStorage.setItem("userEmail", email);
 
-      if (data.role === "admin") {
-        window.location.href = "admin.html";
-      } else {
-        window.location.href = "index.html";
-      }
+      console.log('Token saved to localStorage:', localStorage.getItem("token"));
+      console.log('Role saved to localStorage:', localStorage.getItem("role"));
+
+      // Show success message briefly before redirect
+      showLoginError("Login successful");
+      loginPasswordError.classList.remove("text-red-400");
+      loginPasswordError.classList.add("text-green-400");
+
+      // Redirect based on role
+      setTimeout(function() {
+        console.log('Redirecting to:', tokenData.role === "admin" ? "admin.html" : "index.html");
+        if (tokenData.role === "admin") {
+          window.location.href = "admin.html";
+        } else {
+          window.location.href = "index.html";
+        }
+      }, 500);
     } else {
+      console.error('No token in response:', data);
       showLoginError(data.message || "Login failed.");
     }
   } catch (err) {

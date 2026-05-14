@@ -82,6 +82,9 @@
       try {
         var res = await fetch(API_BASE + "/orders/" + id, { headers: authHeaders() });
         var data = await res.json();
+        
+        console.log('Order detail response:', data);
+        
         document.getElementById("loading").classList.add("hidden");
 
         if (!res.ok) {
@@ -90,8 +93,13 @@
           return;
         }
 
-        var o = data.order;
-        var items = data.items || [];
+        // Handle both response formats
+        var orderData = data.data || data;
+        
+        console.log('Order data:', orderData);
+        
+        var o = orderData.order;
+        var items = orderData.items || [];
         document.getElementById("content").classList.remove("hidden");
 
         document.getElementById("orderTitle").textContent = "Order #" + o.id;
@@ -102,8 +110,8 @@
             : "—") +
           " · Status: " +
           (o.status || "—");
-        if (data.userEmail && localStorage.getItem("role") === "admin") {
-          meta += " · Customer: " + data.userEmail;
+        if (orderData.userEmail && localStorage.getItem("role") === "admin") {
+          meta += " · Customer: " + orderData.userEmail;
         }
         document.getElementById("orderMeta").textContent = meta;
 
@@ -140,6 +148,7 @@
           list.appendChild(row);
         });
       } catch (e) {
+        console.error('Error loading order detail:', e);
         document.getElementById("loading").classList.add("hidden");
         document.getElementById("error").textContent = "Server connection error.";
         document.getElementById("error").classList.remove("hidden");

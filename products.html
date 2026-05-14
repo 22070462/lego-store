@@ -12,7 +12,7 @@
 
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&display=swap" rel="stylesheet" />
 
@@ -20,29 +20,31 @@
 
     tailwind.config = {
 
+      darkMode: "class",
+
       theme: {
 
         extend: {
 
           colors: {
 
-            legoYellow: '#ffcf00',
+            primary: "#f49d25",
 
-            legoRed: '#d11013',
+            "background-light": "#f8f7f5",
 
-            legoOrange: '#fd8024',
-
-            legoNavy: '#20214b',
-
-            legoGrey: '#f8f8f8',
+            "background-dark": "#221a10",
 
           },
 
-          fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+          fontFamily: {
 
-        }
+            display: ["Spline Sans"],
 
-      }
+          },
+
+        },
+
+      },
 
     }
 
@@ -50,12 +52,12 @@
 
   <style>
 
-    body { font-family: 'Montserrat', sans-serif; }
+    body { font-family: 'Spline Sans', sans-serif; }
 
     .product-card:hover .product-image { transform: scale(1.05); }
     .product-card:hover .wishlist-icon { color: #ef4444; transform: scale(1.2); }
     .product-card:hover .wishlist-toggle { background-color: #ef4444; color: white; }
-    .wishlist-toggle:hover { background-color: #ef4444; color: white; }
+    .wishlist-toggle:hover { background-color: #dc2626; }
     .wishlist-toggle:active { transform: scale(0.95); }
     .product-image { object-fit: contain; max-width: 100%; max-height: 100%; padding: 1rem; }
     .aspect-square { display: flex; align-items: center; justify-content: center; }
@@ -180,7 +182,7 @@
 
 </head>
 
-<body class="bg-gray-50 text-gray-900 font-sans">
+<body class="bg-background-light text-slate-900">
 
   <header class="header">
 
@@ -243,57 +245,67 @@
 
 
 
-  <main>
-    <!-- Hero Section -->
-    <section class="relative w-full h-[500px] bg-gradient-to-br from-legoYellow via-legoOrange to-legoRed overflow-hidden">
-      <div class="absolute inset-0 bg-black/30"></div>
-      <div class="absolute inset-0">
-        <img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=1920" alt="LEGO shop" class="w-full h-full object-cover opacity-40" />
-      </div>
-      <div class="relative z-10 max-w-6xl mx-auto px-4 h-full flex items-center">
-        <div class="text-white">
-          <p class="text-xs font-semibold tracking-[0.3em] mb-4 uppercase">Shop Collection</p>
-          <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">
-            Discover Your<br />
-            <span class="text-legoNavy">Next Build</span>
-          </h1>
-          <p class="text-xl text-gray-200 max-w-2xl mb-8">
-            Explore thousands of LEGO®-inspired building sets for every age, skill level, and interest.
-          </p>
-          <div class="flex gap-4">
-            <a href="#products" class="inline-flex items-center justify-center px-8 py-4 rounded-full bg-legoNavy text-white text-lg font-bold shadow-lg hover:scale-105 transition-transform">
-              Browse All Sets
-            </a>
-            <a href="about.html" class="inline-flex items-center justify-center px-8 py-4 rounded-full bg-white/20 backdrop-blur-sm text-white text-lg font-bold hover:bg-white/30 transition-colors">
-              Learn More
-            </a>
+  <!-- Hero Banner -->
+  <div class="bg-gradient-to-r from-[#f39c12] via-[#e67e22] to-[#d35400] text-white py-16 md:py-20 px-4 md:px-10 relative overflow-hidden">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+        <div class="flex-1">
+          <h1 class="text-4xl md:text-5xl font-black mb-4 leading-tight">Explore LEGO Sets</h1>
+          <p class="text-lg md:text-xl opacity-90 mb-6">Premium building sets for all ages</p>
+          <div class="flex gap-4 text-sm flex-wrap">
+            <span class="bg-white/20 px-4 py-2 rounded-full font-semibold backdrop-blur">🎯 500+ Products</span>
+            <span class="bg-white/20 px-4 py-2 rounded-full font-semibold backdrop-blur">🚀 Fast Shipping</span>
+            <span class="bg-white/20 px-4 py-2 rounded-full font-semibold backdrop-blur">⭐ Trusted Store</span>
           </div>
         </div>
+        <div class="flex-1 text-center">
+          <img src="images/f1-main.png" alt="Featured" class="w-full max-w-xs mx-auto drop-shadow-lg transform hover:scale-105 transition-transform duration-300">
+        </div>
       </div>
-    </section>
+    </div>
+    <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+  </div>
 
-    <!-- Products Section -->
-    <section id="products" class="max-w-[1440px] mx-auto px-4 md:px-10 py-16">
-      <div class="mb-8">
-        <nav class="flex items-center gap-2 text-xs font-medium text-gray-500 mb-4 tracking-widest">
-          <a class="hover:text-legoRed transition-colors" href="index.html">Home</a>
-          <span class="text-gray-400">›</span>
-          <span class="text-legoNavy font-semibold">Shop</span>
-        </nav>
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <h2 class="text-4xl md:text-5xl font-black text-legoNavy mb-2">All Building Sets</h2>
-            <p class="text-gray-600">Browse all building sets available in our store.</p>
-          </div>
-          <div class="flex items-center gap-3 bg-white border-2 border-legoYellow rounded-xl px-4 py-3 self-start md:self-auto">
-            <span class="text-sm font-semibold text-legoNavy">Sort by:</span>
-            <select id="sortSelect" class="bg-transparent border-none focus:ring-0 text-sm font-bold p-0 pr-8 cursor-pointer text-legoNavy">
-              <option value="">Most Popular</option>
-              <option value="low">Price: Low to High</option>
-              <option value="high">Price: High to Low</option>
-            </select>
-          </div>
+  <main class="max-w-[1440px] mx-auto px-4 md:px-10 py-8">
+
+    <div class="mb-8">
+
+      <nav class="flex items-center gap-2 text-xs font-medium text-slate-400 mb-2 tracking-widest">
+
+        <a class="hover:text-primary transition-colors" href="index.html">Home</a>
+
+        <span class="text-slate-300">›</span>
+
+        <span class="text-slate-600 font-semibold">Shop</span>
+
+      </nav>
+
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+
+        <div>
+
+          <h2 class="text-4xl font-black text-slate-900 mb-2">SHOP</h2>
+
+          <p class="text-slate-500">Browse all premium LEGO building sets available in our store.</p>
+
         </div>
+
+        <div class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg px-4 py-2 self-start md:self-auto">
+
+          <span class="text-sm font-semibold text-slate-500">Sort by:</span>
+
+          <select id="sortSelect" class="bg-transparent border-none focus:ring-0 text-sm font-bold p-0 pr-8 cursor-pointer">
+
+            <option value="">Most Popular</option>
+
+            <option value="low">Price: Low to High</option>
+
+            <option value="high">Price: High to Low</option>
+
+          </select>
+
+        </div>
+
       </div>
 
     </div>
@@ -302,37 +314,47 @@
 
     <div class="flex flex-col lg:flex-row gap-8">
 
-      <!-- Sidebar -->
-      <aside class="w-full lg:w-64 flex-shrink-0 space-y-6">
-        <div class="bg-white rounded-2xl p-6 border-2 border-legoYellow shadow-lg">
-          <h3 class="text-lg font-bold text-legoNavy mb-4">Filters</h3>
-          
-          <!-- Age Filter -->
-          <div class="mb-6">
-            <h4 class="text-sm font-bold text-legoNavy mb-3">Age Group</h4>
-            <div class="space-y-2">
-              <label class="flex items-center gap-3 cursor-pointer hover:bg-legoYellow/5 p-2 rounded-lg transition-colors">
-                <input type="radio" name="ageFilter" value="under9" class="w-4 h-4 text-legoOrange focus:ring-legoYellow border-gray-300">
-                <span class="text-sm text-gray-700">Under 9 years</span>
-              </label>
-              <label class="flex items-center gap-3 cursor-pointer hover:bg-legoYellow/5 p-2 rounded-lg transition-colors">
-                <input type="radio" name="ageFilter" value="over10" class="w-4 h-4 text-legoOrange focus:ring-legoYellow border-gray-300">
-                <span class="text-sm text-gray-700">10+ years</span>
-              </label>
-              <label class="flex items-center gap-3 cursor-pointer hover:bg-legoYellow/5 p-2 rounded-lg transition-colors">
-                <input type="radio" name="ageFilter" value="all" checked class="w-4 h-4 text-legoOrange focus:ring-legoYellow border-gray-300">
-                <span class="text-sm text-gray-700">All Ages</span>
-              </label>
-            </div>
-          </div>
+      <!-- Sidebar with Filters -->
 
-          <div class="bg-legoYellow/10 p-4 rounded-xl border border-legoYellow/30 flex items-center justify-between">
-            <span class="text-sm font-bold text-legoNavy">Show In Stock Only</span>
-            <button class="w-10 h-5 bg-legoYellow rounded-full relative opacity-50 cursor-not-allowed">
-              <span class="absolute right-1 top-1 w-3 h-3 bg-white rounded-full"></span>
+      <aside class="w-full lg:w-64 flex-shrink-0 space-y-6">
+
+        <!-- Age Filter -->
+        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-5 rounded-xl border border-blue-200 shadow-sm">
+          <h3 class="text-sm font-bold text-slate-900 mb-4">🎂 AGE FILTER</h3>
+          <div class="space-y-3">
+            <button id="ageAllBtn" class="w-full py-2 px-4 bg-white border-2 border-slate-300 text-slate-900 font-semibold rounded-lg hover:border-primary hover:bg-primary/10 transition-all">
+              All Ages
+            </button>
+            <button id="ageUnder9Btn" class="w-full py-2 px-4 bg-white border-2 border-blue-300 text-slate-900 font-semibold rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all flex items-center justify-center gap-2">
+              <span>👧👦</span> Under 9
+            </button>
+            <button id="age9PlusBtn" class="w-full py-2 px-4 bg-white border-2 border-purple-300 text-slate-900 font-semibold rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-all flex items-center justify-center gap-2">
+              <span>👨👩</span> 9 Years+
             </button>
           </div>
         </div>
+
+        <!-- Stock Filter -->
+        <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-5 rounded-xl border border-green-200 shadow-sm">
+
+          <span class="text-sm font-bold text-slate-700 block mb-3">📦 IN STOCK</span>
+
+          <button class="w-full flex items-center gap-2 p-3 bg-white rounded-lg border border-green-300 hover:bg-green-50 transition-colors">
+
+            <span class="text-lg">✓</span>
+
+            <span class="font-semibold text-slate-700">In Stock Items</span>
+
+          </button>
+
+        </div>
+
+        <p class="text-xs text-slate-500 bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+
+          💡 <strong>Tip:</strong> Use filters to find sets perfect for your age group.
+
+        </p>
+
       </aside>
 
 
@@ -356,18 +378,68 @@
       </div>
 
     </div>
-    </section>
+
+    <!-- Stats Section -->
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-xl border border-blue-200 text-center shadow-md hover:shadow-lg transition-shadow">
+        <div class="text-4xl font-black text-blue-600 mb-2">500+</div>
+        <p class="text-slate-600 font-semibold">Building Sets</p>
+      </div>
+      <div class="bg-gradient-to-br from-green-50 to-green-100 p-8 rounded-xl border border-green-200 text-center shadow-md hover:shadow-lg transition-shadow">
+        <div class="text-4xl font-black text-green-600 mb-2">10K+</div>
+        <p class="text-slate-600 font-semibold">Happy Customers</p>
+      </div>
+      <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-8 rounded-xl border border-purple-200 text-center shadow-md hover:shadow-lg transition-shadow">
+        <div class="text-4xl font-black text-purple-600 mb-2">4.8⭐</div>
+        <p class="text-slate-600 font-semibold">Average Rating</p>
+      </div>
+      <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-8 rounded-xl border border-orange-200 text-center shadow-md hover:shadow-lg transition-shadow">
+        <div class="text-4xl font-black text-orange-600 mb-2">24h</div>
+        <p class="text-slate-600 font-semibold">Fast Delivery</p>
+      </div>
+    </div>
+
+    <!-- Benefits Section -->
+    <div class="mt-16 bg-gradient-to-r from-slate-50 to-blue-50 p-10 rounded-2xl border border-slate-200 shadow-lg">
+      <h3 class="text-3xl font-black text-slate-900 mb-8 text-center">Why Choose Us? 🎯</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="text-center">
+          <div class="text-4xl mb-3">✨</div>
+          <h4 class="font-bold text-slate-900 mb-2">Premium Quality</h4>
+          <p class="text-sm text-slate-600">Authentic LEGO sets sourced directly from manufacturers</p>
+        </div>
+        <div class="text-center">
+          <div class="text-4xl mb-3">🚀</div>
+          <h4 class="font-bold text-slate-900 mb-2">Super Fast</h4>
+          <p class="text-sm text-slate-600">Orders arrive within 24 hours in most areas</p>
+        </div>
+        <div class="text-center">
+          <div class="text-4xl mb-3">💰</div>
+          <h4 class="font-bold text-slate-900 mb-2">Best Prices</h4>
+          <p class="text-sm text-slate-600">Competitive pricing with regular discounts</p>
+        </div>
+        <div class="text-center">
+          <div class="text-4xl mb-3">🛡️</div>
+          <h4 class="font-bold text-slate-900 mb-2">Safe & Secure</h4>
+          <p class="text-sm text-slate-600">100% money-back guarantee on all orders</p>
+        </div>
+      </div>
+    </div>
 
     <!-- CTA Section -->
-    <section class="bg-legoNavy py-20">
-      <div class="max-w-4xl mx-auto px-4 text-center">
-        <h2 class="text-4xl md:text-5xl font-black text-white mb-6">Can't Find What You're Looking For?</h2>
-        <p class="text-xl text-gray-300 mb-8">Check out our recommendations or explore different themes.</p>
-        <a href="about.html" class="inline-flex items-center justify-center px-8 py-4 rounded-full bg-legoYellow text-legoNavy text-lg font-bold shadow-lg hover:scale-105 transition-transform">
-          Discover More
-        </a>
+    <div class="mt-16 bg-gradient-to-r from-[#ffcf00] to-[#ffc107] rounded-2xl p-10 text-gray-900 text-center shadow-xl">
+      <h3 class="text-3xl font-black mb-4">Ready to Build? 🧱</h3>
+      <p class="text-lg opacity-90 mb-6">Join thousands of happy customers building amazing creations with our premium LEGO sets</p>
+      <div class="flex gap-4 justify-center flex-wrap">
+        <button class="bg-white text-yellow-600 font-black px-8 py-3 rounded-lg hover:bg-gray-100 transition-colors">
+          Browse All Sets
+        </button>
+        <button class="border-2 border-gray-900 text-gray-900 font-black px-8 py-3 rounded-lg hover:bg-yellow-50 transition-colors">
+          View Deals
+        </button>
       </div>
-    </section>
+    </div>
+
   </main>
 
 
@@ -375,6 +447,36 @@
   <script src="wishlist.js"></script>
 
   <script src="cart-system.js"></script>
+
+  <footer class="bg-[#0d1425] text-[#a0a7b5] py-16 px-[10%]">
+        <div class="flex flex-wrap justify-between gap-10 pb-12">
+            <div class="flex-1 min-w-[250px]">
+                <div class="bg-yellow-400 w-10 h-10 rounded-lg flex items-center justify-center text-gray-900 font-bold text-xl mb-6">★</div>
+                <p class="text-sm leading-relaxed">Inspiring the builders of tomorrow since 1995. Explore our universe of creative building sets.</p>
+            </div>
+            <div class="flex gap-12 flex-wrap">
+                <div>
+                    <h4 class="text-white uppercase text-xs font-bold mb-6">Support</h4>
+                    <ul class="text-sm space-y-3"><li><a href="help.html" class="hover:text-white">Contact Us</a></li><li><a href="#" class="hover:text-white">Shipping</a></li></ul>
+                </div>
+                <div>
+                    <h4 class="text-white uppercase text-xs font-bold mb-6">Account</h4>
+                    <ul class="text-sm space-y-3"><li><a href="wishlist.html" class="hover:text-white">Wishlist</a></li><li><a href="orders.html" class="hover:text-white">Track Order</a></li></ul>
+                </div>
+            </div>
+            <div class="flex-1 min-w-[280px]">
+                <h4 class="text-white uppercase text-xs font-bold mb-6">Newsletter</h4>
+                <div class="flex gap-2">
+                    <input type="email" placeholder="Your email" class="bg-[#1a233a] border-none rounded-md p-3 flex-grow text-sm text-white focus:ring-1 focus:ring-yellow-400">
+                    <button class="bg-yellow-400 text-gray-900 px-5 py-2 rounded-md font-bold text-sm">Join</button>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 pt-8 flex flex-wrap justify-between text-[11px]">
+            <p>© 2026 BrickWorld Systems A/S. All rights reserved.</p>
+            <div class="flex gap-6"><a href="#" class="hover:text-white">Privacy Policy</a><a href="#" class="hover:text-white">Terms</a></div>
+        </div>
+  </footer>
 
   <script>
 
@@ -436,12 +538,22 @@
 
     searchInput.addEventListener("input", applySearch);
 
+    
 
-
-    // Age filter event listeners
-    const ageFilters = document.querySelectorAll('input[name="ageFilter"]');
-    ageFilters.forEach(filter => {
-      filter.addEventListener("change", applyFilters);
+    // Add age filter listeners
+    document.getElementById("ageAllBtn")?.addEventListener("click", function() {
+      applyAgeFilter(null);
+      updateAgeFilterUI(this);
+    });
+    
+    document.getElementById("ageUnder9Btn")?.addEventListener("click", function() {
+      applyAgeFilter("under9");
+      updateAgeFilterUI(this);
+    });
+    
+    document.getElementById("age9PlusBtn")?.addEventListener("click", function() {
+      applyAgeFilter("9plus");
+      updateAgeFilterUI(this);
     });
 
   });
@@ -504,7 +616,14 @@
 
 
 
-      if (!Array.isArray(data)) {
+      // Handle both response formats:
+      // New format: { success: true, data: [...] }
+      // Old format: [...]
+      const products = data.data || data;
+
+      
+
+      if (!Array.isArray(products)) {
 
         grid.innerHTML = "<p class='col-span-full text-center text-sm text-red-500'>Invalid product data from server.</p>";
 
@@ -514,11 +633,11 @@
 
 
 
-      productsData = data;
+      productsData = products;
 
       renderProducts(productsData);
 
-      empty.classList.toggle("hidden", data.length > 0);
+      empty.classList.toggle("hidden", products.length > 0);
 
     } catch (e) {
 
@@ -543,9 +662,7 @@
       const card = document.createElement("div");
 
       card.className =
-        "group product-card bg-white rounded-xl overflow-hidden border border-slate-100 shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col relative";
-
-
+        "group product-card bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col relative hover:border-primary/50 hover:-translate-y-2 cursor-pointer";
 
       const imgUrl =
 
@@ -559,13 +676,17 @@
 
       const pieces = p.pieces || "";
 
+      const ageCategory = age ? (parseInt(age) < 9 ? "Dưới 9" : "9+") : "";
+
 
 
       card.innerHTML =
 
-        '<div class="relative overflow-hidden aspect-square bg-slate-50">' +
+        '<div class="relative overflow-hidden aspect-square bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 group-hover:from-primary/10 group-hover:to-primary/5 transition-colors duration-500">' +
 
-        '  <img class="product-image w-full h-full object-cover transition-transform duration-500" src="' +
+        '  <div class="absolute inset-0 bg-gradient-to-t from-black/0 via-transparent to-black/0 group-hover:from-black/10 transition-all duration-500"></div>' +
+
+        '  <img class="product-image w-full h-full object-contain transition-transform duration-500 group-hover:scale-110" src="' +
 
         imgUrl +
 
@@ -575,15 +696,17 @@
 
         '">' +
 
+        "  <div class=\"absolute top-3 right-3 bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-black shadow-lg hidden group-hover:block transition-all duration-300\">🔥 HOT</div>" +
+
         "</div>" +
 
-        '<div class="p-5 flex flex-col flex-1">' +
+        '<div class="p-6 flex flex-col flex-1 bg-gradient-to-b from-white to-slate-50">' +
 
-        '  <div class="flex items-center gap-2 mb-2">' +
+        '  <div class="flex items-center gap-2 mb-3 flex-wrap">' +
 
         (age
 
-          ? '<span class="text-[10px] font-bold bg-slate-100 px-2 py-0.5 rounded text-slate-600">AGE ' +
+          ? '<span class="text-[11px] font-black bg-gradient-to-r from-blue-100 to-blue-50 text-blue-700 px-3 py-1 rounded-full border border-blue-200 shadow-sm">🎂 ' +
 
             age +
 
@@ -591,9 +714,19 @@
 
           : "") +
 
+        (ageCategory
+
+          ? '<span class="text-[11px] font-black bg-gradient-to-r from-amber-100 to-amber-50 text-amber-700 px-3 py-1 rounded-full border border-amber-200 shadow-sm">' +
+
+            ageCategory +
+
+            "</span>"
+
+          : "") +
+
         (pieces
 
-          ? '<span class="text-[10px] font-bold bg-slate-100 px-2 py-0.5 rounded text-slate-600">' +
+          ? '<span class="text-[11px] font-black bg-gradient-to-r from-purple-100 to-purple-50 text-purple-700 px-3 py-1 rounded-full border border-purple-200 shadow-sm">🧱 ' +
 
             pieces +
 
@@ -603,7 +736,7 @@
 
         "  </div>" +
 
-        '  <h3 class="font-bold text-slate-900 line-clamp-2 mb-2 group-hover:text-primary transition-colors">' +
+        '  <h3 class="font-bold text-slate-900 line-clamp-2 mb-3 group-hover:text-primary transition-colors text-base">' +
 
         p.name +
 
@@ -611,23 +744,36 @@
 
         '  <div class="mt-auto">' +
 
-        '    <div class="flex items-center justify-between gap-4 mb-3">' +
+        '    <div class="flex items-center justify-between gap-4 mb-4">' +
 
-        '      <span class="text-xl font-black text-slate-900">$' +
+        '      <div class="text-3xl font-black bg-gradient-to-r from-primary to-orange-600 bg-clip-text text-transparent">$' +
         Number(p.price).toFixed(2) +
-        "</span>" +
+        "</div>" +
+
         "    </div>" +
+
         '    <div class="flex gap-2">' +
-        '      <button type="button" data-add-cart class="bg-legoOrange hover:bg-legoOrange/90 text-white font-bold py-2 px-3 rounded-lg flex items-center justify-center text-sm transition-colors" title="Add to Cart">' +
-        '      <span class="material-symbols-outlined text-lg">add</span>' +
+
+        '      <button type="button" data-add-cart class="flex-1 bg-gradient-to-r from-primary to-orange-600 hover:from-primary/90 hover:to-orange-600/90 text-white font-black py-3 px-3 rounded-lg flex items-center justify-center text-sm transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95">' +
+
+        '      🛒 ADD' +
+
         "      </button>" +
-        '      <button type="button" class="wishlist-toggle bg-gray-200 text-gray-700 font-bold py-2 px-3 rounded-lg flex items-center justify-center text-sm transition-colors" data-pid="' +
+
+        '      <button type="button" class="wishlist-toggle bg-gradient-to-r from-gray-100 to-gray-50 hover:from-red-100 hover:to-pink-50 text-gray-700 hover:text-red-600 font-black py-3 px-3 rounded-lg flex items-center justify-center text-sm transition-all duration-300 border border-gray-200 hover:border-red-300 shadow-sm" data-pid="' +
+
         p.id +
+
         '" title="Add to Wishlist">' +
-        '      <span class="material-symbols-outlined text-lg wishlist-icon">Wishlist</span>' +
+
+        '      <span class="material-symbols-outlined text-lg wishlist-icon">Favorite</span>' +
+
         "      </button>" +
+
         "    </div>" +
+
         "  </div>" +
+
         "</div>";
 
 
@@ -672,11 +818,15 @@
 
         const on = typeof isWishlisted === "function" && isWishlisted(p.id);
 
-        wishIcon.textContent = on ? "Wishlist" : "Wishlist";
+        wishIcon.textContent = on ? "Favorite" : "Favorite";
 
-        wishBtn.classList.toggle("text-red-500", on);
+        wishBtn.classList.toggle("from-red-100", on);
 
-        wishBtn.classList.toggle("text-slate-400", !on);
+        wishBtn.classList.toggle("to-pink-50", on);
+
+        wishBtn.classList.toggle("text-red-600", on);
+
+        wishBtn.classList.toggle("border-red-300", on);
 
       }
 
@@ -723,44 +873,85 @@
 
 
 
-  function applyFilters() {
-    const sortSelect = document.getElementById("sortSelect");
-    let filtered = [...productsData];
-
-    // Apply age filter
-    const ageFilter = document.querySelector('input[name="ageFilter"]:checked');
-    if (ageFilter && ageFilter.value !== "all") {
-      if (ageFilter.value === "under9") {
-        filtered = filtered.filter(p => p.age_min && p.age_min < 9);
-      } else if (ageFilter.value === "over10") {
-        filtered = filtered.filter(p => p.age_min && p.age_min >= 10);
-      }
-    }
-
-    // Apply search filter
-    const search = document.getElementById("searchInput").value.toLowerCase();
-    if (search) {
-      filtered = filtered.filter(p =>
-        String(p.name || "").toLowerCase().includes(search)
-      );
-    }
-
-    // Apply sort
-    if (sortSelect.value === "low") {
-      filtered.sort((a, b) => a.price - b.price);
-    } else if (sortSelect.value === "high") {
-      filtered.sort((a, b) => b.price - a.price);
-    }
-
-    renderProducts(filtered);
-  }
-
   function applySort() {
-    applyFilters();
+
+    const sortSelect = document.getElementById("sortSelect");
+
+    let sorted = [...productsData];
+
+
+
+    if (sortSelect.value === "low") {
+
+      sorted.sort((a, b) => a.price - b.price);
+
+    } else if (sortSelect.value === "high") {
+
+      sorted.sort((a, b) => b.price - a.price);
+
+    }
+
+
+
+    const search = document.getElementById("searchInput").value.toLowerCase();
+
+    if (search) {
+
+      sorted = sorted.filter((p) =>
+
+        String(p.name || "").toLowerCase().includes(search)
+
+      );
+
+    }
+    
+    // Apply age filter
+    if (currentAgeFilter === "under9") {
+      sorted = sorted.filter((p) => {
+        const ageMin = p.age_min ? parseInt(p.age_min) : 0;
+        return ageMin < 9;
+      });
+    } else if (currentAgeFilter === "9plus") {
+      sorted = sorted.filter((p) => {
+        const ageMin = p.age_min ? parseInt(p.age_min) : 0;
+        return ageMin >= 9;
+      });
+    }
+
+
+
+    renderProducts(sorted);
+
   }
+
+
 
   function applySearch() {
-    applyFilters();
+
+    applySort();
+
+  }
+
+  // Age filter functionality
+  let currentAgeFilter = null;
+
+  function applyAgeFilter(filter) {
+    currentAgeFilter = filter;
+    applySort();
+  }
+
+  function updateAgeFilterUI(clickedBtn) {
+    document.getElementById("ageAllBtn")?.classList.remove("!border-primary", "!bg-primary/10");
+    document.getElementById("ageUnder9Btn")?.classList.remove("!border-blue-500", "!bg-blue-100");
+    document.getElementById("age9PlusBtn")?.classList.remove("!border-purple-500", "!bg-purple-100");
+    
+    if (clickedBtn.id === "ageAllBtn") {
+      clickedBtn.classList.add("!border-primary", "!bg-primary/10");
+    } else if (clickedBtn.id === "ageUnder9Btn") {
+      clickedBtn.classList.add("!border-blue-500", "!bg-blue-100");
+    } else if (clickedBtn.id === "age9PlusBtn") {
+      clickedBtn.classList.add("!border-purple-500", "!bg-purple-100");
+    }
   }
 
   // Modal functionality
@@ -862,31 +1053,39 @@
       <div class="p-6">
         <div class="grid md:grid-cols-2 gap-8">
           <!-- Product Image -->
-          <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+          <div class="aspect-square bg-gradient-to-br from-blue-50 to-slate-100 rounded-lg overflow-hidden flex items-center justify-center">
             <img id="modalProductImage" src="" alt="" class="w-full h-full object-contain p-4">
           </div>
           
           <!-- Product Details -->
           <div class="flex flex-col justify-between">
             <div>
-              <h2 id="modalProductName" class="text-2xl font-bold text-gray-900 mb-2"></h2>
-              <p id="modalProductAge" class="text-sm text-gray-600 mb-2"></p>
-              <p id="modalProductPieces" class="text-sm text-gray-600 mb-4"></p>
-              <p id="modalProductDescription" class="text-gray-700 mb-6"></p>
+              <div class="flex items-center gap-2 mb-3">
+                <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
+                <span class="text-sm text-gray-600">(48 reviews)</span>
+              </div>
+              <h2 id="modalProductName" class="text-2xl font-bold text-gray-900 mb-3"></h2>
+              <p id="modalProductAge" class="text-sm text-blue-600 font-semibold mb-2"></p>
+              <p id="modalProductPieces" class="text-sm text-purple-600 font-semibold mb-4"></p>
+              <p id="modalProductDescription" class="text-gray-700 mb-6 leading-relaxed"></p>
+              <div class="flex gap-2 mb-4">
+                <span class="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">✓ In Stock</span>
+                <span class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">🚚 Free Shipping</span>
+              </div>
             </div>
             
             <!-- Price and Actions -->
-            <div class="space-y-4">
-              <div class="text-3xl font-bold text-gray-900">
+            <div class="space-y-4 border-t pt-4">
+              <div class="text-3xl font-black bg-gradient-to-r from-[#f39c12] to-[#e67e22] bg-clip-text text-transparent">
                 $<span id="modalProductPrice">0.00</span>
               </div>
               
               <div class="flex gap-3">
-                <button id="modalAddToCart" class="flex-1 bg-[#f39c12] hover:bg-[#e8910c] text-white font-bold py-3 px-6 rounded-lg transition-colors">
-                  Add to Cart
+                <button id="modalAddToCart" class="flex-1 bg-gradient-to-r from-[#f39c12] to-[#e67e22] hover:from-[#e8910c] hover:to-[#d35400] text-white font-bold py-3 px-6 rounded-lg transition-all shadow-md hover:shadow-lg">
+                  🛒 Add to Cart
                 </button>
-                <button id="modalAddToWishlist" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 px-6 rounded-lg transition-colors">
-                  Add to Wishlist
+                <button id="modalAddToWishlist" class="flex-1 bg-gray-200 hover:bg-red-100 text-gray-700 hover:text-red-600 font-bold py-3 px-6 rounded-lg transition-all">
+                  ♡ Wishlist
                 </button>
               </div>
             </div>
