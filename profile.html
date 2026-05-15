@@ -83,7 +83,7 @@
         <a href="profile.html" class="sidebar-item active-sidebar p-3 flex items-center gap-3">
           <i class="fa-solid fa-house"></i> Account Overview
         </a>
-        <a href="cart.html" class="sidebar-item p-3 border-t flex items-center gap-3">
+        <a href="orders.html" class="sidebar-item p-3 border-t flex items-center gap-3">
           <i class="fa-solid fa-box"></i> My Orders
         </a>
         <a href="wishlist.html" class="sidebar-item p-3 border-t flex items-center gap-3">
@@ -155,6 +155,40 @@
           <button id="cancelEditBtn" class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-6 rounded-lg transition-colors">
             Cancel
           </button>
+        </div>
+      </div>
+
+      <!-- Purchase History Section -->
+      <div class="bg-white rounded-lg p-6 border shadow-sm">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-bold">Lịch sử mua hàng</h2>
+          <a href="orders.html" class="text-[#fd8024] hover:text-[#e8910c] font-semibold text-sm">
+            Xem tất cả →
+          </a>
+        </div>
+
+        <div id="ordersLoading" class="text-gray-500 text-sm py-8 text-center">Đang tải...</div>
+        
+        <div id="ordersEmpty" class="hidden text-center py-8">
+          <p class="text-gray-500 mb-4">Bạn chưa có đơn hàng nào</p>
+          <a href="products.html" class="inline-block bg-[#fd8024] hover:bg-[#e8910c] text-white font-bold py-2 px-6 rounded-lg transition-colors">
+            Mua sắm ngay
+          </a>
+        </div>
+
+        <div id="ordersTable" class="hidden overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="border-b-2 border-gray-200">
+              <tr class="text-gray-600">
+                <th class="px-4 py-3 text-left font-semibold">Mã đơn hàng</th>
+                <th class="px-4 py-3 text-left font-semibold">Ngày mua</th>
+                <th class="px-4 py-3 text-left font-semibold">Trạng thái</th>
+                <th class="px-4 py-3 text-right font-semibold">Tổng tiền</th>
+                <th class="px-4 py-3 text-center font-semibold">Chi tiết</th>
+              </tr>
+            </thead>
+            <tbody id="recentOrders" class="divide-y divide-gray-100"></tbody>
+          </table>
         </div>
       </div>
     </main>
@@ -326,7 +360,83 @@
     } catch (e) {
       // on backend error, fall back to localStorage
     }
+
+    // Load recent orders
+    loadRecentOrders();
   });
+
+  // Load recent orders for purchase history
+  async function loadRecentOrders() {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const res = await fetch(API_BASE + "/orders", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      });
+
+      const data = await res.json();
+      const orders = data.data || data || [];
+
+      document.getElementById("ordersLoading").classList.add("hidden");
+
+      if (!Array.isArray(orders) || orders.length === 0) {
+        document.getElementById("ordersEmpty").classList.remove("hidden");
+        return;
+      }
+
+      // Show table and populate with first 5 orders
+      document.getElementById("ordersTable").classList.remove("hidden");
+      const tbody = document.getElementById("recentOrders");
+      tbody.innerHTML = "";
+
+      // Only show 5 most recent orders
+      const recentOrders = orders.slice(0, 5);
+
+      recentOrders.forEach((order) => {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-gray-50 transition-colors";
+
+        const dateStr = order.created_at
+          ? new Date(order.created_at.replace(" ", "T")).toLocaleString("vi-VN")
+          : "—";
+
+        // Get status badge color
+        let statusBadgeClass = "bg-gray-100 text-gray-700";
+        if (order.status === "completed" || order.status === "Đã giao") {
+          statusBadgeClass = "bg-green-100 text-green-700";
+        } else if (order.status === "pending" || order.status === "Chờ xử lý") {
+          statusBadgeClass = "bg-yellow-100 text-yellow-700";
+        } else if (order.status === "cancelled" || order.status === "Đã hủy") {
+          statusBadgeClass = "bg-red-100 text-red-700";
+        }
+
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-semibold text-gray-900">#${order.id}</td>
+          <td class="px-4 py-3 text-gray-600">${dateStr}</td>
+          <td class="px-4 py-3">
+            <span class="px-3 py-1 rounded-full text-sm font-medium ${statusBadgeClass}">
+              ${order.status || "—"}
+            </span>
+          </td>
+          <td class="px-4 py-3 text-right font-semibold text-gray-900">$${Number(order.total || 0).toFixed(2)}</td>
+          <td class="px-4 py-3 text-center">
+            <a href="order-detail.html?id=${order.id}" class="inline-block bg-[#fd8024] hover:bg-[#e8910c] text-white font-bold py-1 px-3 rounded transition-colors text-sm">
+              Xem
+            </a>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    } catch (e) {
+      console.error("Error loading orders:", e);
+      document.getElementById("ordersLoading").classList.add("hidden");
+      document.getElementById("ordersEmpty").classList.remove("hidden");
+    }
+  }
   </script>
 </body>
 </html>
