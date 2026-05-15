@@ -23,15 +23,16 @@
           <p class="text-xs text-slate-400">Master Builder Console</p>
         </div>
         <nav class="space-y-2">
-          <button class="nav-item w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700/60" data-tab="overview">Overview</button>
-          <button class="nav-item w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700/60 active" data-tab="inventory">Inventory</button>
-          <button class="nav-item w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700/60" data-tab="orders">Orders</button>
-          <button class="nav-item w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700/60" data-tab="customers">Customers</button>
+          <button class="nav-item w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700/60" data-tab="overview">📊 Overview</button>
+          <button class="nav-item w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700/60 active" data-tab="inventory">📦 Inventory</button>
+          <button class="nav-item w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700/60" data-tab="orders">🛒 Orders</button>
+          <button class="nav-item w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700/60" data-tab="revenue">💰 Revenue</button>
+          <button class="nav-item w-full text-left px-3 py-2 rounded-lg hover:bg-slate-700/60" data-tab="customers">👥 Customers</button>
         </nav>
       </div>
       <div class="space-y-2 text-sm">
-        <a href="index.html" class="block px-3 py-2 rounded-lg hover:bg-slate-700/60">Back to store</a>
-        <button id="btnLogout" class="w-full text-left px-3 py-2 rounded-lg hover:bg-red-500/20 text-red-300">Log out</button>
+        <a href="index.html" class="block px-3 py-2 rounded-lg hover:bg-slate-700/60">🏠 Back to store</a>
+        <button id="btnLogout" class="w-full text-left px-3 py-2 rounded-lg hover:bg-red-500/20 text-red-300">🚪 Log out</button>
       </div>
     </aside>
 
@@ -39,30 +40,30 @@
       <header class="bg-white border border-slate-200 rounded-xl px-5 py-4 mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 id="screenTitle" class="text-3xl font-black tracking-tight text-slate-800">Inventory Management</h1>
-          <p class="text-xs text-slate-500 mt-1">Admin / Inventory / Set & Pieces</p>
+          <p id="breadcrumb" class="text-xs text-slate-500 mt-1">🏠 Admin / 📦 Inventory / Set & Pieces</p>
         </div>
         <div class="flex items-center gap-3">
           <span id="adminEmail" class="text-sm text-slate-500"></span>
-          <button id="btnRefresh" class="px-3 py-2 text-sm font-semibold border border-slate-300 rounded-lg hover:bg-slate-50">Refresh</button>
-          <button id="btnQuickAdd" class="px-3 py-2 text-sm font-semibold bg-yellow-400 rounded-lg hover:bg-yellow-300">+ Add Set</button>
+          <button id="btnRefresh" class="px-3 py-2 text-sm font-semibold border border-slate-300 rounded-lg hover:bg-slate-50">🔄 Refresh</button>
+          <button id="btnQuickAdd" class="px-3 py-2 text-sm font-semibold bg-yellow-400 rounded-lg hover:bg-yellow-300">➕ Add Set</button>
         </div>
       </header>
 
       <section class="grid md:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
         <article class="bg-white border border-slate-200 rounded-xl p-4">
-          <p class="text-[11px] uppercase tracking-wide text-slate-500">Total Products</p>
+          <p class="text-[11px] uppercase tracking-wide text-slate-500">📦 Total Products</p>
           <p id="kpiProducts" class="text-3xl font-black mt-2 text-slate-800">0</p>
         </article>
         <article class="bg-white border border-slate-200 rounded-xl p-4">
-          <p class="text-[11px] uppercase tracking-wide text-slate-500">Categories</p>
+          <p class="text-[11px] uppercase tracking-wide text-slate-500">🏷️ Categories</p>
           <p id="kpiCategories" class="text-3xl font-black mt-2 text-slate-800">0</p>
         </article>
         <article class="bg-white border border-slate-200 rounded-xl p-4">
-          <p class="text-[11px] uppercase tracking-wide text-slate-500">Low Stock</p>
+          <p class="text-[11px] uppercase tracking-wide text-slate-500">⚠️ Low Stock</p>
           <p id="kpiLowStock" class="text-3xl font-black mt-2 text-red-500">0</p>
         </article>
         <article class="bg-slate-900 text-white rounded-xl p-4">
-          <p class="text-[11px] uppercase tracking-wide text-slate-400">Pending Orders</p>
+          <p class="text-[11px] uppercase tracking-wide text-slate-400">⏳ Pending Orders</p>
           <p id="kpiPending" class="text-3xl font-black mt-2 text-yellow-300">0</p>
         </article>
       </section>
@@ -70,14 +71,14 @@
       <section class="bg-white border border-slate-200 rounded-xl">
         <div class="px-4 py-3 border-b border-slate-200 flex flex-wrap items-center gap-3">
           <select id="themeFilter" class="text-sm border border-slate-300 rounded-lg px-3 py-2">
-            <option value="">Category: All Themes</option>
+            <option value="">🏷️ Category: All Themes</option>
           </select>
           <select id="stockFilter" class="text-sm border border-slate-300 rounded-lg px-3 py-2">
-            <option value="">Stock Status: All</option>
-            <option value="low">Low stock only</option>
-            <option value="safe">Safe stock only</option>
+            <option value="">📊 Stock Status: All</option>
+            <option value="low">⚠️ Low stock only</option>
+            <option value="safe">✅ Safe stock only</option>
           </select>
-          <input id="searchInput" class="ml-auto text-sm border border-slate-300 rounded-lg px-3 py-2 w-full md:w-60" placeholder="Search sets..." />
+          <input id="searchInput" class="ml-auto text-sm border border-slate-300 rounded-lg px-3 py-2 w-full md:w-60" placeholder="🔍 Search sets..." />
         </div>
 
         <div id="inventoryPane" class="tab-pane">
@@ -85,12 +86,12 @@
             <table class="w-full text-sm">
               <thead class="bg-slate-50 text-slate-500 uppercase text-[11px]">
                 <tr>
-                  <th class="px-4 py-3 text-left">Product</th>
-                  <th class="px-4 py-3 text-left">Pieces</th>
-                  <th class="px-4 py-3 text-left">Age</th>
-                  <th class="px-4 py-3 text-left">Price</th>
-                  <th class="px-4 py-3 text-left">Stock</th>
-                  <th class="px-4 py-3 text-right">Actions</th>
+                  <th class="px-4 py-3 text-left">📦 Product</th>
+                  <th class="px-4 py-3 text-left">🧱 Pieces</th>
+                  <th class="px-4 py-3 text-left">🎂 Age</th>
+                  <th class="px-4 py-3 text-left">💵 Price</th>
+                  <th class="px-4 py-3 text-left">📑 Stock</th>
+                  <th class="px-4 py-3 text-right">⚙️ Actions</th>
                 </tr>
               </thead>
               <tbody id="productRows"></tbody>
@@ -99,8 +100,8 @@
           <div class="px-4 py-3 border-t border-slate-200 flex items-center justify-between">
             <p id="inventoryMeta" class="text-xs text-slate-500"></p>
             <div class="space-x-2">
-              <button id="prevPage" class="px-3 py-1.5 text-sm border border-slate-300 rounded-lg">Prev</button>
-              <button id="nextPage" class="px-3 py-1.5 text-sm border border-slate-300 rounded-lg">Next</button>
+              <button id="prevPage" class="px-3 py-1.5 text-sm border border-slate-300 rounded-lg">⬅️ Prev</button>
+              <button id="nextPage" class="px-3 py-1.5 text-sm border border-slate-300 rounded-lg">Next ➡️</button>
             </div>
           </div>
         </div>
@@ -110,11 +111,11 @@
             <table class="w-full text-sm">
               <thead class="bg-slate-50 text-slate-500 uppercase text-[11px]">
                 <tr>
-                  <th class="px-4 py-3 text-left">Order</th>
-                  <th class="px-4 py-3 text-left">Customer</th>
-                  <th class="px-4 py-3 text-left">Date</th>
-                  <th class="px-4 py-3 text-left">Status</th>
-                  <th class="px-4 py-3 text-right">Total</th>
+                  <th class="px-4 py-3 text-left">🛒 Order</th>
+                  <th class="px-4 py-3 text-left">👤 Customer</th>
+                  <th class="px-4 py-3 text-left">📅 Date</th>
+                  <th class="px-4 py-3 text-left">📍 Status</th>
+                  <th class="px-4 py-3 text-right">💰 Total</th>
                 </tr>
               </thead>
               <tbody id="orderRows"></tbody>
@@ -127,9 +128,11 @@
             <table class="w-full text-sm">
               <thead class="bg-slate-50 text-slate-500 uppercase text-[11px]">
                 <tr>
-                  <th class="px-4 py-3 text-left">ID</th>
-                  <th class="px-4 py-3 text-left">Email</th>
-                  <th class="px-4 py-3 text-left">Role</th>
+                  <th class="px-4 py-3 text-left">🆔 ID</th>
+                  <th class="px-4 py-3 text-left">📧 Email</th>
+                  <th class="px-4 py-3 text-left">👑 Role</th>
+                  <th class="px-4 py-3 text-left">🔴 Status</th>
+                  <th class="px-4 py-3 text-right">⚙️ Actions</th>
                 </tr>
               </thead>
               <tbody id="userRows"></tbody>
@@ -137,13 +140,38 @@
           </div>
         </div>
 
+        <div id="revenuePane" class="tab-pane hidden p-4">
+          <div class="grid lg:grid-cols-4 gap-4 mb-6">
+            <article class="bg-white border border-slate-200 rounded-xl p-4">
+              <p class="text-[11px] uppercase tracking-wide text-slate-500">Total Revenue</p>
+              <p id="kpiTotalRevenue" class="text-3xl font-black mt-2 text-green-600">$0</p>
+            </article>
+            <article class="bg-white border border-slate-200 rounded-xl p-4">
+              <p class="text-[11px] uppercase tracking-wide text-slate-500">Completed Orders</p>
+              <p id="kpiCompletedOrders" class="text-3xl font-black mt-2 text-blue-600">0</p>
+            </article>
+            <article class="bg-white border border-slate-200 rounded-xl p-4">
+              <p class="text-[11px] uppercase tracking-wide text-slate-500">Avg Order Value</p>
+              <p id="kpiAvgOrderValue" class="text-3xl font-black mt-2 text-purple-600">$0</p>
+            </article>
+            <article class="bg-white border border-slate-200 rounded-xl p-4">
+              <p class="text-[11px] uppercase tracking-wide text-slate-500">Total Orders</p>
+              <p id="kpiTotalOrders" class="text-3xl font-black mt-2 text-slate-800">0</p>
+            </article>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-xl p-4">
+            <h3 class="font-bold text-slate-800 mb-4">📊 Revenue by Status</h3>
+            <div id="revenueByStatus" class="space-y-2"></div>
+          </div>
+        </div>
+
         <div id="overviewPane" class="tab-pane hidden p-4 grid lg:grid-cols-2 gap-4">
           <article class="border border-slate-200 rounded-xl p-4">
-            <h3 class="font-bold text-slate-800 mb-2">Low stock alerts</h3>
+            <h3 class="font-bold text-slate-800 mb-2">⚠️ Low stock alerts</h3>
             <div id="lowStockList" class="space-y-2"></div>
           </article>
           <article class="border border-slate-200 rounded-xl p-4">
-            <h3 class="font-bold text-slate-800 mb-2">Recent customer activity</h3>
+            <h3 class="font-bold text-slate-800 mb-2">📊 Recent customer activity</h3>
             <div id="recentActivityList" class="space-y-2"></div>
           </article>
         </div>
@@ -154,8 +182,8 @@
   <dialog id="productModal" class="backdrop:bg-slate-900/50 rounded-xl p-0 w-full max-w-xl">
     <form id="productForm" class="bg-white rounded-xl p-5 space-y-3">
       <div class="flex items-center justify-between">
-        <h3 id="formTitle" class="font-black text-xl">Add Set</h3>
-        <button type="button" id="closeModal" class="text-slate-500">X</button>
+        <h3 id="formTitle" class="font-black text-xl">📦 Add Set</h3>
+        <button type="button" id="closeModal" class="text-slate-500">❌</button>
       </div>
       <input type="hidden" id="editId" value="" />
       <div class="grid md:grid-cols-2 gap-3">
@@ -172,8 +200,8 @@
       </div>
       <p id="formMessage" class="text-sm text-red-500 min-h-[20px]"></p>
       <div class="flex gap-2">
-        <button class="flex-1 bg-yellow-400 rounded-lg py-2 font-bold">Save Set</button>
-        <button type="button" id="btnCancelEdit" class="px-4 border border-slate-300 rounded-lg">Cancel</button>
+        <button class="flex-1 bg-yellow-400 rounded-lg py-2 font-bold">💾 Save Set</button>
+        <button type="button" id="btnCancelEdit" class="px-4 border border-slate-300 rounded-lg">❌ Cancel</button>
       </div>
     </form>
   </dialog>
@@ -241,7 +269,9 @@
       document.getElementById("screenTitle").textContent =
         nextTab === "inventory" ? "Inventory Management" :
         nextTab === "orders" ? "Order Management" :
+        nextTab === "revenue" ? "Revenue Statistics" :
         nextTab === "customers" ? "Customer Management" : "Overview";
+      if (nextTab === "revenue") renderRevenue();
     }
 
     function applyProductFilter() {
@@ -262,7 +292,7 @@
       const list = applyProductFilter();
       const start = (state.page - 1) * PAGE_SIZE;
       const pageRows = list.slice(start, start + PAGE_SIZE);
-      rows.innerHTML = pageRows.length ? "" : '<tr><td colspan="6" class="px-4 py-8 text-center text-slate-500">No data found.</td></tr>';
+      rows.innerHTML = pageRows.length ? "" : '<tr><td colspan="6" class="px-4 py-8 text-center text-slate-500">📭 No data found.</td></tr>';
       pageRows.forEach((p) => {
         const stock = Number(p.stock || 0);
         const stockCls = stock <= LOW_STOCK_THRESHOLD ? "text-red-500" : "text-emerald-600";
@@ -278,8 +308,8 @@
           '<td class="px-4 py-3">' + fmtMoney(p.price) + "</td>" +
           '<td class="px-4 py-3 font-semibold ' + stockCls + '">' + stock + " units</td>" +
           '<td class="px-4 py-3 text-right space-x-2">' +
-          '<button class="btn-edit text-blue-600" data-id="' + p.id + '">Edit</button>' +
-          '<button class="btn-del text-red-500" data-id="' + p.id + '">Delete</button>' +
+          '<button class="btn-edit text-blue-600" data-id="' + p.id + '">✏️ Edit</button>' +
+          '<button class="btn-del text-red-500" data-id="' + p.id + '">🗑️ Delete</button>' +
           "</td>";
         rows.appendChild(tr);
       });
@@ -294,7 +324,7 @@
       const rows = document.getElementById("orderRows");
       rows.innerHTML = "";
       if (!state.orders.length) {
-        rows.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-slate-500">No orders yet.</td></tr>';
+        rows.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-slate-500">📭 No orders yet.</td></tr>';
         return;
       }
       state.orders.forEach((o) => {
@@ -324,18 +354,23 @@
       const rows = document.getElementById("userRows");
       rows.innerHTML = "";
       if (!state.users.length) {
-        rows.innerHTML = '<tr><td colspan="3" class="px-4 py-8 text-center text-slate-500">No customers yet.</td></tr>';
+        rows.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-slate-500">👥 No customers yet.</td></tr>';
         return;
       }
       state.users.forEach((u) => {
         const tr = document.createElement("tr");
         tr.className = "border-t border-slate-200";
+        const isDisabled = u.is_disabled === true || u.is_disabled === 1;
+        const statusBadge = isDisabled ? '<span class="text-red-600 font-semibold">🔴 Disabled</span>' : '<span class="text-green-600 font-semibold">🟢 Active</span>';
+        const actionBtn = isDisabled ? '<button class="btn-enable text-green-600 font-semibold" data-id="' + u.id + '">🔓 Enable</button>' : '<button class="btn-disable text-red-600 font-semibold" data-id="' + u.id + '">🔐 Disable</button>';
         tr.innerHTML =
           '<td class="px-4 py-3">' + u.id + "</td>" +
           '<td class="px-4 py-3">' + (u.email || "") + "</td>" +
-          '<td class="px-4 py-3"><select class="role-select border border-slate-300 rounded px-2 py-1" data-id="' + u.id + '">' +
+          '<td class="px-4 py-3"><select class="role-select border border-slate-300 rounded px-2 py-1" data-id="' + u.id + '"' + (isDisabled ? ' disabled' : '') + '>' +
           '<option value="user"' + (u.role === "user" ? " selected" : "") + ">user</option>" +
-          '<option value="admin"' + (u.role === "admin" ? " selected" : "") + ">admin</option></select></td>";
+          '<option value="admin"' + (u.role === "admin" ? " selected" : "") + ">admin</option></select></td>" +
+          '<td class="px-4 py-3">' + statusBadge + "</td>" +
+          '<td class="px-4 py-3 text-right">' + actionBtn + "</td>";
         rows.appendChild(tr);
       });
       rows.querySelectorAll(".role-select").forEach((sel) => {
@@ -345,17 +380,57 @@
           });
         });
       });
+      rows.querySelectorAll(".btn-disable").forEach((b) => {
+        b.addEventListener("click", async () => {
+          if (!confirm("🔒 Disable this account?")) return;
+          await disableUserAccount(b.dataset.id);
+        });
+      });
+      rows.querySelectorAll(".btn-enable").forEach((b) => {
+        b.addEventListener("click", async () => {
+          if (!confirm("🔓 Enable this account?")) return;
+          await enableUserAccount(b.dataset.id);
+        });
+      });
+    }
+
+    function renderRevenue() {
+      const completed = state.orders.filter((o) => o.status === "completed");
+      const totalRevenue = completed.reduce((sum, o) => sum + Number(o.total || 0), 0);
+      const avgOrder = completed.length > 0 ? totalRevenue / completed.length : 0;
+      const totalOrders = state.orders.length;
+
+      document.getElementById("kpiTotalRevenue").textContent = fmtMoney(totalRevenue);
+      document.getElementById("kpiCompletedOrders").textContent = completed.length;
+      document.getElementById("kpiAvgOrderValue").textContent = fmtMoney(avgOrder);
+      document.getElementById("kpiTotalOrders").textContent = totalOrders;
+
+      const statusMap = {};
+      state.orders.forEach((o) => {
+        const status = o.status || "unknown";
+        if (!statusMap[status]) statusMap[status] = { count: 0, revenue: 0 };
+        statusMap[status].count++;
+        statusMap[status].revenue += Number(o.total || 0);
+      });
+
+      const revenueHtml = Object.entries(statusMap).map(([status, data]) =>
+        '<div class="border border-slate-200 rounded-lg px-4 py-3 flex justify-between items-center">' +
+        '<div><p class="font-semibold text-slate-800 capitalize">📊 ' + status + '</p><p class="text-xs text-slate-500">📦 ' + data.count + ' orders</p></div>' +
+        '<p class="text-lg font-bold text-green-600">💰 ' + fmtMoney(data.revenue) + '</p>' +
+        '</div>'
+      ).join("");
+      document.getElementById("revenueByStatus").innerHTML = revenueHtml || '<p class="text-slate-500">📭 No revenue data available.</p>';
     }
 
     function renderOverview() {
       const low = state.products.filter((p) => Number(p.stock || 0) <= LOW_STOCK_THRESHOLD).slice(0, 8);
       const recent = state.orders.slice(0, 8);
       document.getElementById("lowStockList").innerHTML = low.length
-        ? low.map((p) => '<div class="border border-slate-200 rounded-lg px-3 py-2 text-sm"><b>#' + p.id + "</b> " + p.name + ' <span class="text-red-500 float-right">' + Number(p.stock || 0) + " units</span></div>").join("")
-        : '<p class="text-sm text-slate-500">No low-stock products.</p>';
+        ? low.map((p) => '<div class="border border-slate-200 rounded-lg px-3 py-2 text-sm"><b>#' + p.id + "</b> " + p.name + ' <span class="text-red-500 float-right">⚠️ ' + Number(p.stock || 0) + " units</span></div>").join("")
+        : '<p class="text-sm text-slate-500">✅ No low-stock products.</p>';
       document.getElementById("recentActivityList").innerHTML = recent.length
-        ? recent.map((o) => '<div class="border border-slate-200 rounded-lg px-3 py-2 text-sm"><b>' + (o.user_email || "N/A") + "</b> created order #" + o.id + '<div class="text-xs text-slate-500 mt-1">' + fmtDate(o.created_at) + " - " + fmtMoney(o.total) + "</div></div>").join("")
-        : '<p class="text-sm text-slate-500">No recent activity.</p>';
+        ? recent.map((o) => '<div class="border border-slate-200 rounded-lg px-3 py-2 text-sm"><b>👤 ' + (o.user_email || "N/A") + "</b> created order #" + o.id + '<div class="text-xs text-slate-500 mt-1">📅 ' + fmtDate(o.created_at) + " - 💰 " + fmtMoney(o.total) + "</div></div>").join("")
+        : '<p class="text-sm text-slate-500">📭 No recent activity.</p>';
     }
 
     function refreshKpi() {
@@ -380,6 +455,45 @@
       renderOrders();
       renderUsers();
       renderOverview();
+      renderRevenue();
+    }
+
+    async function disableUserAccount(userId) {
+      try {
+        const res = await fetch(API_BASE + "/admin/users/" + userId + "/disable", {
+          method: "PATCH",
+          headers: authHeaders(),
+          body: JSON.stringify({ is_disabled: true })
+        });
+        if (res.ok) {
+          alert("🔒 Account disabled successfully.");
+          await loadAllData();
+        } else {
+          alert("❌ Failed to disable account.");
+        }
+      } catch (e) {
+        console.error("Disable error:", e);
+        alert("❌ Error: " + e.message);
+      }
+    }
+
+    async function enableUserAccount(userId) {
+      try {
+        const res = await fetch(API_BASE + "/admin/users/" + userId + "/enable", {
+          method: "PATCH",
+          headers: authHeaders(),
+          body: JSON.stringify({ is_disabled: false })
+        });
+        if (res.ok) {
+          alert("🔓 Account enabled successfully.");
+          await loadAllData();
+        } else {
+          alert("❌ Failed to enable account.");
+        }
+      } catch (e) {
+        console.error("Enable error:", e);
+        alert("❌ Error: " + e.message);
+      }
     }
 
     async function loadAllData() {
@@ -428,7 +542,7 @@
     function openEditProduct(id) {
       const p = state.products.find((x) => String(x.id) === String(id));
       if (!p) return;
-      document.getElementById("formTitle").textContent = "Edit Set #" + p.id;
+      document.getElementById("formTitle").textContent = "✏️ Edit Set #" + p.id;
       document.getElementById("editId").value = p.id;
       document.getElementById("fName").value = p.name || "";
       document.getElementById("fPrice").value = p.price || 0;
@@ -446,7 +560,7 @@
       document.getElementById("productModal").showModal();
     }
     async function removeProduct(id) {
-      if (!confirm("Delete this set?")) return;
+      if (!confirm("🗑️ Delete this set?")) return;
       
       try {
         const res = await fetch(API_BASE + "/admin/products/" + id, { 
@@ -457,14 +571,14 @@
         const data = await res.json();
         
         if (res.ok) {
-          alert('Product deleted successfully!');
+          alert('✅ Product deleted successfully!');
           await loadAllData();
         } else {
-          alert('Failed to delete product: ' + (data.message || 'Unknown error'));
+          alert('❌ Failed to delete product: ' + (data.message || 'Unknown error'));
         }
       } catch (error) {
         console.error('Delete error:', error);
-        alert('Error deleting product: ' + error.message);
+        alert('❌ Error deleting product: ' + error.message);
       }
     }
 

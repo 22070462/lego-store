@@ -161,18 +161,18 @@
       <!-- Purchase History Section -->
       <div class="bg-white rounded-lg p-6 border shadow-sm">
         <div class="flex justify-between items-center mb-6">
-          <h2 class="text-xl font-bold">Lịch sử mua hàng</h2>
+          <h2 class="text-xl font-bold">Purchase History</h2>
           <a href="orders.html" class="text-[#fd8024] hover:text-[#e8910c] font-semibold text-sm">
-            Xem tất cả →
+            View All →
           </a>
         </div>
 
-        <div id="ordersLoading" class="text-gray-500 text-sm py-8 text-center">Đang tải...</div>
+        <div id="ordersLoading" class="text-gray-500 text-sm py-8 text-center">Loading...</div>
         
         <div id="ordersEmpty" class="hidden text-center py-8">
-          <p class="text-gray-500 mb-4">Bạn chưa có đơn hàng nào</p>
+          <p class="text-gray-500 mb-4">You dont have any purchase history</p>
           <a href="products.html" class="inline-block bg-[#fd8024] hover:bg-[#e8910c] text-white font-bold py-2 px-6 rounded-lg transition-colors">
-            Mua sắm ngay
+            Shopping now
           </a>
         </div>
 
@@ -180,11 +180,11 @@
           <table class="w-full text-sm">
             <thead class="border-b-2 border-gray-200">
               <tr class="text-gray-600">
-                <th class="px-4 py-3 text-left font-semibold">Mã đơn hàng</th>
-                <th class="px-4 py-3 text-left font-semibold">Ngày mua</th>
-                <th class="px-4 py-3 text-left font-semibold">Trạng thái</th>
-                <th class="px-4 py-3 text-right font-semibold">Tổng tiền</th>
-                <th class="px-4 py-3 text-center font-semibold">Chi tiết</th>
+                <th class="px-4 py-3 text-left font-semibold">ID</th>
+                <th class="px-4 py-3 text-left font-semibold">DATE</th>
+                <th class="px-4 py-3 text-left font-semibold">STATUS</th>
+                <th class="px-4 py-3 text-right font-semibold">TOTAL</th>
+                <th class="px-4 py-3 text-center font-semibold">DETAIL</th>
               </tr>
             </thead>
             <tbody id="recentOrders" class="divide-y divide-gray-100"></tbody>
